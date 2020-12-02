@@ -7,6 +7,12 @@ import {createFormListTemplate} from "./view/form-list.js";
 import {createAddFormTemplate} from "./view/form-add.js";
 import {createEditTemplate} from "./view/form-edit.js";
 import {createRoutePinTemplate} from "./view/route-pin.js";
+import {generatePoint} from "./mock/route-point.js";
+
+const POINT_COUNT = 20;
+
+const points = new Array(POINT_COUNT).fill().map(generatePoint);
+
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -32,11 +38,9 @@ render(siteSortElement, createFormListTemplate(), `beforeend`);
 const siteListElement = siteMainElement.querySelector(`.trip-events__list`);
 
 render(siteListElement, createAddFormTemplate(), `beforeend`);
-render(siteListElement, createEditTemplate(), `afterbegin`);
+render(siteListElement, createEditTemplate(points), `afterbegin`);
 
-const PINS_NUMBER = 3;
-
-for (let i = 0; i < PINS_NUMBER; i++) {
-  render(siteListElement, createRoutePinTemplate(), `beforeend`);
+for (let i = 0; i < POINT_COUNT; i++) {
+  render(siteListElement, createRoutePinTemplate(points[i]), `beforeend`);
 }
 
