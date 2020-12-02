@@ -37,10 +37,10 @@ render(siteSortElement, createFormListTemplate(), `beforeend`);
 
 const siteListElement = siteMainElement.querySelector(`.trip-events__list`);
 
-render(siteListElement, createAddFormTemplate(), `beforeend`);
-render(siteListElement, createEditTemplate(points), `afterbegin`);
+render(siteListElement, createAddFormTemplate(points[0]), `beforeend`);
+render(siteListElement, createEditTemplate(points[0]), `afterbegin`);
 
-for (let i = 0; i < POINT_COUNT; i++) {
+for (let i = 1; i < POINT_COUNT; i++) {
   render(siteListElement, createRoutePinTemplate(points[i]), `beforeend`);
 }
 
