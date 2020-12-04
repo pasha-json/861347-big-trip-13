@@ -8,11 +8,22 @@ import {createAddFormTemplate} from "./view/form-add.js";
 import {createEditTemplate} from "./view/form-edit.js";
 import {createRoutePinTemplate} from "./view/route-pin.js";
 import {generatePoint} from "./mock/route-point.js";
+import {generateTotalCost} from "./mock/cost.js";
+import {generateMenu} from "./mock/menu.js";
+import {generateFilters} from "./mock/filters.js";
+import {generateRouteInfo} from "./mock/route.js";
+import {generateSorting} from "./mock/sort.js";
 
 const POINT_COUNT = 20;
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
+const cost = generateTotalCost(points);
 
+const menu = generateMenu();
+
+const filters = Object.values(generateFilters());
+const route = generateRouteInfo(points);
+const sort = generateSorting();
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -25,14 +36,14 @@ const siteFiltersElement = siteMainElement.querySelector(`.trip-main__trip-contr
 const siteSortElement = siteMainElement.querySelector(`.trip-events`);
 
 
-render(siteRouteElement, createRouteTemplate(), `afterbegin`);
+render(siteRouteElement, createRouteTemplate(route), `afterbegin`);
 
 const siteCostElement = siteRouteElement.querySelector(`.trip-main__trip-info`);
 
-render(siteCostElement, createCostTemplate(), `beforeend`);
-render(siteControlsElement, createMenuTemplate(), `afterend`);
-render(siteFiltersElement, createFiltersTemplate(), `afterend`);
-render(siteSortElement, createSortTemplate(), `beforeend`);
+render(siteCostElement, createCostTemplate(cost), `beforeend`);
+render(siteControlsElement, createMenuTemplate(menu), `afterend`);
+render(siteFiltersElement, createFiltersTemplate(filters), `afterend`);
+render(siteSortElement, createSortTemplate(sort), `beforeend`);
 render(siteSortElement, createFormListTemplate(), `beforeend`);
 
 const siteListElement = siteMainElement.querySelector(`.trip-events__list`);
