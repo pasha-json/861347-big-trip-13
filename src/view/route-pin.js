@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {getRouteDuration} from "../mock/utils.js";
+import {getRouteDuration} from "../utils.js";
 
 const renderOptions = (points) => {
   return `<h4 class="visually-hidden">Offers:</h4>

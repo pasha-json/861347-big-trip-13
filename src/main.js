@@ -9,8 +9,8 @@ import {createEditTemplate} from "./view/form-edit.js";
 import {createRoutePinTemplate} from "./view/route-pin.js";
 import {generatePoint} from "./mock/route-point.js";
 import {generateTotalCost} from "./mock/cost.js";
-import {generateMenu} from "./mock/menu.js";
-import {generateFilters} from "./mock/filters.js";
+import {generateMenu} from "./view/const.js";
+import {generateFilters} from "./view/const.js";
 import {generateRouteInfo} from "./mock/route.js";
 import {generateSorting} from "./mock/sort.js";
 

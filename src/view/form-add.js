@@ -33,6 +33,7 @@ const createOptionsList = (features) => {
 };
 
 export const createAddFormTemplate = (points = {}) => {
+
   const {type, destination, date, price, description, images} = points;
   const typeName = type.toLowerCase();
   const {start, end} = date;
@@ -42,6 +43,11 @@ export const createAddFormTemplate = (points = {}) => {
       return `<img class="event__photo" src="${elem}" alt="Event photo">`;
     }).join(``);
   };
+
+  const typeList = createTypeList(points);
+  const destinationList = createDestinationList(points);
+  const optionsList = createOptionsList(options);
+  const imgList = createImgList(images);
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -56,7 +62,7 @@ export const createAddFormTemplate = (points = {}) => {
           <div class="event__type-list">
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Event type</legend>
-                ${createTypeList}
+                ${typeList}
             </fieldset>
           </div>
         </div>
@@ -67,7 +73,7 @@ export const createAddFormTemplate = (points = {}) => {
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
           <datalist id="destination-list-1">
-            ${createDestinationList}
+            ${destinationList}
           </datalist>
         </div>
 
@@ -95,7 +101,7 @@ export const createAddFormTemplate = (points = {}) => {
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
           <div class="event__available-offers">
-          ${createOptionsList(options)}
+          ${optionsList}
           </div>
         </section>
 
@@ -105,7 +111,7 @@ export const createAddFormTemplate = (points = {}) => {
 
           <div class="event__photos-container">
             <div class="event__photos-tape">
-            ${createImgList(images)}
+            ${imgList}
             </div>
           </div>
         </section>
