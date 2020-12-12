@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import {generateOptions} from "../mock/options.js";
+import {createElement} from "../utils.js";
 
 const options = generateOptions();
 
@@ -31,7 +32,7 @@ const createOptionsList = (features) => {
   }).join(``);
 };
 
-export const createEditTemplate = (points = {}) => {
+const createEditTemplate = (points = {}) => {
   const {type, destination, date, price, description} = points;
   const typeName = type.toLowerCase();
   const {start, end} = date;
@@ -108,3 +109,22 @@ export const createEditTemplate = (points = {}) => {
   </form>
 </li>`;
 };
+
+export default class FormEditView {
+  constructor(data) {
+    this._element = null;
+    this._data = data;
+  }
+  getTemplate() {
+    return createEditTemplate(this._data);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

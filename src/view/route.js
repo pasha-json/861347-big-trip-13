@@ -1,4 +1,6 @@
-export const createRouteTemplate = ({firstPoint, secondPoint, lastPoint, firstDay, lastDay, firstMonth, lastMonth}) => {
+import {createElement} from "../utils.js";
+
+const createRouteTemplate = ({firstPoint, secondPoint, lastPoint, firstDay, lastDay, firstMonth, lastMonth}) => {
 
   const secondMonth = lastMonth === firstMonth ? `` : `${lastMonth}`;
 
@@ -10,3 +12,22 @@ export const createRouteTemplate = ({firstPoint, secondPoint, lastPoint, firstDa
   </div>
 </section>`;
 };
+
+export default class RouteView {
+  constructor(data) {
+    this._element = null;
+    this._data = data;
+  }
+  getTemplate() {
+    return createRouteTemplate(this._data);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

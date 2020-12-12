@@ -1,4 +1,6 @@
-export const createSortTemplate = (sort) => {
+import {createElement} from "../utils.js";
+
+const createSortTemplate = (sort) => {
 
   const data = Object.entries(sort);
   const sortItems = data.map((value) => {
@@ -12,3 +14,22 @@ export const createSortTemplate = (sort) => {
   ${sortItems}
 </form>`;
 };
+
+export default class SortView {
+  constructor(data) {
+    this._element = null;
+    this._data = data;
+  }
+  getTemplate() {
+    return createSortTemplate(this._data);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

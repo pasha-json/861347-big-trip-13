@@ -1,4 +1,6 @@
-export const createFiltersTemplate = (filters) => {
+import {createElement} from "../utils.js";
+
+const createFiltersTemplate = (filters) => {
 
   const filterItems = filters.map((value) => {
     const valueLowerCase = value.toLowerCase();
@@ -13,3 +15,22 @@ export const createFiltersTemplate = (filters) => {
   <button class="visually-hidden" type="submit">Accept filter</button>
 </form>`;
 };
+
+export default class FiltersView {
+  constructor(data) {
+    this._element = null;
+    this._data = data;
+  }
+  getTemplate() {
+    return createFiltersTemplate(this._data);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

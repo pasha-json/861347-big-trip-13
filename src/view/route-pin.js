@@ -62,12 +62,12 @@ const createRoutePinTemplate = (points) => {
 
 
 export default class RoutePinView {
-  constructor(points) {
+  constructor(data) {
     this._element = null;
-    this._points = points;
+    this._data = data;
   }
   getTemplate() {
-    return createRoutePinTemplate(this._points);
+    return createRoutePinTemplate(this._data);
   }
   getElement() {
     if (!this._element) {
