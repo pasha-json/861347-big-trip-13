@@ -4,7 +4,7 @@ import MenuView from "./view/menu.js";
 import FiltersView from "./view/filters.js";
 import SortView from "./view/sort.js";
 import FormListView from "./view/form-list.js";
-import FormAddView from "./view/form-add.js";
+// import FormAddView from "./view/form-add.js";
 import FormEditView from "./view/form-edit.js";
 import RoutePinView from "./view/route-pin.js";
 import {generatePoint} from "./mock/route-point.js";
@@ -46,11 +46,51 @@ renderElement(siteSortElement, new FormListView().getElement(), RenderPosition.B
 
 const siteListElement = siteMainElement.querySelector(`.trip-events__list`);
 
-renderElement(siteListElement, new FormAddView(points[0]).getElement(), RenderPosition.BEFOREEND);
-renderElement(siteListElement, new FormEditView(points[0]).getElement(), RenderPosition.AFTERBEGIN);
+// renderElement(siteListElement, new FormAddView(points[0]).getElement(), RenderPosition.BEFOREEND);
+// renderElement(siteListElement, new FormEditView(points[0]).getElement(), RenderPosition.AFTERBEGIN);
+
+const renderRoutePoints = (data) => {
+  const routePoint = new RoutePinView(data);
+  const editForm = new FormEditView(data);
+
+  const replaceRoutePointToForm = () => {
+    siteListElement.replaceChild(editForm.getElement(), routePoint.getElement());
+  };
+
+  const replaceFormToRoutePoint = () => {
+    siteListElement.replaceChild(routePoint.getElement(), editForm.getElement());
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
+      replaceFormToRoutePoint();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
+  routePoint.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+    replaceRoutePointToForm();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  });
+
+  editForm.getElement().querySelector(`.event__save-btn`).addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    replaceFormToRoutePoint();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  });
+
+  editForm.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+    replaceFormToRoutePoint();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  });
+
+  renderElement(siteListElement, routePoint.getElement(), RenderPosition.BEFOREEND);
+};
 
 
 for (let i = 1; i < POINT_COUNT; i++) {
-  renderElement(siteListElement, new RoutePinView(points[i]).getElement(), RenderPosition.BEFOREEND);
+  // renderElement(siteListElement, new RoutePinView(points[i]).getElement(), RenderPosition.BEFOREEND);
+  renderRoutePoints(points[i]);
 }
 
