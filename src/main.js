@@ -6,7 +6,7 @@ import {createSortTemplate} from "./view/sort.js";
 import FormListView from "./view/form-list.js";
 import {createAddFormTemplate} from "./view/form-add.js";
 import {createEditTemplate} from "./view/form-edit.js";
-import {createRoutePinTemplate} from "./view/route-pin.js";
+import RoutePinView from "./view/route-pin.js";
 import {generatePoint} from "./mock/route-point.js";
 import {generateTotalCost} from "./mock/cost.js";
 import {generateMenu} from "./view/const.js";
@@ -49,7 +49,8 @@ const siteListElement = siteMainElement.querySelector(`.trip-events__list`);
 renderTemplate(siteListElement, createAddFormTemplate(points[0]), `beforeend`);
 renderTemplate(siteListElement, createEditTemplate(points[0]), `afterbegin`);
 
+
 for (let i = 1; i < POINT_COUNT; i++) {
-  renderTemplate(siteListElement, createRoutePinTemplate(points[i]), `beforeend`);
+  renderElement(siteListElement, new RoutePinView(points[i]).getElement(), RenderPosition.BEFOREEND);
 }
 
