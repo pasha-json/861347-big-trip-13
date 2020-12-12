@@ -4,7 +4,7 @@ import MenuView from "./view/menu.js";
 import FiltersView from "./view/filters.js";
 import SortView from "./view/sort.js";
 import FormListView from "./view/form-list.js";
-// import FormAddView from "./view/form-add.js";
+import FormAddView from "./view/form-add.js";
 import FormEditView from "./view/form-edit.js";
 import RoutePinView from "./view/route-pin.js";
 import {generatePoint} from "./mock/route-point.js";
@@ -46,7 +46,7 @@ renderElement(siteSortElement, new FormListView().getElement(), RenderPosition.B
 
 const siteListElement = siteMainElement.querySelector(`.trip-events__list`);
 
-// renderElement(siteListElement, new FormAddView(points[0]).getElement(), RenderPosition.BEFOREEND);
+renderElement(siteListElement, new FormAddView(points[0]).getElement(), RenderPosition.BEFOREEND);
 // renderElement(siteListElement, new FormEditView(points[0]).getElement(), RenderPosition.AFTERBEGIN);
 
 const renderRoutePoints = (data) => {

@@ -1,8 +1,5 @@
 import dayjs from "dayjs";
-import {generateOptions} from "../mock/options.js";
 import {createElement} from "../utils.js";
-
-const options = generateOptions();
 
 const createTypeList = (points) => {
   return Array.from(points).map(({type}) => {
@@ -33,7 +30,7 @@ const createOptionsList = (features) => {
 };
 
 const createEditTemplate = (points = {}) => {
-  const {type, destination, date, price, description} = points;
+  const {type, destination, date, price, description, options} = points;
   const typeName = type.toLowerCase();
   const {start, end} = date;
 
