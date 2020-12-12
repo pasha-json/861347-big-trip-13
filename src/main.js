@@ -13,6 +13,7 @@ import {generateMenu} from "./view/const.js";
 import {generateFilters} from "./view/const.js";
 import {generateRouteInfo} from "./mock/route.js";
 import {generateSorting} from "./mock/sort.js";
+import {renderTemplate} from "./utils.js";
 
 const POINT_COUNT = 20;
 
@@ -25,9 +26,6 @@ const filters = Object.values(generateFilters());
 const route = generateRouteInfo(points);
 const sort = generateSorting();
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
 
 const siteMainElement = document.querySelector(`.page-body`);
 const siteRouteElement = siteMainElement.querySelector(`.trip-main`);
@@ -36,22 +34,22 @@ const siteFiltersElement = siteMainElement.querySelector(`.trip-main__trip-contr
 const siteSortElement = siteMainElement.querySelector(`.trip-events`);
 
 
-render(siteRouteElement, createRouteTemplate(route), `afterbegin`);
+renderTemplate(siteRouteElement, createRouteTemplate(route), `afterbegin`);
 
 const siteCostElement = siteRouteElement.querySelector(`.trip-main__trip-info`);
 
-render(siteCostElement, createCostTemplate(cost), `beforeend`);
-render(siteControlsElement, createMenuTemplate(menu), `afterend`);
-render(siteFiltersElement, createFiltersTemplate(filters), `afterend`);
-render(siteSortElement, createSortTemplate(sort), `beforeend`);
-render(siteSortElement, createFormListTemplate(), `beforeend`);
+renderTemplate(siteCostElement, createCostTemplate(cost), `beforeend`);
+renderTemplate(siteControlsElement, createMenuTemplate(menu), `afterend`);
+renderTemplate(siteFiltersElement, createFiltersTemplate(filters), `afterend`);
+renderTemplate(siteSortElement, createSortTemplate(sort), `beforeend`);
+renderTemplate(siteSortElement, createFormListTemplate(), `beforeend`);
 
 const siteListElement = siteMainElement.querySelector(`.trip-events__list`);
 
-render(siteListElement, createAddFormTemplate(points[0]), `beforeend`);
-render(siteListElement, createEditTemplate(points[0]), `afterbegin`);
+renderTemplate(siteListElement, createAddFormTemplate(points[0]), `beforeend`);
+renderTemplate(siteListElement, createEditTemplate(points[0]), `afterbegin`);
 
 for (let i = 1; i < POINT_COUNT; i++) {
-  render(siteListElement, createRoutePinTemplate(points[i]), `beforeend`);
+  renderTemplate(siteListElement, createRoutePinTemplate(points[i]), `beforeend`);
 }
 
