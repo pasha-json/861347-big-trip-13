@@ -3,7 +3,7 @@ import {createCostTemplate} from "./view/cost.js";
 import {createMenuTemplate} from "./view/menu.js";
 import {createFiltersTemplate} from "./view/filters.js";
 import {createSortTemplate} from "./view/sort.js";
-import {createFormListTemplate} from "./view/form-list.js";
+import FormListView from "./view/form-list.js";
 import {createAddFormTemplate} from "./view/form-add.js";
 import {createEditTemplate} from "./view/form-edit.js";
 import {createRoutePinTemplate} from "./view/route-pin.js";
@@ -13,7 +13,7 @@ import {generateMenu} from "./view/const.js";
 import {generateFilters} from "./view/const.js";
 import {generateRouteInfo} from "./mock/route.js";
 import {generateSorting} from "./mock/sort.js";
-import {renderTemplate} from "./utils.js";
+import {renderTemplate, renderElement, RenderPosition} from "./utils.js";
 
 const POINT_COUNT = 20;
 
@@ -42,7 +42,7 @@ renderTemplate(siteCostElement, createCostTemplate(cost), `beforeend`);
 renderTemplate(siteControlsElement, createMenuTemplate(menu), `afterend`);
 renderTemplate(siteFiltersElement, createFiltersTemplate(filters), `afterend`);
 renderTemplate(siteSortElement, createSortTemplate(sort), `beforeend`);
-renderTemplate(siteSortElement, createFormListTemplate(), `beforeend`);
+renderElement(siteSortElement, new FormListView().getElement(), RenderPosition.BEFOREEND);
 
 const siteListElement = siteMainElement.querySelector(`.trip-events__list`);
 
