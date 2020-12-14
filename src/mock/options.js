@@ -1,4 +1,4 @@
-import {getRandomInteger} from "./utils.js";
+import {getRandomInteger} from "../utils.js";
 
 export const generateOptions = () => {
   const optionMocks = [

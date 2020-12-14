@@ -1,4 +1,4 @@
-import {getRandomInteger} from "./utils.js";
+import {getRandomInteger} from "../utils.js";
 import {generateOptions} from "./options.js";
 import dayjs from 'dayjs';
 

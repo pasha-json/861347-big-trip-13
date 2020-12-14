@@ -1,7 +1,5 @@
 import dayjs from "dayjs";
-import {generateOptions} from "../mock/options.js";
-
-const options = generateOptions();
+import {createElement} from "../utils.js";
 
 const createTypeList = (points) => {
   return Array.from(points).map(({type}) => {
@@ -31,10 +29,15 @@ const createOptionsList = (features) => {
   }).join(``);
 };
 
-export const createEditTemplate = (points = {}) => {
-  const {type, destination, date, price, description} = points;
+const createEditTemplate = (points = {}) => {
+  const {type, destination, date, price, description, options} = points;
   const typeName = type.toLowerCase();
   const {start, end} = date;
+
+  const typeList = createTypeList(points);
+  const destinationList = createDestinationList(points);
+  const optionsList = createOptionsList(options);
+
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -48,7 +51,7 @@ export const createEditTemplate = (points = {}) => {
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
-            ${createTypeList}
+            ${typeList}
 
           </fieldset>
         </div>
@@ -60,7 +63,7 @@ export const createEditTemplate = (points = {}) => {
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
         <datalist id="destination-list-1">
-          ${createDestinationList}
+          ${destinationList}
         </datalist>
       </div>
 
@@ -91,7 +94,7 @@ export const createEditTemplate = (points = {}) => {
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-          ${createOptionsList(options)}
+          ${optionsList}
         </div>
       </section>
 
@@ -103,3 +106,22 @@ export const createEditTemplate = (points = {}) => {
   </form>
 </li>`;
 };
+
+export default class FormEditView {
+  constructor(data) {
+    this._element = null;
+    this._data = data;
+  }
+  getTemplate() {
+    return createEditTemplate(this._data);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

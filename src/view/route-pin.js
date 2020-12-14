@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
-import {getRouteDuration} from "../mock/utils.js";
+import {getRouteDuration} from "../utils.js";
+import {createElement} from "../utils.js";
 
 const renderOptions = (points) => {
   return `<h4 class="visually-hidden">Offers:</h4>
@@ -15,7 +16,7 @@ const renderOptions = (points) => {
 };
 
 
-export const createRoutePinTemplate = (points) => {
+const createRoutePinTemplate = (points) => {
   const {type, destination, options, date, price} = points;
   const {start, end} = date;
   const startDateDay = dayjs(start).format(`MMM DD`);
@@ -58,3 +59,23 @@ export const createRoutePinTemplate = (points) => {
   </div>
 </li>`;
 };
+
+
+export default class RoutePinView {
+  constructor(data) {
+    this._element = null;
+    this._data = data;
+  }
+  getTemplate() {
+    return createRoutePinTemplate(this._data);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,18 +1,19 @@
-import {createRouteTemplate} from "./view/route.js";
-import {createCostTemplate} from "./view/cost.js";
-import {createMenuTemplate} from "./view/menu.js";
-import {createFiltersTemplate} from "./view/filters.js";
-import {createSortTemplate} from "./view/sort.js";
-import {createFormListTemplate} from "./view/form-list.js";
-import {createAddFormTemplate} from "./view/form-add.js";
-import {createEditTemplate} from "./view/form-edit.js";
-import {createRoutePinTemplate} from "./view/route-pin.js";
+import RouteView from "./view/route.js";
+import CostView from "./view/cost.js";
+import MenuView from "./view/menu.js";
+import FiltersView from "./view/filters.js";
+import SortView from "./view/sort.js";
+import FormListView from "./view/form-list.js";
+import FormAddView from "./view/form-add.js";
+import FormEditView from "./view/form-edit.js";
+import RoutePinView from "./view/route-pin.js";
 import {generatePoint} from "./mock/route-point.js";
 import {generateTotalCost} from "./mock/cost.js";
-import {generateMenu} from "./mock/menu.js";
-import {generateFilters} from "./mock/filters.js";
+import {generateMenu} from "./view/const.js";
+import {generateFilters} from "./view/const.js";
 import {generateRouteInfo} from "./mock/route.js";
 import {generateSorting} from "./mock/sort.js";
+import {renderElement, RenderPosition} from "./utils.js";
 
 const POINT_COUNT = 20;
 
@@ -25,9 +26,6 @@ const filters = Object.values(generateFilters());
 const route = generateRouteInfo(points);
 const sort = generateSorting();
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
 
 const siteMainElement = document.querySelector(`.page-body`);
 const siteRouteElement = siteMainElement.querySelector(`.trip-main`);
@@ -36,22 +34,63 @@ const siteFiltersElement = siteMainElement.querySelector(`.trip-main__trip-contr
 const siteSortElement = siteMainElement.querySelector(`.trip-events`);
 
 
-render(siteRouteElement, createRouteTemplate(route), `afterbegin`);
+renderElement(siteRouteElement, new RouteView(route).getElement(), RenderPosition.AFTERBEGIN);
 
 const siteCostElement = siteRouteElement.querySelector(`.trip-main__trip-info`);
 
-render(siteCostElement, createCostTemplate(cost), `beforeend`);
-render(siteControlsElement, createMenuTemplate(menu), `afterend`);
-render(siteFiltersElement, createFiltersTemplate(filters), `afterend`);
-render(siteSortElement, createSortTemplate(sort), `beforeend`);
-render(siteSortElement, createFormListTemplate(), `beforeend`);
+renderElement(siteCostElement, new CostView(cost).getElement(), `beforeend`);
+renderElement(siteControlsElement, new MenuView(menu).getElement(), RenderPosition.AFTEREND);
+renderElement(siteFiltersElement, new FiltersView(filters).getElement(), RenderPosition.AFTEREND);
+renderElement(siteSortElement, new SortView(sort).getElement(), RenderPosition.BEFOREEND);
+renderElement(siteSortElement, new FormListView().getElement(), RenderPosition.BEFOREEND);
 
 const siteListElement = siteMainElement.querySelector(`.trip-events__list`);
 
-render(siteListElement, createAddFormTemplate(points[0]), `beforeend`);
-render(siteListElement, createEditTemplate(points[0]), `afterbegin`);
+renderElement(siteListElement, new FormAddView(points[0]).getElement(), RenderPosition.BEFOREEND);
+// renderElement(siteListElement, new FormEditView(points[0]).getElement(), RenderPosition.AFTERBEGIN);
+
+const renderRoutePoints = (data) => {
+  const routePoint = new RoutePinView(data);
+  const editForm = new FormEditView(data);
+
+  const replaceRoutePointToForm = () => {
+    siteListElement.replaceChild(editForm.getElement(), routePoint.getElement());
+  };
+
+  const replaceFormToRoutePoint = () => {
+    siteListElement.replaceChild(routePoint.getElement(), editForm.getElement());
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
+      replaceFormToRoutePoint();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
+  routePoint.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+    replaceRoutePointToForm();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  });
+
+  editForm.getElement().querySelector(`.event__save-btn`).addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    replaceFormToRoutePoint();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  });
+
+  editForm.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+    replaceFormToRoutePoint();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  });
+
+  renderElement(siteListElement, routePoint.getElement(), RenderPosition.BEFOREEND);
+};
+
 
 for (let i = 1; i < POINT_COUNT; i++) {
-  render(siteListElement, createRoutePinTemplate(points[i]), `beforeend`);
+  // renderElement(siteListElement, new RoutePinView(points[i]).getElement(), RenderPosition.BEFOREEND);
+  renderRoutePoints(points[i]);
 }
 
