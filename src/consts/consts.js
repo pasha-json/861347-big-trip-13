@@ -1,14 +1,11 @@
 import {getRandomInteger} from "../utils.js";
 
-export const generateFilters = () => {
-  const everything = `Everything`;
-  const future = `Future`;
-  const past = `Past`;
-  return {
-    everything,
-    future,
-    past
-  };
+export const POINT_COUNT = 20;
+
+export const Filters = {
+  EVERYTHING: `Everything`,
+  FUTURE: `Future`,
+  PAST: `Past`
 };
 
 export const generateMenu = () => {

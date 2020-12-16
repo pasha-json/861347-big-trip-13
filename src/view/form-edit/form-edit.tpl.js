@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import {createElement} from "../utils.js";
 
 const createTypeList = (points) => {
   return Array.from(points).map(({type}) => {
@@ -29,7 +28,7 @@ const createOptionsList = (features) => {
   }).join(``);
 };
 
-const createEditTemplate = (points = {}) => {
+export const createEditTemplate = (points = {}) => {
   const {type, destination, date, price, description, options} = points;
   const typeName = type.toLowerCase();
   const {start, end} = date;
@@ -106,22 +105,3 @@ const createEditTemplate = (points = {}) => {
   </form>
 </li>`;
 };
-
-export default class FormEditView {
-  constructor(data) {
-    this._element = null;
-    this._data = data;
-  }
-  getTemplate() {
-    return createEditTemplate(this._data);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
-  }
-}
