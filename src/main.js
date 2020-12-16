@@ -85,8 +85,11 @@ const renderRoutePoints = (data) => {
   renderElement(siteListElement, routePoint.getElement(), RenderPosition.BEFOREEND);
 };
 
-
-for (let i = 1; i < POINT_COUNT; i++) {
-  renderRoutePoints(points[i]);
+if (points.length > 1) {
+  for (let i = 1; i < POINT_COUNT; i++) {
+    renderRoutePoints(points[i]);
+  }
+} else {
+  renderElement(siteListElement, new EmptyView().getElement(), RenderPosition.BEFOREEND);
 }
 
