@@ -1,17 +1,13 @@
-import {createElement} from "../utils.js";
+import {createElement} from "../../utils.js";
+import {createEditTemplate} from "./form-edit.tpl.js";
 
-const createFormListTemplate = () => {
-  return `<ul class="trip-events__list">
-  </ul>`;
-};
-
-
-export default class FormListView {
-  constructor() {
+export default class FormEditView {
+  constructor(data) {
     this._element = null;
+    this._data = data;
   }
   getTemplate() {
-    return createFormListTemplate();
+    return createEditTemplate(this._data);
   }
   getElement() {
     if (!this._element) {

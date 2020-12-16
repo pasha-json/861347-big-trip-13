@@ -1,18 +1,13 @@
-import {createElement} from "../utils.js";
+import {createElement} from "../../utils.js";
+import {createRoutePinTemplate} from "./route-pin.tpl.js";
 
-const createCostTemplate = (cost) => {
-  return `<p class="trip-info__cost">
-  Total: &euro;&nbsp;<span class="trip-info__cost-value">${cost}</span>
-</p>`;
-};
-
-export default class CostView {
+export default class RoutePinView {
   constructor(data) {
     this._element = null;
     this._data = data;
   }
   getTemplate() {
-    return createCostTemplate(this._data);
+    return createRoutePinTemplate(this._data);
   }
   getElement() {
     if (!this._element) {

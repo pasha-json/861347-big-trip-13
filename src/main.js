@@ -1,28 +1,26 @@
-import RouteView from "./view/route.js";
-import CostView from "./view/cost.js";
-import MenuView from "./view/menu.js";
-import FiltersView from "./view/filters.js";
-import SortView from "./view/sort.js";
-import FormListView from "./view/form-list.js";
-import FormAddView from "./view/form-add.js";
-import FormEditView from "./view/form-edit.js";
-import RoutePinView from "./view/route-pin.js";
+import RouteView from "./view/route/route.js";
+import CostView from "./view/cost/cost.js";
+import MenuView from "./view/menu/menu.js";
+import FiltersView from "./view/filters/filters.js";
+import SortView from "./view/sort/sort.js";
+import FormListView from "./view/form-list/form-list.js";
+import FormAddView from "./view/form-add/form-add.js";
+import FormEditView from "./view/form-edit/form-edit.js";
+import RoutePinView from "./view/route-pin/route-pin.js";
+import EmptyView from "./view/empty/empty.js";
 import {generatePoint} from "./mock/route-point.js";
 import {generateTotalCost} from "./mock/cost.js";
-import {generateMenu} from "./view/const.js";
-import {generateFilters} from "./view/const.js";
+import {Filters, generateMenu, POINT_COUNT} from "./consts/consts.js";
 import {generateRouteInfo} from "./mock/route.js";
 import {generateSorting} from "./mock/sort.js";
-import {renderElement, RenderPosition} from "./utils.js";
-
-const POINT_COUNT = 20;
+import {renderElement, RenderPosition, ifEscKeyPressed} from "./utils.js";
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
 const cost = generateTotalCost(points);
 
 const menu = generateMenu();
 
-const filters = Object.values(generateFilters());
+const filters = Object.values(Filters);
 const route = generateRouteInfo(points);
 const sort = generateSorting();
 
@@ -47,7 +45,6 @@ renderElement(siteSortElement, new FormListView().getElement(), RenderPosition.B
 const siteListElement = siteMainElement.querySelector(`.trip-events__list`);
 
 renderElement(siteListElement, new FormAddView(points[0]).getElement(), RenderPosition.BEFOREEND);
-// renderElement(siteListElement, new FormEditView(points[0]).getElement(), RenderPosition.AFTERBEGIN);
 
 const renderRoutePoints = (data) => {
   const routePoint = new RoutePinView(data);
@@ -62,7 +59,7 @@ const renderRoutePoints = (data) => {
   };
 
   const onEscKeyDown = (evt) => {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
+    if (ifEscKeyPressed(evt)) {
       evt.preventDefault();
       replaceFormToRoutePoint();
       document.removeEventListener(`keydown`, onEscKeyDown);
@@ -88,9 +85,11 @@ const renderRoutePoints = (data) => {
   renderElement(siteListElement, routePoint.getElement(), RenderPosition.BEFOREEND);
 };
 
-
-for (let i = 1; i < POINT_COUNT; i++) {
-  // renderElement(siteListElement, new RoutePinView(points[i]).getElement(), RenderPosition.BEFOREEND);
-  renderRoutePoints(points[i]);
+if (points.length > 1) {
+  for (let i = 1; i < POINT_COUNT; i++) {
+    renderRoutePoints(points[i]);
+  }
+} else {
+  renderElement(siteListElement, new EmptyView().getElement(), RenderPosition.BEFOREEND);
 }
 

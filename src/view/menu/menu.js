@@ -1,15 +1,5 @@
-import {createElement} from "../utils.js";
-
-const createMenuTemplate = ({items}) => {
-
-  const menuItems = items.map(({title, isActive}) => {
-    return `<a class="trip-tabs__btn  ${isActive ? `trip-tabs__btn--active` : ``}" href="#">${title}</a>`;
-  }).join(``);
-
-  return `<nav class="trip-controls__trip-tabs  trip-tabs">
-  ${menuItems}
-  </nav>`;
-};
+import {createElement} from "../../utils.js";
+import {createMenuTemplate} from "./menu.tpl.js";
 
 export default class MenuView {
   constructor(data) {
