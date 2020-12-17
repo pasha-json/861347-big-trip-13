@@ -13,7 +13,8 @@ import {generateTotalCost} from "./mock/cost.js";
 import {Filters, generateMenu, POINT_COUNT} from "./consts/consts.js";
 import {generateRouteInfo} from "./mock/route.js";
 import {generateSorting} from "./mock/sort.js";
-import {renderElement, RenderPosition, ifEscKeyPressed} from "./utils.js";
+import {renderElement, RenderPosition} from "./utils/render.js";
+import {isEscKeyPressed} from "./utils/common.js";
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
 const cost = generateTotalCost(points);
@@ -59,25 +60,24 @@ const renderRoutePoints = (data) => {
   };
 
   const onEscKeyDown = (evt) => {
-    if (ifEscKeyPressed(evt)) {
+    if (isEscKeyPressed(evt)) {
       evt.preventDefault();
       replaceFormToRoutePoint();
       document.removeEventListener(`keydown`, onEscKeyDown);
     }
   };
 
-  routePoint.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+  routePoint.setClickHandler(() => {
     replaceRoutePointToForm();
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  editForm.getElement().querySelector(`.event__save-btn`).addEventListener(`submit`, (evt) => {
-    evt.preventDefault();
+  editForm.setSubmitHandler(() => {
     replaceFormToRoutePoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
-  editForm.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+  editForm.setClickHandler(() => {
     replaceFormToRoutePoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
   });

@@ -1,21 +1,12 @@
-import {createElement} from "../../utils.js";
 import {createSortTemplate} from "./sort.tpl.js";
+import Abstract from "../abstract/abstract.js";
 
-export default class SortView {
+export default class SortView extends Abstract {
   constructor(data) {
-    this._element = null;
+    super();
     this._data = data;
   }
   getTemplate() {
     return createSortTemplate(this._data);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,20 +1,11 @@
-import {createElement} from "../../utils.js";
 import {createFormListTemplate} from "./form-list.tpl.js";
+import Abstract from "../abstract/abstract.js";
 
-export default class FormListView {
+export default class FormListView extends Abstract {
   constructor() {
-    this._element = null;
+    super();
   }
   getTemplate() {
     return createFormListTemplate();
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

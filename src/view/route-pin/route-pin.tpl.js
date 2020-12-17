@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {getRouteDuration} from "../../utils.js";
+import {getRouteDuration} from "../../utils/common.js";
 
 
 const renderOptions = (points) => {

@@ -1,20 +1,11 @@
-import {createElement} from "../../utils.js";
 import {createEmptyTemplate} from "./empty.tpl.js";
+import Abstract from "../abstract/abstract.js";
 
-export default class EmptyView {
+export default class EmptyView extends Abstract {
   constructor() {
-    this._element = null;
+    super();
   }
   getTemplate() {
     return createEmptyTemplate();
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }
