@@ -66,18 +66,17 @@ const renderRoutePoints = (data) => {
     }
   };
 
-  routePoint.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+  routePoint.setClickHandler(() => {
     replaceRoutePointToForm();
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  editForm.getElement().querySelector(`.event__save-btn`).addEventListener(`submit`, (evt) => {
-    evt.preventDefault();
+  editForm.setSubmitHandler(() => {
     replaceFormToRoutePoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
-  editForm.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+  editForm.setClickHandler(() => {
     replaceFormToRoutePoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
