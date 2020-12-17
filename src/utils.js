@@ -48,11 +48,8 @@ export const createElement = (template) => {
   return newElement.firstChild;
 };
 
-export const ifEscKeyPressed = (evt) => {
-  if (evt.key === `Escape` || evt.key === `Esc`) {
-    return true;
-  }
-  return false;
+export const isEscKeyPressed = (evt) => {
+  return evt.key === `Escape` || evt.key === `Esc`;
 };
 
 
