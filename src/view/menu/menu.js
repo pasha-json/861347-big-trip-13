@@ -1,22 +1,13 @@
-import {createElement} from "../../utils.js";
 import {createMenuTemplate} from "./menu.tpl.js";
+import Abstract from "../abstract/abstract.js";
 
-export default class MenuView {
+export default class MenuView extends Abstract {
   constructor(data) {
-    this._element = null;
+    super();
     this._data = data;
   }
   getTemplate() {
     return createMenuTemplate(this._data);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }
 

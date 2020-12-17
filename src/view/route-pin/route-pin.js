@@ -1,21 +1,12 @@
-import {createElement} from "../../utils.js";
 import {createRoutePinTemplate} from "./route-pin.tpl.js";
+import Abstract from "../abstract/abstract.js";
 
-export default class RoutePinView {
+export default class RoutePinView extends Abstract {
   constructor(data) {
-    this._element = null;
+    super();
     this._data = data;
   }
   getTemplate() {
     return createRoutePinTemplate(this._data);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

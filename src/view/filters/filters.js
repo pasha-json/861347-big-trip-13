@@ -1,21 +1,12 @@
-import {createElement} from "../../utils.js";
 import {createFiltersTemplate} from "./filters.tpl.js";
+import Abstract from "../abstract/abstract.js";
 
-export default class FiltersView {
+export default class FiltersView extends Abstract {
   constructor(data) {
-    this._element = null;
+    super();
     this._data = data;
   }
   getTemplate() {
     return createFiltersTemplate(this._data);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }
