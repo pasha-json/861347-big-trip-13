@@ -13,7 +13,8 @@ import {generateTotalCost} from "./mock/cost.js";
 import {Filters, generateMenu, POINT_COUNT} from "./consts/consts.js";
 import {generateRouteInfo} from "./mock/route.js";
 import {generateSorting} from "./mock/sort.js";
-import {renderElement, RenderPosition, isEscKeyPressed} from "./utils.js";
+import {renderElement, RenderPosition} from "./utils/render.js";
+import {isEscKeyPressed} from "./utils/common.js";
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
 const cost = generateTotalCost(points);
