@@ -1,5 +1,5 @@
-import {createRoutePinTemplate} from "./route-pin.tpl.js";
-import Abstract from "../abstract/abstract.js";
+import {createRoutePinTemplate} from "./route-pin.tpl";
+import Abstract from "../abstract/abstract";
 
 export default class RoutePinView extends Abstract {
   constructor(data) {

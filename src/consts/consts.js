@@ -1,4 +1,4 @@
-import {getRandomInteger} from "../utils/common.js";
+import {getRandomInteger} from "../utils/common";
 
 export const POINT_COUNT = 20;
 

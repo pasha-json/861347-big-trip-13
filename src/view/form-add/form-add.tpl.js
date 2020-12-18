@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {generateOptions} from "../../mock/options.js";
+import {generateOptions} from "../../mock/options";
 
 const options = generateOptions();
 

@@ -1,5 +1,5 @@
-import {createCostTemplate} from "./cost.tpl.js";
-import Abstract from "../abstract/abstract.js";
+import {createCostTemplate} from "./cost.tpl";
+import Abstract from "../abstract/abstract";
 
 export default class CostView extends Abstract {
   constructor(data) {

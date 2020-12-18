@@ -1,5 +1,5 @@
-import {getRandomInteger} from "../utils/common.js";
-import {generateOptions} from "./options.js";
+import {getRandomInteger} from "../utils/common";
+import {generateOptions} from "./options";
 import dayjs from 'dayjs';
 
 const generateType = () => {

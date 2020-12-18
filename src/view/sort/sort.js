@@ -1,5 +1,5 @@
-import {createSortTemplate} from "./sort.tpl.js";
-import Abstract from "../abstract/abstract.js";
+import {createSortTemplate} from "./sort.tpl";
+import Abstract from "../abstract/abstract";
 
 export default class SortView extends Abstract {
   constructor(data) {

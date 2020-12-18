@@ -1,5 +1,5 @@
-import {createFormListTemplate} from "./form-list.tpl.js";
-import Abstract from "../abstract/abstract.js";
+import {createFormListTemplate} from "./form-list.tpl";
+import Abstract from "../abstract/abstract";
 
 export default class FormListView extends Abstract {
   constructor() {

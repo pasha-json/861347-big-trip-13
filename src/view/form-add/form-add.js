@@ -1,5 +1,5 @@
-import {createAddFormTemplate} from "./form-add.tpl.js";
-import Abstract from "../abstract/abstract.js";
+import {createAddFormTemplate} from "./form-add.tpl";
+import Abstract from "../abstract/abstract";
 
 export default class FormAddView extends Abstract {
   constructor(data) {

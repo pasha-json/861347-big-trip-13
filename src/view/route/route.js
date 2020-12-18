@@ -1,5 +1,5 @@
-import {createRouteTemplate} from "./route.tpl.js";
-import Abstract from "../abstract/abstract.js";
+import {createRouteTemplate} from "./route.tpl";
+import Abstract from "../abstract/abstract";
 
 export default class RouteView extends Abstract {
   constructor(data) {

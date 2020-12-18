@@ -1,5 +1,5 @@
-import {createEditTemplate} from "./form-edit.tpl.js";
-import Abstract from "../abstract/abstract.js";
+import {createEditTemplate} from "./form-edit.tpl";
+import Abstract from "../abstract/abstract";
 
 export default class FormEditView extends Abstract {
   constructor(data) {

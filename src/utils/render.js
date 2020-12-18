@@ -1,4 +1,4 @@
-import Abstract from "../view/abstract/abstract.js";
+import Abstract from "../view/abstract/abstract";
 
 export const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -26,6 +26,9 @@ export const renderElement = (container, child, place) => {
       break;
     case RenderPosition.AFTEREND:
       container.after(child);
+      break;
+    default:
+      container.append(child);
       break;
   }
 };

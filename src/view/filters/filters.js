@@ -1,5 +1,5 @@
-import {createFiltersTemplate} from "./filters.tpl.js";
-import Abstract from "../abstract/abstract.js";
+import {createFiltersTemplate} from "./filters.tpl";
+import Abstract from "../abstract/abstract";
 
 export default class FiltersView extends Abstract {
   constructor(data) {
