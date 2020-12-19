@@ -8,30 +8,20 @@ import FormAddView from "../view/form-add/form-add";
 import FormEditView from "../view/form-edit/form-edit";
 import RoutePinView from "../view/route-pin/route-pin";
 import EmptyView from "../view/empty/empty";
-import {generatePoint} from "../mock/route-point";
-import {generateTotalCost} from "../mock/cost";
-import {Filters, generateMenu, POINT_COUNT} from "../consts/consts";
-import {generateRouteInfo} from "../mock/route";
-import {generateSorting} from "../mock/sort";
 import {renderElement, RenderPosition} from "../utils/render";
 import {isEscKeyPressed} from "../utils/common";
 
 
 export default class Trip {
-  constructor() {
+  constructor(points, cost, menu, filters, route, sort, POINT_COUNT) {
 
-    this._costView = new CostView();
-    this._menuView = new MenuView();
-    this._filtersView = new FiltersView();
-    this._sortView = new SortView();
-    this._formListView = new FormListView();
-    this._formAddView = new FormAddView();
-    this._formEditView = new FormEditView();
-    this._routePinView = new RoutePinView();
-    this._emptyView = new EmptyView();
-
-    this._pointCount = POINT_COUNT;
-    this._points = new Array(POINT_COUNT).fill().map(this._generatePoint);
+    this._points = points;
+    this._cost = cost;
+    this._menu = menu;
+    this._filters = filters;
+    this._route = route;
+    this._sort = sort;
+    this._POINT_COUNT = POINT_COUNT;
 
     this._isEscKeyPressed = isEscKeyPressed;
 
@@ -42,52 +32,31 @@ export default class Trip {
     this._siteSortElement = this._siteMainElement.querySelector(`.trip-events`);
 
   }
-  _getCost() {
-    return generateTotalCost(this._points);
-  }
-  _getRoute(points) {
-    return generateRouteInfo(points);
-  }
-  _getSort() {
-    return generateSorting();
-  }
-  _getMenu() {
-    return generateMenu();
-  }
-  _getFilters() {
-    return Object.values(Filters);
-  }
-  _generatePoint() {
-    return generatePoint();
-  }
   _render(where, what, position) {
     renderElement(where, what, position);
-  }
-  _generateTotalCost(points) {
-    return generateTotalCost(points);
   }
   _init() {
     this._renderRoute();
   }
   _renderRoute() {
-    this._render(this._siteRouteElement, new RouteView(this._getRoute(this._points)).getElement(), RenderPosition.AFTERBEGIN);
+    this._render(this._siteRouteElement, new RouteView(this._route).getElement(), RenderPosition.AFTERBEGIN);
     this._siteCostElement = this._siteRouteElement.querySelector(`.trip-main__trip-info`);
     this._renderCost();
   }
   _renderCost() {
-    this._render(this._siteCostElement, new CostView(this._getCost()).getElement(), RenderPosition.BEFOREEND);
+    this._render(this._siteCostElement, new CostView(this._cost).getElement(), RenderPosition.BEFOREEND);
     this._renderMenu();
   }
   _renderMenu() {
-    this._render(this._siteControlsElement, new MenuView(this._getMenu()).getElement(), RenderPosition.AFTEREND);
+    this._render(this._siteControlsElement, new MenuView(this._menu).getElement(), RenderPosition.AFTEREND);
     this._renderFilters();
   }
   _renderFilters() {
-    this._render(this._siteFiltersElement, new FiltersView(this._getFilters()).getElement(), RenderPosition.AFTEREND);
+    this._render(this._siteFiltersElement, new FiltersView(this._filters).getElement(), RenderPosition.AFTEREND);
     this._renderSort();
   }
   _renderSort() {
-    this._render(this._siteSortElement, new SortView(this._getSort()).getElement(), RenderPosition.BEFOREEND);
+    this._render(this._siteSortElement, new SortView(this._sort).getElement(), RenderPosition.BEFOREEND);
     this._renderFormList();
   }
   _renderFormList() {
@@ -139,7 +108,7 @@ export default class Trip {
   }
   _renderPins() {
     if (this._points.length > 1) {
-      for (let i = 1; i < POINT_COUNT; i++) {
+      for (let i = 1; i < this._POINT_COUNT; i++) {
         this._renderRoutePin(this._points[i]);
       }
     } else {
