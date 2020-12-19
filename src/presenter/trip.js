@@ -5,15 +5,13 @@ import FiltersView from "../view/filters/filters";
 import SortView from "../view/sort/sort";
 import FormListView from "../view/form-list/form-list";
 import FormAddView from "../view/form-add/form-add";
-import FormEditView from "../view/form-edit/form-edit";
-import RoutePinView from "../view/route-pin/route-pin";
-import EmptyView from "../view/empty/empty";
 import {renderElement, RenderPosition} from "../utils/render";
 import {isEscKeyPressed} from "../utils/common";
+import Point from "./point.js";
 
 
 export default class Trip {
-  constructor(points, cost, menu, filters, route, sort, POINT_COUNT) {
+  constructor(points, cost, menu, filters, route, sort) {
 
     this._points = points;
     this._cost = cost;
@@ -21,7 +19,6 @@ export default class Trip {
     this._filters = filters;
     this._route = route;
     this._sort = sort;
-    this._POINT_COUNT = POINT_COUNT;
 
     this._isEscKeyPressed = isEscKeyPressed;
 
@@ -66,59 +63,7 @@ export default class Trip {
   _renderFormAdd() {
     this._siteListElement = this._siteMainElement.querySelector(`.trip-events__list`);
     this._render(this._siteListElement, new FormAddView(this._points[0]).getElement(), RenderPosition.BEFOREEND);
-    this._renderPins();
-  }
-  _renderRoutePin(data) {
-    const routePoint = new RoutePinView(data);
-    const editForm = new FormEditView(data);
-
-    const replaceRoutePointToForm = () => {
-      this._siteListElement.replaceChild(editForm.getElement(), routePoint.getElement());
-    };
-
-    const replaceFormToRoutePoint = () => {
-      this._siteListElement.replaceChild(routePoint.getElement(), editForm.getElement());
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (isEscKeyPressed(evt)) {
-        evt.preventDefault();
-        replaceFormToRoutePoint();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    routePoint.setClickHandler(() => {
-      replaceRoutePointToForm();
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-
-    editForm.setSubmitHandler(() => {
-      replaceFormToRoutePoint();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-
-    editForm.setClickHandler(() => {
-      replaceFormToRoutePoint();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-
-    this._render(this._siteListElement, routePoint.getElement(), RenderPosition.BEFOREEND);
-
-  }
-  _renderPins() {
-    if (this._points.length > 1) {
-      for (let i = 1; i < this._POINT_COUNT; i++) {
-        this._renderRoutePin(this._points[i]);
-      }
-    } else {
-      this._renderEmpty();
-    }
-  }
-  _renderFormEdit() {
-    // Отрисовка формы редактирования
-  }
-  _renderEmpty() {
-    this._render(this._siteListElement, new EmptyView().getElement(), RenderPosition.BEFOREEND);
+    const pointPresenter = new Point(this._points, this._siteListElement);
+    pointPresenter._init();
   }
 }

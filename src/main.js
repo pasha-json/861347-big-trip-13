@@ -14,5 +14,5 @@ const filters = Object.values(Filters);
 const route = generateRouteInfo(points);
 const sort = generateSorting();
 
-const newTrip = new Trip(points, cost, menu, filters, route, sort, POINT_COUNT);
+const newTrip = new Trip(points, cost, menu, filters, route, sort);
 newTrip._init();
