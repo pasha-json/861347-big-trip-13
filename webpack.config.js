@@ -10,8 +10,8 @@ module.exports = {
   devServer: {
     contentBase: path.resolve(__dirname, 'public'),
     watchContentBase: true
-  },
-  resolve: {
-    extentions: ['.wasm', '.mjs', '.js', '.json']
   }
+  // resolve: {
+  //   extentions: ['.wasm', '.mjs', '.js', '.json']
+  // }
 };
