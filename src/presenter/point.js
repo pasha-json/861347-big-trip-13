@@ -1,69 +1,67 @@
 import FormEditView from "../view/form-edit/form-edit";
 import RoutePinView from "../view/route-pin/route-pin";
 import EmptyView from "../view/empty/empty";
-import {renderElement, RenderPosition} from "../utils/render";
+import {renderElement, RenderPosition, remove, replace} from "../utils/render";
 import {isEscKeyPressed} from "../utils/common";
 
 export default class Point {
-  constructor(points, siteListElement) {
-    this._points = points;
+  constructor(siteListElement) {
     this._siteListElement = siteListElement;
 
-  }
-  _render(where, what, position) {
-    renderElement(where, what, position);
-  }
-  _init() {
-    this._renderPins();
-  }
-  _renderRoutePin(data) {
-    const routePoint = new RoutePinView(data);
-    const editForm = new FormEditView(data);
+    this._routePoint = null;
+    this._editForm = null;
 
-    const replaceRoutePointToForm = () => {
-      this._siteListElement.replaceChild(editForm.getElement(), routePoint.getElement());
-    };
-
-    const replaceFormToRoutePoint = () => {
-      this._siteListElement.replaceChild(routePoint.getElement(), editForm.getElement());
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (isEscKeyPressed(evt)) {
-        evt.preventDefault();
-        replaceFormToRoutePoint();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    routePoint.setClickHandler(() => {
-      replaceRoutePointToForm();
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-
-    editForm.setSubmitHandler(() => {
-      replaceFormToRoutePoint();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-
-    editForm.setClickHandler(() => {
-      replaceFormToRoutePoint();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    });
-
-    this._render(this._siteListElement, routePoint.getElement(), RenderPosition.BEFOREEND);
+    this._replaceRoutePointToForm = this._replaceRoutePointToForm.bind(this);
+    this._replaceFormToRoutePoint = this._replaceFormToRoutePoint.bind(this);
+    this._onEscKeyDown = this._onEscKeyDown.bind(this);
 
   }
-  _renderPins() {
-    if (this._points.length > 1) {
-      for (let i = 1; i < this._points.length; i++) {
-        this._renderRoutePin(this._points[i]);
-      }
-    } else {
-      this._renderEmpty();
-    }
+
+  _init(point) {
+    this._renderPins(point);
+  }
+  _renderRoutePin(point) {
+
+    // const routePoint = new RoutePinView(point);
+    // const editForm = new FormEditView(point);
+
+    this._routePoint = new RoutePinView(point);
+    this._editForm = new FormEditView(point);
+
+    this._routePoint.setClickHandler(this._replaceRoutePointToForm);
+    this._editForm.setSubmitHandler(this._replaceFormToRoutePoint);
+    this._editForm.setClickHandler(this._replaceFormToRoutePoint);
+
+    renderElement(this._siteListElement, this._routePoint, RenderPosition.BEFOREEND);
+
+  }
+  _renderPins(point) {
+    this._renderRoutePin(point);
   }
   _renderEmpty() {
     this._render(this._siteListElement, new EmptyView().getElement(), RenderPosition.BEFOREEND);
+  }
+
+  _replaceRoutePointToForm() {
+    replace(this._siteListElement, this._editForm, this._routePoint);
+    document.addEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  _replaceFormToRoutePoint() {
+    replace(this._siteListElement, this._routePoint, this._editForm);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  _onEscKeyDown(evt) {
+    if (isEscKeyPressed(evt)) {
+      evt.preventDefault();
+      this._replaceFormToRoutePoint();
+      document.removeEventListener(`keydown`, this._onEscKeyDown);
+    }
+  }
+
+  destroy() {
+    remove(this._routePoint);
+    remove(this._editForm);
   }
 }

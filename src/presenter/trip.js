@@ -28,6 +28,8 @@ export default class Trip {
     this._siteFiltersElement = this._siteMainElement.querySelector(`.trip-main__trip-controls h2:nth-child(2)`);
     this._siteSortElement = this._siteMainElement.querySelector(`.trip-events`);
 
+    this._formList = new FormListView();
+
   }
   _render(where, what, position) {
     renderElement(where, what, position);
@@ -57,13 +59,20 @@ export default class Trip {
     this._renderFormList();
   }
   _renderFormList() {
-    this._render(this._siteSortElement, new FormListView().getElement(), RenderPosition.BEFOREEND);
+    this._render(this._siteSortElement, this._formList.getElement(), RenderPosition.BEFOREEND);
     this._renderFormAdd();
   }
   _renderFormAdd() {
-    this._siteListElement = this._siteMainElement.querySelector(`.trip-events__list`);
-    this._render(this._siteListElement, new FormAddView(this._points[0]).getElement(), RenderPosition.BEFOREEND);
-    const pointPresenter = new Point(this._points, this._siteListElement);
-    pointPresenter._init();
+    this._render(this._formList.getElement(), new FormAddView(this._points[0]).getElement(), RenderPosition.BEFOREEND);
+    this._renderPointsList();
+  }
+  _renderPoint(point) {
+    this._pointPresenter = new Point(this._formList);
+    this._pointPresenter._init(point);
+  }
+  _renderPointsList() {
+    this._points.forEach((point) => {
+      this._renderPoint(point);
+    });
   }
 }
