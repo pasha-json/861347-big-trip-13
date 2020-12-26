@@ -1,4 +1,4 @@
-import Abstract from "../view/abstract/abstract.js";
+import Abstract from "../view/abstract/abstract";
 
 export const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -27,5 +27,34 @@ export const renderElement = (container, child, place) => {
     case RenderPosition.AFTEREND:
       container.after(child);
       break;
+    default:
+      container.append(child);
+      break;
   }
+};
+
+export const remove = (component) => {
+  if (!(component instanceof Abstract)) {
+    throw new Error(`Can remove only components`);
+  }
+
+  component.getElement().remove();
+  component.removeElement();
+};
+
+export const replace = (container, newChild, oldChild) => {
+
+  if (container instanceof Abstract) {
+    container = container.getElement();
+  }
+
+  if (oldChild instanceof Abstract) {
+    oldChild = oldChild.getElement();
+  }
+
+  if (newChild instanceof Abstract) {
+    newChild = newChild.getElement();
+  }
+
+  container.replaceChild(newChild, oldChild);
 };

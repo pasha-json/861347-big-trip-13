@@ -1,5 +1,5 @@
-import {createMenuTemplate} from "./menu.tpl.js";
-import Abstract from "../abstract/abstract.js";
+import {createMenuTemplate} from "./menu.tpl";
+import Abstract from "../abstract/abstract";
 
 export default class MenuView extends Abstract {
   constructor(data) {

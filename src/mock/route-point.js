@@ -1,6 +1,8 @@
-import {getRandomInteger} from "../utils/common.js";
-import {generateOptions} from "./options.js";
+import {getRandomInteger} from "../utils/common";
+import {generateOptions} from "./options";
 import dayjs from 'dayjs';
+
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 const generateType = () => {
   const types = [
@@ -102,6 +104,7 @@ export const generatePoint = () => {
   const date = generateDates();
   const price = generatePrice();
   const isFavourite = Boolean(getRandomInteger(0, 1));
+  const id = generateId();
 
   return {
     type,
@@ -111,6 +114,7 @@ export const generatePoint = () => {
     images,
     date,
     price,
-    isFavourite
+    isFavourite,
+    id
   };
 };
