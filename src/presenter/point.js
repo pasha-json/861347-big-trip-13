@@ -22,8 +22,8 @@ export default class Point {
   }
   _renderRoutePin(point) {
 
-    // const routePoint = new RoutePinView(point);
-    // const editForm = new FormEditView(point);
+    const prevRoutePoint = this._routePoint;
+    const prevEditForm = this._editForm;
 
     this._routePoint = new RoutePinView(point);
     this._editForm = new FormEditView(point);
@@ -32,7 +32,20 @@ export default class Point {
     this._editForm.setSubmitHandler(this._replaceFormToRoutePoint);
     this._editForm.setClickHandler(this._replaceFormToRoutePoint);
 
-    renderElement(this._siteListElement, this._routePoint, RenderPosition.BEFOREEND);
+    if (prevRoutePoint === null || prevEditForm === null) {
+      renderElement(this._siteListElement, this._routePoint, RenderPosition.BEFOREEND);
+      return;
+    }
+
+    if (this._siteListElement.getElement().contains(prevRoutePoint.getElement())) {
+      replace(this._siteListElement, this._routePoint, prevRoutePoint);
+    }
+    if (this._siteListElement.getElement().contains(prevEditForm.getElement())) {
+      replace(this._siteListElement, this._editForm, prevEditForm);
+    }
+
+    remove(this._routePoint);
+    remove(this._editForm);
 
   }
   _renderPins(point) {

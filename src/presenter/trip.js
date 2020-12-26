@@ -6,7 +6,7 @@ import SortView from "../view/sort/sort";
 import FormListView from "../view/form-list/form-list";
 import FormAddView from "../view/form-add/form-add";
 import {renderElement, RenderPosition} from "../utils/render";
-import {isEscKeyPressed} from "../utils/common";
+import {isEscKeyPressed, updateItem} from "../utils/common";
 import Point from "./point.js";
 
 
@@ -22,6 +22,8 @@ export default class Trip {
 
     this._isEscKeyPressed = isEscKeyPressed;
 
+    this._pointPresenter = {};
+
     this._siteMainElement = document.querySelector(`.page-body`);
     this._siteRouteElement = this._siteMainElement.querySelector(`.trip-main`);
     this._siteControlsElement = this._siteMainElement.querySelector(`.trip-main__trip-controls h2:first-child`);
@@ -30,13 +32,23 @@ export default class Trip {
 
     this._formList = new FormListView();
 
+    this._handlePointChange = this._handlePointChange.bind(this);
+
   }
-  _render(where, what, position) {
-    renderElement(where, what, position);
-  }
+
   _init() {
     this._renderRoute();
   }
+
+  _handlePointChange(updatedPoint) {
+    this._routePoints = updateItem(this._routePoints, updatedPoint);
+    this._pointPresenter[updatedPoint.id]._init(updatedPoint);
+  }
+
+  _render(where, what, position) {
+    renderElement(where, what, position);
+  }
+
   _renderRoute() {
     this._render(this._siteRouteElement, new RouteView(this._route).getElement(), RenderPosition.AFTERBEGIN);
     this._siteCostElement = this._siteRouteElement.querySelector(`.trip-main__trip-info`);
@@ -67,12 +79,19 @@ export default class Trip {
     this._renderPointsList();
   }
   _renderPoint(point) {
-    this._pointPresenter = new Point(this._formList);
-    this._pointPresenter._init(point);
+    const pointPresenter = new Point(this._formList);
+    pointPresenter._init(point);
+    this._pointPresenter[point.id] = pointPresenter;
   }
   _renderPointsList() {
     this._points.forEach((point) => {
       this._renderPoint(point);
     });
+  }
+  _clearPointList() {
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._pointPresenter = {};
   }
 }
