@@ -4,13 +4,21 @@ import EmptyView from "../view/empty/empty";
 import {renderElement, RenderPosition, remove, replace} from "../utils/render";
 import {isEscKeyPressed} from "../utils/common";
 
+const Mode = {
+  DEFAULT: `DEFAULT`,
+  EDITING: `EDITING`
+};
+
+
 export default class Point {
-  constructor(siteListElement, changeData) {
+  constructor(siteListElement, changeData, changeMode) {
     this._siteListElement = siteListElement;
     this._changeData = changeData;
+    this._changeMode = changeMode;
 
     this._routePoint = null;
     this._editForm = null;
+    this._mode = Mode.DEFAULT;
 
     this._replaceRoutePointToForm = this._replaceRoutePointToForm.bind(this);
     this._replaceFormToRoutePoint = this._replaceFormToRoutePoint.bind(this);
@@ -42,10 +50,10 @@ export default class Point {
       return;
     }
 
-    if (this._siteListElement.getElement().contains(prevRoutePoint.getElement())) {
+    if (this._mode === Mode.DEFAULT) {
       replace(this._siteListElement, this._routePoint, prevRoutePoint);
     }
-    if (this._siteListElement.getElement().contains(prevEditForm.getElement())) {
+    if (this._mode === Mode.EDITING) {
       replace(this._siteListElement, this._editForm, prevEditForm);
     }
 
@@ -59,15 +67,23 @@ export default class Point {
   _renderEmpty() {
     this._render(this._siteListElement, new EmptyView().getElement(), RenderPosition.BEFOREEND);
   }
+  _resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceFormToRoutePoint();
+    }
+  }
 
   _replaceRoutePointToForm() {
     replace(this._siteListElement, this._editForm, this._routePoint);
     document.addEventListener(`keydown`, this._onEscKeyDown);
+    this._changeMode();
+    this._mode = Mode.EDITING;
   }
 
   _replaceFormToRoutePoint() {
     replace(this._siteListElement, this._routePoint, this._editForm);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._mode = Mode.DEFAULT;
   }
 
   _onEscKeyDown(evt) {

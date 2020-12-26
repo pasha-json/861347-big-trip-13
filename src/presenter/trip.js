@@ -9,7 +9,6 @@ import {renderElement, RenderPosition} from "../utils/render";
 import {isEscKeyPressed, updateItem} from "../utils/common";
 import Point from "./point.js";
 
-
 export default class Trip {
   constructor(points, cost, menu, filters, route, sort) {
 
@@ -33,11 +32,18 @@ export default class Trip {
     this._formList = new FormListView();
 
     this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
 
   }
 
   _init() {
     this._renderRoute();
+  }
+
+  _handleModeChange() {
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => presenter._resetView());
   }
 
   _handlePointChange(updatedPoint) {
@@ -79,7 +85,7 @@ export default class Trip {
     this._renderPointsList();
   }
   _renderPoint(point) {
-    const pointPresenter = new Point(this._formList, this._handlePointChange);
+    const pointPresenter = new Point(this._formList, this._handlePointChange, this._handleModeChange);
     pointPresenter._init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
