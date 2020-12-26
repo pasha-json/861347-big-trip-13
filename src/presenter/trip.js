@@ -13,7 +13,7 @@ import Point from "./point.js";
 export default class Trip {
   constructor(points, cost, menu, filters, route, sort) {
 
-    this._points = points;
+    this._points = points.slice();
     this._cost = cost;
     this._menu = menu;
     this._filters = filters;
@@ -41,7 +41,7 @@ export default class Trip {
   }
 
   _handlePointChange(updatedPoint) {
-    this._routePoints = updateItem(this._routePoints, updatedPoint);
+    this._points = updateItem(this._points, updatedPoint);
     this._pointPresenter[updatedPoint.id]._init(updatedPoint);
   }
 
@@ -79,7 +79,7 @@ export default class Trip {
     this._renderPointsList();
   }
   _renderPoint(point) {
-    const pointPresenter = new Point(this._formList);
+    const pointPresenter = new Point(this._formList, this._handlePointChange);
     pointPresenter._init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }

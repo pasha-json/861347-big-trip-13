@@ -5,8 +5,9 @@ import {renderElement, RenderPosition, remove, replace} from "../utils/render";
 import {isEscKeyPressed} from "../utils/common";
 
 export default class Point {
-  constructor(siteListElement) {
+  constructor(siteListElement, changeData) {
     this._siteListElement = siteListElement;
+    this._changeData = changeData;
 
     this._routePoint = null;
     this._editForm = null;
@@ -14,6 +15,7 @@ export default class Point {
     this._replaceRoutePointToForm = this._replaceRoutePointToForm.bind(this);
     this._replaceFormToRoutePoint = this._replaceFormToRoutePoint.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    this._handleFavouriteClick = this._handleFavouriteClick.bind(this);
 
   }
 
@@ -25,12 +27,15 @@ export default class Point {
     const prevRoutePoint = this._routePoint;
     const prevEditForm = this._editForm;
 
-    this._routePoint = new RoutePinView(point);
-    this._editForm = new FormEditView(point);
+    this._point = point;
+
+    this._routePoint = new RoutePinView(this._point);
+    this._editForm = new FormEditView(this._point);
 
     this._routePoint.setClickHandler(this._replaceRoutePointToForm);
     this._editForm.setSubmitHandler(this._replaceFormToRoutePoint);
     this._editForm.setClickHandler(this._replaceFormToRoutePoint);
+    this._routePoint.setFavouriteClickHandler(this._handleFavouriteClick);
 
     if (prevRoutePoint === null || prevEditForm === null) {
       renderElement(this._siteListElement, this._routePoint, RenderPosition.BEFOREEND);
@@ -44,8 +49,8 @@ export default class Point {
       replace(this._siteListElement, this._editForm, prevEditForm);
     }
 
-    remove(this._routePoint);
-    remove(this._editForm);
+    remove(prevRoutePoint);
+    remove(prevEditForm);
 
   }
   _renderPins(point) {
@@ -76,5 +81,17 @@ export default class Point {
   destroy() {
     remove(this._routePoint);
     remove(this._editForm);
+  }
+
+  _handleFavouriteClick() {
+    this._changeData(
+        Object.assign(
+            {},
+            this._point,
+            {
+              isFavourite: !this._point.isFavourite
+            }
+        )
+    );
   }
 }
