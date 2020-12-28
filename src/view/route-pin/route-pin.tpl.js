@@ -3,15 +3,14 @@ import {getRouteDuration} from "../../utils/common";
 
 
 const renderOptions = (points) => {
-  return `<h4 class="visually-hidden">Offers:</h4>
-  <ul class="event__selected-offers">
+  return `<ul class="event__selected-offers">
     ${points.options.map(({name, price}) => {
     return `<li class="event__offer">
         <span class="event__offer-title">${name}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${price}</span>
       </li>`;
-  }).join(``)}
+  }).slice().join(``)}
   </ul>`;
 };
 
