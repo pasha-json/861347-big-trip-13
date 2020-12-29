@@ -96,12 +96,21 @@ export default class Trip {
       .forEach((presenter) => presenter.destroy());
     this._pointPresenter = {};
   }
-  _sortTask(sortType) {
+  _sortPoints(sortType) {
     switch (sortType) {
       case SortType.DAY:
-        this._points.sort(sortByDay);
+        this._points.sort(sortByDate);
         break;
+      case SortType.TIME:
+        this._points.sort(sortByTime);
+        break;
+      case SortType.PRICE:
+        this._points.sort(sortByPrice);
+        break;
+      default:
+        this._points = this._sourcedPoints.slice();
     }
+    this._currentSortType = sortType;
   }
   _handleModeChange() {
     Object
@@ -114,7 +123,10 @@ export default class Trip {
     this._pointPresenter[updatedPoint.id]._init(updatedPoint);
   }
   _handleSortTypeChange(sortType) {
-
+    if (this._currentSortType === sortType) {
+      return;
+    }
+    this._sortPoints(sortType);
 
     this._clearPointList();
     this._renderPointsList();
