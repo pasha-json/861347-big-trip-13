@@ -2,9 +2,10 @@ import dayjs from "dayjs";
 
 const createTypeList = (points) => {
   return Array.from(points).map(({type}) => {
+    const typeName = type.toLowerCase();
     return `<div class="event__type-item">
-    <input id="event-type-${type.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type.toLowerCase()}">
-    <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-taxi-1">${type}</label>
+    <input id="event-type-${typeName}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${typeName}">
+    <label class="event__type-label  event__type-label--${typeName}" for="event-type-${typeName}-1">${type}</label>
   </div>`;
   }).join(``);
 };
@@ -16,10 +17,10 @@ const createDestinationList = (points) => {
 };
 
 const createOptionsList = (features) => {
-  return Array.from(features).map(({name, price, isIncluded}) => {
+  return Array.from(features).map(({type, name, price, isIncluded}) => {
     return `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" ${isIncluded ? `checked` : ``}>
-    <label class="event__offer-label" for="event-offer-comfort-1">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-1" type="checkbox" name="event-offer-${type}" ${isIncluded ? `checked` : ``}>
+    <label class="event__offer-label" for="event-offer-${type}-1">
       <span class="event__offer-title">${name}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${price}</span>
