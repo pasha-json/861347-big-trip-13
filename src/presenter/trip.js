@@ -43,6 +43,7 @@ export default class Trip {
   }
 
   _init() {
+    console.log(this._points);
     this._renderRoute();
   }
 

@@ -45,11 +45,11 @@ export const updateItem = (items, update) => {
 const getTime = (startDate, endDate) => dayjs(endDate).diff(startDate);
 
 export const sortByDate = (a, b) => {
-  if (dayjs(a.startDate).isBefore(b.startDate)) {
+  if (dayjs(a.date.start).isBefore(b.date.start)) {
     return -1;
   }
 
-  if (dayjs(a.startDate).isAfter(b.startDate)) {
+  if (dayjs(a.date.start).isAfter(b.date.start)) {
     return 1;
   }
 
@@ -69,9 +69,9 @@ export const sortByPrice = (a, b) => {
 };
 
 export const sortByTime = (a, b) => {
-  const timeFirst = getTime(a.startDate, a.endDate);
+  const timeFirst = getTime(a.date.start, a.date.end);
 
-  const timeLast = getTime(b.startDate, b.endDate);
+  const timeLast = getTime(b.date.start, b.date.end);
 
   if (timeFirst < timeLast) {
     return 1;
