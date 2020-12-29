@@ -13,7 +13,6 @@ export default class SortView extends Abstract {
     if (evt.target.tagName !== `LABEL`) {
       return;
     }
-    // evt.preventDefault();
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   }
   setSortTypeChangeHandler(callback) {

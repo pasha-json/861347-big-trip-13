@@ -4,7 +4,6 @@ import MenuView from "../view/menu/menu";
 import FiltersView from "../view/filters/filters";
 import SortView from "../view/sort/sort";
 import FormListView from "../view/form-list/form-list";
-// import FormAddView from "../view/form-add/form-add";
 import {renderElement, RenderPosition} from "../utils/render";
 import {isEscKeyPressed, updateItem, sortByDate, sortByPrice, sortByTime} from "../utils/common";
 import Point from "./point.js";
@@ -19,7 +18,6 @@ export default class Trip {
     this._menu = menu;
     this._filters = filters;
     this._route = route;
-    // this._sort = sort;
 
     this._isEscKeyPressed = isEscKeyPressed;
 
@@ -43,7 +41,6 @@ export default class Trip {
   }
 
   _init() {
-    console.log(this._points);
     this._renderRoute();
   }
 
