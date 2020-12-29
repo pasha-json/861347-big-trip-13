@@ -41,3 +41,45 @@ export const updateItem = (items, update) => {
     ...items.slice(index + 1)
   ];
 };
+
+const getTime = (startDate, endDate) => dayjs(endDate).diff(startDate);
+
+export const sortByDate = (a, b) => {
+  if (dayjs(a.startDate).isBefore(b.startDate)) {
+    return -1;
+  }
+
+  if (dayjs(a.startDate).isAfter(b.startDate)) {
+    return 1;
+  }
+
+  return 0;
+};
+
+export const sortByPrice = (a, b) => {
+  if (a.price < b.price) {
+    return 1;
+  }
+
+  if (a.price > b.price) {
+    return -1;
+  }
+
+  return 0;
+};
+
+export const sortByTime = (a, b) => {
+  const timeFirst = getTime(a.startDate, a.endDate);
+
+  const timeLast = getTime(b.startDate, b.endDate);
+
+  if (timeFirst < timeLast) {
+    return 1;
+  }
+
+  if (timeFirst > timeLast) {
+    return -1;
+  }
+
+  return 0;
+};
