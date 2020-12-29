@@ -81,7 +81,7 @@ export default class Trip {
     this._renderFormAdd();
   }
   _renderFormAdd() {
-    this._render(this._formList.getElement(), new FormAddView(this._points[0]).getElement(), RenderPosition.BEFOREEND);
+    // this._render(this._formList.getElement(), new FormAddView(this._points[0]).getElement(), RenderPosition.BEFOREEND);
     this._renderPointsList();
   }
   _renderPoint(point) {
