@@ -24,3 +24,9 @@ export const generateMenu = () => {
     items
   };
 };
+
+export const SortType = {
+  DAY: `day`,
+  TIME: `time`,
+  PRICE: `price`
+};
