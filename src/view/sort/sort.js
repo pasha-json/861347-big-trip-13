@@ -10,10 +10,10 @@ export default class SortView extends Abstract {
     return createSortTemplate();
   }
   _sortTypeChangeHandler(evt) {
-    if (evt.target.tagName !== `A`) {
+    if (evt.target.tagName !== `LABEL`) {
       return;
     }
-    evt.preventDefault();
+    // evt.preventDefault();
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   }
   setSortTypeChangeHandler(callback) {

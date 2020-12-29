@@ -10,14 +10,14 @@ import {isEscKeyPressed, updateItem} from "../utils/common";
 import Point from "./point.js";
 
 export default class Trip {
-  constructor(points, cost, menu, filters, route, sort) {
+  constructor(points, cost, menu, filters, route) {
 
     this._points = points.slice();
     this._cost = cost;
     this._menu = menu;
     this._filters = filters;
     this._route = route;
-    this._sort = sort;
+    // this._sort = sort;
 
     this._isEscKeyPressed = isEscKeyPressed;
 
@@ -30,25 +30,16 @@ export default class Trip {
     this._siteSortElement = this._siteMainElement.querySelector(`.trip-events`);
 
     this._formList = new FormListView();
+    this._sortComponent = new SortView();
 
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
   }
 
   _init() {
     this._renderRoute();
-  }
-
-  _handleModeChange() {
-    Object
-      .values(this._pointPresenter)
-      .forEach((presenter) => presenter._resetView());
-  }
-
-  _handlePointChange(updatedPoint) {
-    this._points = updateItem(this._points, updatedPoint);
-    this._pointPresenter[updatedPoint.id]._init(updatedPoint);
   }
 
   _render(where, what, position) {
@@ -73,7 +64,8 @@ export default class Trip {
     this._renderSort();
   }
   _renderSort() {
-    this._render(this._siteSortElement, new SortView(this._sort).getElement(), RenderPosition.BEFOREEND);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+    this._render(this._siteSortElement, this._sortComponent.getElement(), RenderPosition.BEFOREEND);
     this._renderFormList();
   }
   _renderFormList() {
@@ -99,5 +91,19 @@ export default class Trip {
       .values(this._pointPresenter)
       .forEach((presenter) => presenter.destroy());
     this._pointPresenter = {};
+  }
+  _handleModeChange() {
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => presenter._resetView());
+  }
+
+  _handlePointChange(updatedPoint) {
+    this._points = updateItem(this._points, updatedPoint);
+    this._pointPresenter[updatedPoint.id]._init(updatedPoint);
+  }
+  _handleSortTypeChange() {
+    this._clearPointList();
+    this._renderPointsList();
   }
 }
