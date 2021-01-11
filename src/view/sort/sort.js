@@ -10,7 +10,7 @@ export default class SortView extends Abstract {
     return createSortTemplate();
   }
   _sortTypeChangeHandler(evt) {
-    if (evt.target.tagName !== `LABEL`) {
+    if (evt.target.className !== `trip-sort__btn` && !evt.target.dataSortType) {
       return;
     }
     this._callback.sortTypeChange(evt.target.dataset.sortType);
