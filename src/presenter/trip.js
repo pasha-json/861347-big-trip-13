@@ -19,6 +19,11 @@ export default class Trip {
     this._filters = filters;
     this._route = route;
 
+    this._typeList = new Set();
+    this._points.forEach((elem) => {
+      this._typeList.add(elem.type);
+    });
+
     this._isEscKeyPressed = isEscKeyPressed;
 
     this._pointPresenter = {};
@@ -78,7 +83,7 @@ export default class Trip {
     this._renderPointsList();
   }
   _renderPoint(point) {
-    const pointPresenter = new Point(this._formList, this._handlePointChange, this._handleModeChange);
+    const pointPresenter = new Point(this._formList, this._handlePointChange, this._handleModeChange, this._typeList);
     pointPresenter._init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }

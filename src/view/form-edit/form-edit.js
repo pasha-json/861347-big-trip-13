@@ -1,15 +1,20 @@
 import {createEditTemplate} from "./form-edit.tpl";
-import Abstract from "../abstract/abstract";
+import Smart from "../smart/smart";
 
-export default class FormEditView extends Abstract {
-  constructor(data) {
+export default class FormEditView extends Smart {
+  constructor(data, types) {
     super();
     this._data = data;
+    this._types = types;
     this._clickHandler = this._clickHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
   }
   getTemplate() {
-    return createEditTemplate(this._data);
+    return createEditTemplate(this._data, this._types);
+  }
+  restoreHandlers() {
+    this._clickHandler = this._clickHandler.bind(this);
+    this._submitHandler = this._submitHandler.bind(this);
   }
   _clickHandler(evt) {
     evt.preventDefault();
