@@ -150,7 +150,8 @@ export const generateOptions = (criteria) => {
 
   // const options = optionMocks.filter(type = `${criteria}`);
 
-  let get = null;
+  let get = optionMocks;
+  console.log(get);
 
   optionMocks.forEach((elem) => {
     if (elem.type === `${criteria}`) {

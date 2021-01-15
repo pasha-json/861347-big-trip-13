@@ -7,7 +7,9 @@ export default class FormEditView extends Smart {
     this._point = point;
     this._types = types;
     this._destinations = destinations;
-    this._offers = this._point.options;
+    this._options = this._point.options;
+
+    // console.log(this._options);
 
     this._data = FormEditView.parsePointToData(point);
 
@@ -66,13 +68,15 @@ export default class FormEditView extends Smart {
     }
     const type = target.textContent;
 
-    // const options = (
-    //   Object.values(this._offers)[name].length && this._offers[type].length
-    // )
-    //   ? this._offers[type]
-    //   : null;
-    // console.log(this._offers[type]);
+    const options = [
+      {
+        name: `Test`,
+        price: 1000,
+        isIncluded: false
+      }
+    ];
 
-    this.updateData({type});
+    this.updateData({type, options: {type, options}});
+
   }
 }
