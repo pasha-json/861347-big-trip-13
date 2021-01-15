@@ -17,8 +17,8 @@ const createDestinationList = (cities) => {
   }).join(``);
 };
 
-const createOptionsList = (features) => {
-  return Array.from(features).map(({type, name, price, isIncluded}) => {
+const createOptionsList = ({type, options}) => {
+  return Array.from(options).map(({name, price, isIncluded}) => {
     return `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-1" type="checkbox" name="event-offer-${type}" ${isIncluded ? `checked` : ``}>
     <label class="event__offer-label" for="event-offer-${type}-1">
@@ -31,6 +31,7 @@ const createOptionsList = (features) => {
 };
 
 export const createEditTemplate = (data = {}, types, destinations) => {
+
   const {type, destination, date, price, description, options} = data;
   const typeName = type.toLowerCase();
   const {start, end} = date;

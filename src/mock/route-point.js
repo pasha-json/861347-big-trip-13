@@ -98,7 +98,7 @@ const generatePrice = () => {
 export const generatePoint = () => {
   const type = generateType();
   const destination = generateDestination();
-  const options = generateOptions();
+  const options = generateOptions(type.toLowerCase());
   const description = generateDescription();
   const images = generateImages();
   const date = generateDates();
