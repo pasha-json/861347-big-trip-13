@@ -1,6 +1,6 @@
 import {getRandomInteger} from "../utils/common";
 
-export const generateOptions = (criteria) => {
+export const generateOptions = () => {
   const optionMocks = [
     {
       type: `taxi`,
@@ -133,35 +133,5 @@ export const generateOptions = (criteria) => {
       ]
     }
   ];
-
-  // const optionsQuantity = getRandomInteger(0, optionMocks.length);
-
-  // if (optionsQuantity === null) {
-  //   return null;
-  // }
-
-  // const options = new Set();
-
-  // for (let i = 0; i < optionsQuantity; i++) {
-  //   options.add(optionMocks[getRandomInteger(0, optionMocks.length - 1)]);
-  // }
-
-  // return [...options];
-
-  // const options = optionMocks.filter(type = `${criteria}`);
-
-  let get = optionMocks;
-  console.log(get);
-
-  optionMocks.forEach((elem) => {
-    if (elem.type === `${criteria}`) {
-      get = elem;
-    }
-  });
-
-  // console.log(optionMocks[0].type);
-  // console.log(criteria);
-  // console.log(options);
-  // return options;
-  return get;
+  return optionMocks;
 };

@@ -10,7 +10,7 @@ import Point from "./point.js";
 import {SortType} from "../consts/consts";
 
 export default class Trip {
-  constructor(points, cost, menu, filters, route) {
+  constructor(points, cost, menu, filters, route, sort, options) {
 
     this._points = points.slice();
     this._sourcedPoints = points.slice();
@@ -28,6 +28,8 @@ export default class Trip {
     this._points.forEach((elem) => {
       this._destinations.add(elem.destination);
     });
+
+    this._options = options;
 
     this._isEscKeyPressed = isEscKeyPressed;
 
@@ -88,7 +90,7 @@ export default class Trip {
     this._renderPointsList();
   }
   _renderPoint(point) {
-    const pointPresenter = new Point(this._formList, this._handlePointChange, this._handleModeChange, this._typeList, this._destinations);
+    const pointPresenter = new Point(this._formList, this._handlePointChange, this._handleModeChange, this._typeList, this._destinations, this._options);
     pointPresenter._init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
