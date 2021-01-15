@@ -7,11 +7,15 @@ export default class FormEditView extends Smart {
     this._point = point;
     this._types = types;
     this._destinations = destinations;
+    this._offers = this._point.options;
 
     this._data = FormEditView.parsePointToData(point);
 
     this._clickHandler = this._clickHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
+    this._pointTypeToggleHandler = this._pointTypeToggleHandler.bind(this);
+
+    this._setInnerHandlers();
   }
   getTemplate() {
     return createEditTemplate(this._data, this._types, this._destinations);
@@ -31,8 +35,13 @@ export default class FormEditView extends Smart {
   }
 
   restoreHandlers() {
+    this._setInnerHandlers();
     this._clickHandler = this._clickHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
+  }
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.event__type-wrapper`)
+      .addEventListener(`click`, this._pointTypeToggleHandler);
   }
   _clickHandler(evt) {
     evt.preventDefault();
@@ -49,5 +58,21 @@ export default class FormEditView extends Smart {
   setSubmitHandler(callback) {
     this._callback.submit = callback;
     this.getElement().addEventListener(`submit`, this._submitHandler);
+  }
+  _pointTypeToggleHandler(evt) {
+    const target = evt.target.closest(`label.event__type-label`);
+    if (!target) {
+      return;
+    }
+    const type = target.textContent;
+
+    // const options = (
+    //   Object.values(this._offers)[name].length && this._offers[type].length
+    // )
+    //   ? this._offers[type]
+    //   : null;
+    // console.log(this._offers[type]);
+
+    this.updateData({type});
   }
 }
