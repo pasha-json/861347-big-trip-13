@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 
-const createTypeList = (points) => {
+const createTypeList = (types) => {
 
-  return Array.from(points).map((type) => {
+  return Array.from(types).map((type) => {
     const typeName = type.toLowerCase();
     return `<div class="event__type-item">
     <input id="event-type-${typeName}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${typeName}">
@@ -11,9 +11,9 @@ const createTypeList = (points) => {
   }).join(``);
 };
 
-const createDestinationList = (points) => {
-  return Array.from(points).map(({destination}) => {
-    return `<option value="${destination}"></option>`;
+const createDestinationList = (cities) => {
+  return Array.from(cities).map((city) => {
+    return `<option value="${city}"></option>`;
   }).join(``);
 };
 
@@ -30,13 +30,13 @@ const createOptionsList = (features) => {
   }).join(``);
 };
 
-export const createEditTemplate = (data = {}, types) => {
+export const createEditTemplate = (data = {}, types, destinations) => {
   const {type, destination, date, price, description, options} = data;
   const typeName = type.toLowerCase();
   const {start, end} = date;
 
   const typeList = createTypeList(types);
-  const destinationList = createDestinationList(data);
+  const destinationList = createDestinationList(destinations);
   const optionsList = createOptionsList(options);
 
   return `<li class="trip-events__item">

@@ -2,16 +2,34 @@ import {createEditTemplate} from "./form-edit.tpl";
 import Smart from "../smart/smart";
 
 export default class FormEditView extends Smart {
-  constructor(data, types) {
+  constructor(point, types, destinations) {
     super();
-    this._data = data;
+    this._point = point;
     this._types = types;
+    this._destinations = destinations;
+
+    this._data = FormEditView.parsePointToData(point);
+
     this._clickHandler = this._clickHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
   }
   getTemplate() {
-    return createEditTemplate(this._data, this._types);
+    return createEditTemplate(this._data, this._types, this._destinations);
   }
+
+  static parsePointToData(point) {
+    return Object.assign(
+        {},
+        point,
+        {}
+    );
+  }
+
+  static parseDataToPoint(data) {
+    data = Object.assign({}, data);
+    return data;
+  }
+
   restoreHandlers() {
     this._clickHandler = this._clickHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);

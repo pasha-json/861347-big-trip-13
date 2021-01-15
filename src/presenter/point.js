@@ -11,11 +11,12 @@ const Mode = {
 
 
 export default class Point {
-  constructor(siteListElement, changeData, changeMode, typesOfPoints) {
+  constructor(siteListElement, changeData, changeMode, typesOfPoints, destinations) {
     this._siteListElement = siteListElement;
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._typesOfPoints = typesOfPoints;
+    this._destinations = destinations;
 
     this._routePoint = null;
     this._editForm = null;
@@ -39,7 +40,7 @@ export default class Point {
     this._point = point;
 
     this._routePoint = new RoutePinView(this._point);
-    this._editForm = new FormEditView(this._point, this._typesOfPoints);
+    this._editForm = new FormEditView(this._point, this._typesOfPoints, this._destinations);
 
     this._routePoint.setClickHandler(this._replaceRoutePointToForm);
     this._editForm.setSubmitHandler(this._replaceFormToRoutePoint);
