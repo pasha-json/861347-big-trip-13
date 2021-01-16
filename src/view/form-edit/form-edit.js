@@ -2,13 +2,20 @@ import {createEditTemplate} from "./form-edit.tpl";
 import Smart from "../smart/smart";
 
 export default class FormEditView extends Smart {
-  constructor(point, types, destinations, options, points) {
+  constructor(point, points) {
     super();
     this._point = point;
-    this._types = types;
-    this._destinations = destinations;
-    this._options = options;
     this._points = points;
+
+    this._destinations = new Set();
+    this._points.forEach((elem) => {
+      this._destinations.add(elem.destination);
+    });
+
+    this._types = new Set();
+    this._points.forEach((elem) => {
+      this._types.add(elem.type);
+    });
 
     this._data = FormEditView.parsePointToData(point);
 
@@ -73,9 +80,9 @@ export default class FormEditView extends Smart {
 
     let options = [];
 
-    this._options.forEach((elem) => {
-      if (elem.type === `${type.toLowerCase()}`) {
-        options = elem;
+    this._points.forEach((elem) => {
+      if (elem.type === `${type}`) {
+        options = elem.options;
       }
     });
 

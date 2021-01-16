@@ -21,16 +21,6 @@ export default class Trip {
     this._description = description;
     this._images = images;
 
-    this._typeList = new Set();
-    this._points.forEach((elem) => {
-      this._typeList.add(elem.type);
-    });
-
-    this._destinations = new Set();
-    this._points.forEach((elem) => {
-      this._destinations.add(elem.destination);
-    });
-
     this._options = options;
 
     this._isEscKeyPressed = isEscKeyPressed;
@@ -92,7 +82,7 @@ export default class Trip {
     this._renderPointsList();
   }
   _renderPoint(point) {
-    const pointPresenter = new Point(this._formList, this._handlePointChange, this._handleModeChange, this._typeList, this._destinations, this._options, this._points);
+    const pointPresenter = new Point(this._formList, this._handlePointChange, this._handleModeChange, this._points);
     pointPresenter._init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
