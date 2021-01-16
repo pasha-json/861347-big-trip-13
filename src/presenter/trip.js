@@ -10,7 +10,7 @@ import Point from "./point.js";
 import {SortType} from "../consts/consts";
 
 export default class Trip {
-  constructor(points, cost, menu, filters, route, sort, options) {
+  constructor(points, cost, menu, filters, route, sort, options, description, images) {
 
     this._points = points.slice();
     this._sourcedPoints = points.slice();
@@ -18,6 +18,8 @@ export default class Trip {
     this._menu = menu;
     this._filters = filters;
     this._route = route;
+    this._description = description;
+    this._images = images;
 
     this._typeList = new Set();
     this._points.forEach((elem) => {
@@ -90,7 +92,7 @@ export default class Trip {
     this._renderPointsList();
   }
   _renderPoint(point) {
-    const pointPresenter = new Point(this._formList, this._handlePointChange, this._handleModeChange, this._typeList, this._destinations, this._options);
+    const pointPresenter = new Point(this._formList, this._handlePointChange, this._handleModeChange, this._typeList, this._destinations, this._options, this._points);
     pointPresenter._init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }

@@ -2,18 +2,20 @@ import {createEditTemplate} from "./form-edit.tpl";
 import Smart from "../smart/smart";
 
 export default class FormEditView extends Smart {
-  constructor(point, types, destinations, options) {
+  constructor(point, types, destinations, options, points) {
     super();
     this._point = point;
     this._types = types;
     this._destinations = destinations;
     this._options = options;
+    this._points = points;
 
     this._data = FormEditView.parsePointToData(point);
 
     this._clickHandler = this._clickHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
     this._pointTypeToggleHandler = this._pointTypeToggleHandler.bind(this);
+    this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -42,6 +44,9 @@ export default class FormEditView extends Smart {
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-wrapper`)
       .addEventListener(`click`, this._pointTypeToggleHandler);
+
+    this.getElement().querySelector(`.event__input--destination`)
+      .addEventListener(`change`, this._destinationChangeHandler);
   }
   _clickHandler(evt) {
     evt.preventDefault();
@@ -77,4 +82,20 @@ export default class FormEditView extends Smart {
     this.updateData({type, options});
 
   }
+  _destinationChangeHandler(evt) {
+
+    const city = evt.target.value;
+    let description = ``;
+    let images = [];
+
+    this._points.forEach((point) => {
+      if (point.destination === `${city}`) {
+        description = point.description;
+        images = point.images;
+      }
+    });
+
+    this.updateData({destination: city, description, images});
+  }
+
 }

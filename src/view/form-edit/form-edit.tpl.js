@@ -29,16 +29,30 @@ const createOptionsList = ({type, options}) => {
   </div>`;
   }).join(``);
 };
+const createImagesBlock = (images) => {
+  if (images) {
+    return `<div class="event__photos-container">
+  <div class="event__photos-tape">
+    ${
+  images.map((url) => {
+    return `<img class="event__photo" src="${url}" alt="Event photo"></img>`;
+  }).join(``)}
+  </div>
+</div>`;
+  }
+  return null;
+};
 
 export const createEditTemplate = (data = {}, types, destinations) => {
 
-  const {type, destination, date, price, description, options} = data;
+  const {type, destination, date, price, description, options, images} = data;
   const typeName = type.toLowerCase();
   const {start, end} = date;
 
   const typeList = createTypeList(types);
   const destinationList = createDestinationList(destinations);
   const optionsList = createOptionsList(options);
+  const imagesBlock = createImagesBlock(images);
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -103,6 +117,7 @@ export const createEditTemplate = (data = {}, types, destinations) => {
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
+        ${imagesBlock}
       </section>
     </section>
   </form>
