@@ -1,7 +1,8 @@
 import dayjs from "dayjs";
 
-const createTypeList = (points) => {
-  return Array.from(points).map(({type}) => {
+const createTypeList = (types) => {
+
+  return Array.from(types).map((type) => {
     const typeName = type.toLowerCase();
     return `<div class="event__type-item">
     <input id="event-type-${typeName}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${typeName}">
@@ -10,14 +11,14 @@ const createTypeList = (points) => {
   }).join(``);
 };
 
-const createDestinationList = (points) => {
-  return Array.from(points).map(({destination}) => {
-    return `<option value="${destination}"></option>`;
+const createDestinationList = (cities) => {
+  return Array.from(cities).map((city) => {
+    return `<option value="${city}"></option>`;
   }).join(``);
 };
 
-const createOptionsList = (features) => {
-  return Array.from(features).map(({type, name, price, isIncluded}) => {
+const createOptionsList = ({type, options}) => {
+  return Array.from(options).map(({name, price, isIncluded}) => {
     return `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-1" type="checkbox" name="event-offer-${type}" ${isIncluded ? `checked` : ``}>
     <label class="event__offer-label" for="event-offer-${type}-1">
@@ -28,15 +29,30 @@ const createOptionsList = (features) => {
   </div>`;
   }).join(``);
 };
+const createImagesBlock = (images) => {
+  if (images) {
+    return `<div class="event__photos-container">
+  <div class="event__photos-tape">
+    ${
+  images.map((url) => {
+    return `<img class="event__photo" src="${url}" alt="Event photo"></img>`;
+  }).join(``)}
+  </div>
+</div>`;
+  }
+  return null;
+};
 
-export const createEditTemplate = (points = {}) => {
-  const {type, destination, date, price, description, options} = points;
+export const createEditTemplate = (data = {}, types, destinations) => {
+
+  const {type, destination, date, price, description, options, images} = data;
   const typeName = type.toLowerCase();
   const {start, end} = date;
 
-  const typeList = createTypeList(points);
-  const destinationList = createDestinationList(points);
+  const typeList = createTypeList(types);
+  const destinationList = createDestinationList(destinations);
   const optionsList = createOptionsList(options);
+  const imagesBlock = createImagesBlock(images);
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -101,6 +117,7 @@ export const createEditTemplate = (points = {}) => {
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>
+        ${imagesBlock}
       </section>
     </section>
   </form>

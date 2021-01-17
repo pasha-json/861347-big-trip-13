@@ -98,13 +98,21 @@ const generatePrice = () => {
 export const generatePoint = () => {
   const type = generateType();
   const destination = generateDestination();
-  const options = generateOptions();
+  const typeOptions = generateOptions();
   const description = generateDescription();
   const images = generateImages();
   const date = generateDates();
   const price = generatePrice();
   const isFavourite = Boolean(getRandomInteger(0, 1));
   const id = generateId();
+
+  let options = null;
+
+  typeOptions.forEach((elem) => {
+    if (elem.type === `${type.toLowerCase()}`) {
+      options = elem;
+    }
+  });
 
   return {
     type,

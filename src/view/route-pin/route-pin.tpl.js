@@ -2,9 +2,9 @@ import dayjs from "dayjs";
 import {getRouteDuration} from "../../utils/common";
 
 
-const renderOptions = (points) => {
+const renderOptions = ({options}) => {
   return `<ul class="event__selected-offers">
-    ${points.options.map(({name, price}) => {
+    ${options.options.map(({name, price}) => {
     return `<li class="event__offer">
         <span class="event__offer-title">${name}</span>
         &plus;&euro;&nbsp;
