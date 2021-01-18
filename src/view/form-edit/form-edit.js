@@ -29,6 +29,7 @@ export default class FormEditView extends Smart {
     this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
     this._dateStartChangeHandler = this._dateStartChangeHandler.bind(this);
     this._dateEndChangeHandler = this._dateEndChangeHandler.bind(this);
+    this._formCloseHandler = this._formCloseHandler.bind(this);
 
     this._setInnerHandlers();
     this._setDatepicker();
@@ -61,6 +62,7 @@ export default class FormEditView extends Smart {
     this._clickHandler = this._clickHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
     this._setDatepicker();
+    this.setFormCloseHandler(this._callback.formClose);
   }
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-wrapper`)
@@ -159,6 +161,16 @@ export default class FormEditView extends Smart {
     this._datepicker.start.destroy();
     this._datepicker.end.destroy();
     this._datepicker = null;
+  }
+
+  setFormCloseHandler(callback) {
+    this._callback.formClose = callback;
+    this.getElement().querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, this._formCloseHandler);
+  }
+
+  _formCloseHandler() {
+    this._callback.formClose();
   }
 
 }
