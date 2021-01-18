@@ -30,6 +30,12 @@ export default class FormEditView extends Smart {
     return createEditTemplate(this._data, this._types, this._destinations);
   }
 
+  reset(point) {
+    this.updateData(
+        FormEditView.parsePointToData(point)
+    );
+  }
+
   static parsePointToData(point) {
     return Object.assign(
         {},

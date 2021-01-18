@@ -90,6 +90,7 @@ export default class Point {
   _onEscKeyDown(evt) {
     if (isEscKeyPressed(evt)) {
       evt.preventDefault();
+      this._editForm.reset(this._point);
       this._replaceFormToRoutePoint();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
