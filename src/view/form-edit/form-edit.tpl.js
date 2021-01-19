@@ -43,15 +43,24 @@ const createImagesBlock = (images) => {
   return null;
 };
 
-export const createEditTemplate = (data = {}, types, destinations) => {
+export const createEditTemplate = (data = {}, types, destinations, options) => {
 
-  const {type, destination, date, price, description, options, images} = data;
+  const {type, destination, date, price, description, images} = data;
   const typeName = type.toLowerCase();
   const {start, end} = date;
 
   const typeList = createTypeList(types);
   const destinationList = createDestinationList(destinations);
-  const optionsList = createOptionsList(options);
+
+  let offers = null;
+
+  options.forEach((elem) => {
+    if (elem.type === `${type.toLowerCase()}`) {
+      offers = elem;
+    }
+  });
+
+  const optionsList = createOptionsList(offers);
   const imagesBlock = createImagesBlock(images);
 
   return `<li class="trip-events__item">

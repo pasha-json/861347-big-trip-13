@@ -10,10 +10,11 @@ import Point from "./point.js";
 import {SortType, generateMenu, Filters} from "../consts/consts";
 
 export default class Trip {
-  constructor(points) {
+  constructor(points, options) {
 
     this._points = points.slice();
     this._sourcedPoints = points.slice();
+    this._options = options;
     this._cost = generateTotalCost(this._points);
     this._menu = generateMenu();
     this._filters = Object.values(Filters);
@@ -82,7 +83,7 @@ export default class Trip {
     this._renderPointsList();
   }
   _renderPoint(point) {
-    const pointPresenter = new Point(this._formList, this._handlePointChange, this._handleModeChange, this._points);
+    const pointPresenter = new Point(this._formList, this._handlePointChange, this._handleModeChange, this._points, this._options);
     pointPresenter._init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }

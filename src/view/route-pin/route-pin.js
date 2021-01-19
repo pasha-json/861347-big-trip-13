@@ -2,14 +2,15 @@ import {createRoutePinTemplate} from "./route-pin.tpl";
 import Abstract from "../abstract/abstract";
 
 export default class RoutePinView extends Abstract {
-  constructor(data) {
+  constructor(data, options) {
     super();
     this._data = data;
+    this._options = options;
     this._clickHandler = this._clickHandler.bind(this);
     this._favouriteClickHandler = this._favouriteClickHandler.bind(this);
   }
   getTemplate() {
-    return createRoutePinTemplate(this._data);
+    return createRoutePinTemplate(this._data, this._options);
   }
   _clickHandler(evt) {
     evt.preventDefault();

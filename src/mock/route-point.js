@@ -1,5 +1,4 @@
 import {getRandomInteger} from "../utils/common";
-import {generateOptions} from "./options";
 import dayjs from 'dayjs';
 
 const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
@@ -98,7 +97,6 @@ const generatePrice = () => {
 export const generatePoint = () => {
   const type = generateType();
   const destination = generateDestination();
-  const typeOptions = generateOptions();
   const description = generateDescription();
   const images = generateImages();
   const date = generateDates();
@@ -106,18 +104,9 @@ export const generatePoint = () => {
   const isFavourite = Boolean(getRandomInteger(0, 1));
   const id = generateId();
 
-  let options = null;
-
-  typeOptions.forEach((elem) => {
-    if (elem.type === `${type.toLowerCase()}`) {
-      options = elem;
-    }
-  });
-
   return {
     type,
     destination,
-    options,
     description,
     images,
     date,
