@@ -5,23 +5,19 @@ import FiltersView from "../view/filters/filters";
 import SortView from "../view/sort/sort";
 import FormListView from "../view/form-list/form-list";
 import {renderElement, RenderPosition} from "../utils/render";
-import {isEscKeyPressed, updateItem, sortByDate, sortByPrice, sortByTime} from "../utils/common";
+import {isEscKeyPressed, updateItem, sortByDate, sortByPrice, sortByTime, generateTotalCost, generateRouteInfo} from "../utils/common";
 import Point from "./point.js";
-import {SortType} from "../consts/consts";
+import {SortType, generateMenu, Filters} from "../consts/consts";
 
 export default class Trip {
-  constructor(points, cost, menu, filters, route, sort, options, description, images) {
+  constructor(points) {
 
     this._points = points.slice();
     this._sourcedPoints = points.slice();
-    this._cost = cost;
-    this._menu = menu;
-    this._filters = filters;
-    this._route = route;
-    this._description = description;
-    this._images = images;
-
-    this._options = options;
+    this._cost = generateTotalCost(this._points);
+    this._menu = generateMenu();
+    this._filters = Object.values(Filters);
+    this._route = generateRouteInfo(points);
 
     this._isEscKeyPressed = isEscKeyPressed;
 
@@ -46,6 +42,10 @@ export default class Trip {
 
   _init() {
     this._renderRoute();
+  }
+
+  _getTasks() {
+    return this._pointsModel.getTasks();
   }
 
   _render(where, what, position) {
