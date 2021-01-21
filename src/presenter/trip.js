@@ -10,7 +10,7 @@ import Point from "./point.js";
 import {SortType, generateMenu, Filters} from "../consts/consts";
 
 export default class Trip {
-  constructor(points, options) {
+  constructor(points, options, pointsModel, optionsModel) {
 
     this._points = points.slice();
     this._sourcedPoints = points.slice();
@@ -19,6 +19,9 @@ export default class Trip {
     this._menu = generateMenu();
     this._filters = Object.values(Filters);
     this._route = generateRouteInfo(points);
+
+    this._pointsModel = pointsModel;
+    this._optionsModel = optionsModel;
 
     this._isEscKeyPressed = isEscKeyPressed;
 
@@ -45,8 +48,12 @@ export default class Trip {
     this._renderRoute();
   }
 
-  _getTasks() {
-    return this._pointsModel.getTasks();
+  _getPoints() {
+    return this._pointsModel.getPoints();
+  }
+
+  _getOptions() {
+    return this._optionsModel.getOptions();
   }
 
   _render(where, what, position) {
