@@ -10,15 +10,15 @@ import Point from "./point.js";
 import {SortType, generateMenu, Filters} from "../consts/consts";
 
 export default class Trip {
-  constructor(points, options, pointsModel, optionsModel) {
+  constructor(pointsModel, optionsModel) {
 
-    this._points = points.slice();
-    this._sourcedPoints = points.slice();
-    this._options = options;
+    this._points = pointsModel.getPoints().slice();
+    this._sourcedPoints = pointsModel.getPoints().slice();
+    this._options = optionsModel.getOptions();
     this._cost = generateTotalCost(this._points);
     this._menu = generateMenu();
     this._filters = Object.values(Filters);
-    this._route = generateRouteInfo(points);
+    this._route = generateRouteInfo(this._points);
 
     this._pointsModel = pointsModel;
     this._optionsModel = optionsModel;

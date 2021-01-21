@@ -14,7 +14,7 @@ pointsModel.setPoints(points);
 const optionsModel = new OptionsModel();
 optionsModel.setOptions(options);
 
-const newTrip = new Trip(points, options, pointsModel, optionsModel);
+const newTrip = new Trip(pointsModel, optionsModel);
 newTrip._init();
 
 
