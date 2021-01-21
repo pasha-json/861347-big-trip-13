@@ -30,9 +30,18 @@ export default class FormEditView extends Smart {
     this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
     this._dateStartChangeHandler = this._dateStartChangeHandler.bind(this);
     this._dateEndChangeHandler = this._dateEndChangeHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
 
     this._setInnerHandlers();
     this._setDatepicker();
+  }
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepicker) {
+      // this._datepicker.destroy();
+      this._datepicker = null;
+    }
   }
   getTemplate() {
     return createEditTemplate(this._data, this._types, this._destinations, this._options);
@@ -62,6 +71,7 @@ export default class FormEditView extends Smart {
     this._setInnerHandlers();
     this.setClickHandler(this._callback.click);
     this.setSubmitHandler(this._callback.submit);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-wrapper`)
@@ -159,6 +169,15 @@ export default class FormEditView extends Smart {
     this._datepicker.start.destroy();
     this._datepicker.end.destroy();
     this._datepicker = null;
+  }
+
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(FormEditView.parseDataToPoint(this._data));
+  }
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
   }
 
 }

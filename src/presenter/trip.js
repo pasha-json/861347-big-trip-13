@@ -88,7 +88,6 @@ export default class Trip {
       this._renderEmpty();
       return;
     }
-    console.log(this._getPoints());
     this._render(this._siteRouteElement, this._routeComponent.getElement(), RenderPosition.AFTERBEGIN);
     this._siteCostElement = this._siteRouteElement.querySelector(`.trip-main__trip-info`);
     this._renderCost();

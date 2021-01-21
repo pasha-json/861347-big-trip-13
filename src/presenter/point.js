@@ -28,6 +28,7 @@ export default class Point {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
     this._handleFavouriteClick = this._handleFavouriteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
 
   }
 
@@ -48,6 +49,7 @@ export default class Point {
     this._editForm.setSubmitHandler(this._handleFormSubmit);
     this._editForm.setClickHandler(this._replaceFormToRoutePoint);
     this._routePoint.setFavouriteClickHandler(this._handleFavouriteClick);
+    this._editForm.setDeleteClickHandler(this._handleDeleteClick);
 
     if (prevRoutePoint === null || prevEditForm === null) {
       renderElement(this._siteListElement, this._routePoint, RenderPosition.BEFOREEND);
@@ -125,5 +127,13 @@ export default class Point {
         point
     );
     this._replaceFormToRoutePoint();
+  }
+
+  _handleDeleteClick(point) {
+    this._changeData(
+        UserAction.DELETE_POINT,
+        UpdateType.MINOR,
+        point
+    );
   }
 }

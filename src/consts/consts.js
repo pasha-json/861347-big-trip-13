@@ -1,6 +1,6 @@
 import {getRandomInteger} from "../utils/common";
 
-export const POINT_COUNT = 4;
+export const POINT_COUNT = 20;
 
 export const Filters = {
   EVERYTHING: `Everything`,
