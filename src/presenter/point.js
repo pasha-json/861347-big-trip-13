@@ -1,8 +1,9 @@
 import FormEditView from "../view/form-edit/form-edit";
 import RoutePinView from "../view/route-pin/route-pin";
-import EmptyView from "../view/empty/empty";
+// import EmptyView from "../view/empty/empty";
 import {renderElement, RenderPosition, remove, replace} from "../utils/render";
 import {isEscKeyPressed} from "../utils/common";
+import {UserAction, UpdateType} from "../consts/consts";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -26,6 +27,7 @@ export default class Point {
     this._replaceFormToRoutePoint = this._replaceFormToRoutePoint.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
     this._handleFavouriteClick = this._handleFavouriteClick.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
 
   }
 
@@ -43,7 +45,7 @@ export default class Point {
     this._editForm = new FormEditView(this._point, this._options, this._points);
 
     this._routePoint.setClickHandler(this._replaceRoutePointToForm);
-    this._editForm.setSubmitHandler(this._replaceFormToRoutePoint);
+    this._editForm.setSubmitHandler(this._handleFormSubmit);
     this._editForm.setClickHandler(this._replaceFormToRoutePoint);
     this._routePoint.setFavouriteClickHandler(this._handleFavouriteClick);
 
@@ -66,9 +68,9 @@ export default class Point {
   _renderPins(point) {
     this._renderRoutePin(point);
   }
-  _renderEmpty() {
-    this._render(this._siteListElement, new EmptyView().getElement(), RenderPosition.BEFOREEND);
-  }
+  // _renderEmpty() {
+  //   this._render(this._siteListElement, new EmptyView().getElement(), RenderPosition.BEFOREEND);
+  // }
   _resetView() {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceFormToRoutePoint();
@@ -104,6 +106,8 @@ export default class Point {
 
   _handleFavouriteClick() {
     this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._point,
@@ -112,5 +116,14 @@ export default class Point {
             }
         )
     );
+  }
+
+  _handleFormSubmit(point) {
+    this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
+        point
+    );
+    this._replaceFormToRoutePoint();
   }
 }
