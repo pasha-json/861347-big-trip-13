@@ -24,16 +24,14 @@ export default class Filter {
   init() {
     const prevFilterComponent = this._filterComponent;
     this._filterComponent = new FiltersView(this._filters, this._currentFilterType);
-    this._filterElement = this._filterComponent.getElement();
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
-    // if (prevFilterComponent === null) {
-      renderElement(this._filterHeaderElement, this._filterElement, RenderPosition.AFTEREND);
+    if (prevFilterComponent === null) {
+      renderElement(this._filterHeaderElement, this._filterComponent, RenderPosition.BEFOREEND);
       return;
-    // }
-
-    // replace(this._filterComponent, prevFilterComponent);
-    // remove(prevFilterComponent);
+    }
+    replace(this._filterHeaderElement, this._filterComponent, prevFilterComponent);
+    remove(prevFilterComponent);
   }
 
   _getFilters() {

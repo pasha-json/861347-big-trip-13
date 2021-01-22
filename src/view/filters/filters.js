@@ -6,6 +6,8 @@ export default class FiltersView extends Abstract {
     super();
     this._data = data;
     this._type = type;
+
+    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
   }
   getTemplate() {
     return createFiltersTemplate(this._data, this._type);

@@ -1,7 +1,6 @@
 import RouteView from "../view/route/route";
 import CostView from "../view/cost/cost";
 import MenuView from "../view/menu/menu";
-// import FiltersView from "../view/filters/filters";
 import SortView from "../view/sort/sort";
 import FormListView from "../view/form-list/form-list";
 import {remove, renderElement, RenderPosition} from "../utils/render";
@@ -23,7 +22,6 @@ export default class Trip {
     this._routeComponent = new RouteView(this._route);
     this._costComponent = new CostView(this._cost);
     this._menuComponent = new MenuView(this._menu);
-    // this._filtersComponent = new FiltersView(this._filters, `FUTURE`);
 
     this._pointsModel = pointsModel;
     this._optionsModel = optionsModel;
@@ -45,7 +43,6 @@ export default class Trip {
     this._emptyComponent = null;
     this._filterPresenter = null;
 
-    // this._handlePointChange = this._handlePointChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
@@ -93,6 +90,7 @@ export default class Trip {
     this._render(this._siteRouteElement, this._routeComponent.getElement(), RenderPosition.AFTERBEGIN);
     this._siteCostElement = this._siteRouteElement.querySelector(`.trip-main__trip-info`);
     this._renderCost();
+
   }
   _renderCost() {
     this._render(this._siteCostElement, this._costComponent.getElement(), RenderPosition.BEFOREEND);
@@ -100,15 +98,9 @@ export default class Trip {
   }
   _renderMenu() {
     this._render(this._siteControlsElement, this._menuComponent.getElement(), RenderPosition.AFTEREND);
-    // this._renderFilters();
     this._renderSort();
   }
-  _renderFilters() {
-    this._filterPresenter = new Filter(this._siteFiltersElement, this._filterModel, this._pointsModel);
-    this._filterPresenter.init();
-    // this._render(this._siteFiltersElement, this._filtersComponent.getElement(), RenderPosition.AFTEREND);
-    this._renderSort();
-  }
+
   _renderSort() {
     if (this._sortComponent !== null) {
       this._sortComponent = null;
@@ -150,12 +142,7 @@ export default class Trip {
     remove(this._routeComponent);
     remove(this._costComponent);
     remove(this._menuComponent);
-    // remove(this._filtersComponent);
     this._filterPresenter = null;
-
-    // if (resetSortType) {
-    //   this._currentSortType = SortType.DAY;
-    // }
   }
 
   _handleModeChange() {
@@ -202,7 +189,6 @@ export default class Trip {
     this._getPoints();
 
     this._clearRoute();
-    // this._renderPointsList();
     this._renderRoute();
   }
 }

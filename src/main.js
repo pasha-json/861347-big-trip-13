@@ -9,7 +9,7 @@ import Filter from "./presenter/filter";
 
 const body = document.querySelector(`.page-body`);
 const tripInfo = body.querySelector(`.page-header .trip-main`);
-const filtersHeader = tripInfo.querySelector(`h2.visually-hidden:last-child`);
+const filtersContainer = tripInfo.querySelector(`.trip-main__trip-controls`);
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
 const options = generateOptions();
@@ -25,7 +25,7 @@ const filterModel = new FilterModel();
 const newTrip = new Trip(pointsModel, optionsModel, filterModel);
 newTrip._init();
 
-const filterPresenter = new Filter(filtersHeader, filterModel, pointsModel);
+const filterPresenter = new Filter(filtersContainer, filterModel, pointsModel);
 filterPresenter.init();
 
 
