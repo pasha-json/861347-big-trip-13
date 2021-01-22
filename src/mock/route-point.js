@@ -76,7 +76,7 @@ const generateImages = () => {
 };
 
 const generateDates = () => {
-  const DAYS_TO_START = getRandomInteger(1, 6);
+  const DAYS_TO_START = getRandomInteger(-5, 6);
   const MAX_TRIP_DURATION_IN_MINUTES = 4320;
   const pointDuration = getRandomInteger(15, MAX_TRIP_DURATION_IN_MINUTES);
 

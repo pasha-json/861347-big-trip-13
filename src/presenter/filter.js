@@ -37,6 +37,10 @@ export default class Filter {
   _getFilters() {
     const points = this._pointsModel.getPoints();
 
+    console.log(Object.keys(filter).reduce((acc, key) => {
+      return Object.assign({}, acc, {[key]: filter[key](points)});
+    }, {}));
+
     return Object.keys(filter).reduce((acc, key) => {
       return Object.assign({}, acc, {[key]: filter[key](points)});
     }, {});
@@ -52,7 +56,6 @@ export default class Filter {
 
       return;
     }
-
     this.init();
   }
 

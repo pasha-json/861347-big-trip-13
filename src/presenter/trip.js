@@ -4,6 +4,7 @@ import MenuView from "../view/menu/menu";
 import SortView from "../view/sort/sort";
 import FormListView from "../view/form-list/form-list";
 import {remove, renderElement, RenderPosition} from "../utils/render";
+import {filter} from "../utils/filter";
 import {isEscKeyPressed, sortByDate, sortByPrice, sortByTime, generateTotalCost, generateRouteInfo} from "../utils/common";
 import Point from "./point.js";
 import {SortType, generateMenu, UserAction, UpdateType} from "../consts/consts";
@@ -49,6 +50,7 @@ export default class Trip {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._pointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
 
   }
 
@@ -57,21 +59,23 @@ export default class Trip {
   }
 
   _getPoints() {
-    let points = [];
+    const filterType = this._filterModel.getFilter();
+    const points = this._pointsModel.getPoints();
+    const filteredPoints = filter[filterType](points);
+
+    let pointsAfterFiltration = [];
+    console.log(this._currentSortType);
     switch (this._currentSortType) {
-      case SortType.DAY:
-        points = this._pointsModel.getPoints().slice().sort(sortByDate);
-        break;
       case SortType.TIME:
-        points = this._pointsModel.getPoints().slice().sort(sortByTime);
+        pointsAfterFiltration = filteredPoints.sort(sortByTime);
         break;
       case SortType.PRICE:
-        points = this._pointsModel.getPoints().slice().sort(sortByPrice);
+        pointsAfterFiltration = filteredPoints.sort(sortByPrice);
         break;
       default:
-        return this._pointsModel.getPoints();
+        pointsAfterFiltration = filteredPoints.sort(sortByDate);
     }
-    return points;
+    return pointsAfterFiltration;
   }
 
   _getOptions() {
