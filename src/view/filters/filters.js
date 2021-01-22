@@ -2,11 +2,24 @@ import {createFiltersTemplate} from "./filters.tpl";
 import Abstract from "../abstract/abstract";
 
 export default class FiltersView extends Abstract {
-  constructor(data) {
+  constructor(data, type) {
     super();
     this._data = data;
+    this._type = type;
   }
   getTemplate() {
-    return createFiltersTemplate(this._data);
+    return createFiltersTemplate(this._data, this._type);
+  }
+  setFilterTypeChangeHandler(callback) {
+    this._callback.filterTypeChange = callback;
+    this.getElement().addEventListener(`change`, this._filterTypeChangeHandler);
+  }
+
+  _filterTypeChangeHandler(evt) {
+    const target = evt.target.closest(`input`);
+    if (!target) {
+      return;
+    }
+    this._callback.filterTypeChange(evt.target.value);
   }
 }

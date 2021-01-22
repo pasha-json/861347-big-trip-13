@@ -1,28 +1,29 @@
 import RouteView from "../view/route/route";
 import CostView from "../view/cost/cost";
 import MenuView from "../view/menu/menu";
-import FiltersView from "../view/filters/filters";
+// import FiltersView from "../view/filters/filters";
 import SortView from "../view/sort/sort";
 import FormListView from "../view/form-list/form-list";
 import {remove, renderElement, RenderPosition} from "../utils/render";
 import {isEscKeyPressed, sortByDate, sortByPrice, sortByTime, generateTotalCost, generateRouteInfo} from "../utils/common";
 import Point from "./point.js";
-import {SortType, generateMenu, Filters, UserAction, UpdateType} from "../consts/consts";
+import {SortType, generateMenu, UserAction, UpdateType} from "../consts/consts";
 import EmptyView from "../view/empty/empty";
 
+
 export default class Trip {
-  constructor(pointsModel, optionsModel) {
+  constructor(pointsModel, optionsModel, filterModel) {
     this._menu = generateMenu();
-    this._filters = Object.values(Filters);
     this._pointsModel = pointsModel;
     this._optionsModel = optionsModel;
+    this._filterModel = filterModel;
     this._cost = generateTotalCost(this._pointsModel.getPoints());
     this._route = generateRouteInfo(this._pointsModel.getPoints());
 
     this._routeComponent = new RouteView(this._route);
     this._costComponent = new CostView(this._cost);
     this._menuComponent = new MenuView(this._menu);
-    this._filtersComponent = new FiltersView(this._filters);
+    // this._filtersComponent = new FiltersView(this._filters, `FUTURE`);
 
     this._pointsModel = pointsModel;
     this._optionsModel = optionsModel;
@@ -42,6 +43,7 @@ export default class Trip {
     this._formList = new FormListView();
     this._sortComponent = null;
     this._emptyComponent = null;
+    this._filterPresenter = null;
 
     // this._handlePointChange = this._handlePointChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -98,10 +100,13 @@ export default class Trip {
   }
   _renderMenu() {
     this._render(this._siteControlsElement, this._menuComponent.getElement(), RenderPosition.AFTEREND);
-    this._renderFilters();
+    // this._renderFilters();
+    this._renderSort();
   }
   _renderFilters() {
-    this._render(this._siteFiltersElement, this._filtersComponent.getElement(), RenderPosition.AFTEREND);
+    this._filterPresenter = new Filter(this._siteFiltersElement, this._filterModel, this._pointsModel);
+    this._filterPresenter.init();
+    // this._render(this._siteFiltersElement, this._filtersComponent.getElement(), RenderPosition.AFTEREND);
     this._renderSort();
   }
   _renderSort() {
@@ -145,7 +150,8 @@ export default class Trip {
     remove(this._routeComponent);
     remove(this._costComponent);
     remove(this._menuComponent);
-    remove(this._filtersComponent);
+    // remove(this._filtersComponent);
+    this._filterPresenter = null;
 
     // if (resetSortType) {
     //   this._currentSortType = SortType.DAY;

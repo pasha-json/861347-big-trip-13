@@ -4,6 +4,12 @@ import {generateOptions} from "./mock/options";
 import {POINT_COUNT} from "./consts/consts";
 import PointsModel from "./model/points";
 import OptionsModel from "./model/options";
+import FilterModel from "./model/filter";
+import Filter from "./presenter/filter";
+
+const body = document.querySelector(`.page-body`);
+const tripInfo = body.querySelector(`.page-header .trip-main`);
+const filtersHeader = tripInfo.querySelector(`h2.visually-hidden:last-child`);
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
 const options = generateOptions();
@@ -14,7 +20,12 @@ pointsModel.setPoints(points);
 const optionsModel = new OptionsModel();
 optionsModel.setOptions(options);
 
-const newTrip = new Trip(pointsModel, optionsModel);
+const filterModel = new FilterModel();
+
+const newTrip = new Trip(pointsModel, optionsModel, filterModel);
 newTrip._init();
+
+const filterPresenter = new Filter(filtersHeader, filterModel, pointsModel);
+filterPresenter.init();
 
 
