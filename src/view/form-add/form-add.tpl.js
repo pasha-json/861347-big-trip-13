@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import {formatPointFormDate} from "../../utils/common";
 // import {generateOptions} from "../../mock/options";
 
 // const options = generateOptions();
@@ -218,10 +219,10 @@ export const createAddFormTemplate = (data = {}, types, destinations, options) =
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs(start).format(`DD/MM/YY HH:MM`)}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatPointFormDate(start)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(end).format(`DD/MM/YY HH:MM`)}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatPointFormDate(end)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">

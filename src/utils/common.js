@@ -126,3 +126,11 @@ export const generateRouteInfo = (points) => {
     lastMonth
   };
 };
+
+export const formatPointFormDate = (date) => {
+  if (!date) {
+    return ``;
+  }
+
+  return dayjs(date).format(`DD/MM/YY HH:mm`);
+};

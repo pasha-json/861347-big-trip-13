@@ -154,12 +154,13 @@ export default class PointNew {
   }
 
   _handleFormSubmit(point) {
+    console.log(point);
     this._changeData(
-        UserAction.UPDATE_POINT,
+        UserAction.ADD_POINT,
         UpdateType.MINOR,
         Object.assign({id: generateId()}, point)
     );
-    this._destroy();
+    this.destroy();
   }
 
   _handleDeleteClick() {

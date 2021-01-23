@@ -37,7 +37,6 @@ export default class FormAddView extends Smart {
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
 
     this._setDatepicker();
-    console.log(this._types, this._destinations, this._options);
   }
   getTemplate() {
     return createAddFormTemplate(EMPTY_POINT, this._types, this._destinations, this._options);
