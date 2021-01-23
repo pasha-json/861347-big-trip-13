@@ -2,12 +2,14 @@ import RouteView from "../view/route/route";
 import CostView from "../view/cost/cost";
 import MenuView from "../view/menu/menu";
 import SortView from "../view/sort/sort";
+// import FormAddView from "../view/form-add/form-add";
 import FormListView from "../view/form-list/form-list";
 import {remove, renderElement, RenderPosition} from "../utils/render";
 import {filter} from "../utils/filter";
 import {isEscKeyPressed, sortByDate, sortByPrice, sortByTime, generateTotalCost, generateRouteInfo} from "../utils/common";
 import Point from "./point.js";
-import {SortType, generateMenu, UserAction, UpdateType} from "../consts/consts";
+import PointNew from "./point-new.js";
+import {SortType, generateMenu, UserAction, UpdateType, Filters} from "../consts/consts";
 import EmptyView from "../view/empty/empty";
 
 
@@ -23,6 +25,7 @@ export default class Trip {
     this._routeComponent = new RouteView(this._route);
     this._costComponent = new CostView(this._cost);
     this._menuComponent = new MenuView(this._menu);
+    // this._formAdd = new FormAddView();
 
     this._pointsModel = pointsModel;
     this._optionsModel = optionsModel;
@@ -52,6 +55,7 @@ export default class Trip {
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
 
+    this._pointNewPresenter = new PointNew(this._formList, this._handleViewAction, this._getOptions(), this._getPoints());
   }
 
   _init() {
@@ -115,10 +119,12 @@ export default class Trip {
   }
   _renderFormList() {
     this._render(this._siteSortElement, this._formList.getElement(), RenderPosition.BEFOREEND);
-    this._renderFormAdd();
-  }
-  _renderFormAdd() {
     this._renderPointsList();
+  }
+  _createPoint() {
+    this._currentSortType = SortType.DAY;
+    this._filterModel.setFilter(UpdateType.MAJOR, Filters.EVERYTHING);
+    this._pointNewPresenter.init();
   }
   _renderEmpty() {
     this._emptyComponent = new EmptyView();
