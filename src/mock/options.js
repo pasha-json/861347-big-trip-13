@@ -4,28 +4,10 @@ export const generateOptions = () => {
   const optionMocks = [
     {
       type: `taxi`,
-      options: [
-        {
-          name: `Upgrade to a business class`,
-          price: `50`,
-          isIncluded: Boolean(getRandomInteger(0, 1))
-        },
-        {
-          name: `Choose the radio station`,
-          price: `80`,
-          isIncluded: Boolean(getRandomInteger(0, 1))
-        }
-      ]
+      options: []
     },
     {
-      type: `bus`,
-      options: [
-        {
-          name: `Upgrade to a business class`,
-          price: `5`,
-          isIncluded: Boolean(getRandomInteger(0, 1))
-        }
-      ]
+      type: `bus`
     },
     {
       type: `train`,

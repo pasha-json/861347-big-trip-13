@@ -3,7 +3,8 @@ import {getRouteDuration} from "../../utils/common";
 
 
 const renderOptions = ({options}) => {
-  return `<ul class="event__selected-offers">
+  if (options) {
+    return `<ul class="event__selected-offers">
     ${options.map(({name, price}) => {
     return `<li class="event__offer">
         <span class="event__offer-title">${name}</span>
@@ -12,6 +13,8 @@ const renderOptions = ({options}) => {
       </li>`;
   }).slice().join(``)}
   </ul>`;
+  }
+  return ``;
 };
 
 

@@ -2,7 +2,6 @@ import RouteView from "../view/route/route";
 import CostView from "../view/cost/cost";
 import MenuView from "../view/menu/menu";
 import SortView from "../view/sort/sort";
-// import FormAddView from "../view/form-add/form-add";
 import FormListView from "../view/form-list/form-list";
 import {remove, renderElement, RenderPosition} from "../utils/render";
 import {filter} from "../utils/filter";
@@ -25,7 +24,6 @@ export default class Trip {
     this._routeComponent = new RouteView(this._route);
     this._costComponent = new CostView(this._cost);
     this._menuComponent = new MenuView(this._menu);
-    // this._formAdd = new FormAddView();
 
     this._pointsModel = pointsModel;
     this._optionsModel = optionsModel;
@@ -65,7 +63,6 @@ export default class Trip {
     const filterType = this._filterModel.getFilter();
     const points = this._pointsModel.getPoints();
     const filteredPoints = filter[filterType](points);
-    console.log(filteredPoints);
 
     let pointsAfterFiltration = [];
     switch (this._currentSortType) {

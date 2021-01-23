@@ -39,7 +39,6 @@ export default class FormEditView extends Smart {
     super.removeElement();
 
     if (this._datepicker) {
-      // this._datepicker.destroy();
       this._datepicker = null;
     }
   }
