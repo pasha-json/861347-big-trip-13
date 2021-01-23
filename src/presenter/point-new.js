@@ -9,15 +9,29 @@ import {UserAction, UpdateType} from "../consts/consts";
 //   EDITING: `EDITING`
 // };
 
+const DEFAULT_POINT_TYPE = `Flight`;
+
+const EMPTY_POINT = {
+  type: DEFAULT_POINT_TYPE,
+  destination: ``,
+  offers: [],
+  price: ``,
+  date: {
+    start: null,
+    end: null,
+  },
+  isFavorite: false
+};
+
 
 export default class PointNew {
-  constructor(siteListElement, changeData) {
+  constructor(siteListElement, changeData, options, points) {
     this._siteListElement = siteListElement;
     this._changeData = changeData;
     // this._changeMode = changeMode;
 
-    // this._options = options;
-    // this._points = points;
+    this._options = options;
+    this._points = points;
 
     this._pointEditComponent = null;
 
@@ -39,11 +53,11 @@ export default class PointNew {
       return;
     }
 
-    this._pointEditComponent = new FormEditView(this._options, this._points);
+    this._pointEditComponent = new FormEditView(EMPTY_POINT, this._options, this._points);
     this._pointEditComponent.setSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
-    renderElement(this.__siteListElement, this._pointEditComponent, RenderPosition.AFTERBEGIN);
+    renderElement(this._siteListElement, this._pointEditComponent, RenderPosition.AFTERBEGIN);
 
     document.addEventListener(`keydown`, this._onEscKeyDown);
   }
