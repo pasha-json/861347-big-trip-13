@@ -64,7 +64,6 @@ export default class Trip {
     const filteredPoints = filter[filterType](points);
 
     let pointsAfterFiltration = [];
-    console.log(this._currentSortType);
     switch (this._currentSortType) {
       case SortType.TIME:
         pointsAfterFiltration = filteredPoints.sort(sortByTime);
@@ -176,10 +175,12 @@ export default class Trip {
         break;
       case UpdateType.MINOR:
         this._clearRoute();
+        this._currentSortType = SortType.DAY;
         this._renderRoute();
         break;
       case UpdateType.MAJOR:
         this._clearRoute();
+        this._currentSortType = SortType.DAY;
         this._renderRoute();
         break;
     }
