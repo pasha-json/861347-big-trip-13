@@ -158,6 +158,8 @@ export default class Trip {
     Object
       .values(this._pointPresenter)
       .forEach((presenter) => presenter._resetView());
+
+    this._pointNewPresenter.destroy();
   }
 
   _handleViewAction(actionType, updateType, update) {

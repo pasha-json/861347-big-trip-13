@@ -1,6 +1,5 @@
 import FormEditView from "../view/form-edit/form-edit";
 import RoutePinView from "../view/route-pin/route-pin";
-// import EmptyView from "../view/empty/empty";
 import {renderElement, RenderPosition, remove, replace} from "../utils/render";
 import {isEscKeyPressed} from "../utils/common";
 import {UserAction, UpdateType} from "../consts/consts";
@@ -70,9 +69,7 @@ export default class Point {
   _renderPins(point) {
     this._renderRoutePin(point);
   }
-  // _renderEmpty() {
-  //   this._render(this._siteListElement, new EmptyView().getElement(), RenderPosition.BEFOREEND);
-  // }
+
   _resetView() {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceFormToRoutePoint();
