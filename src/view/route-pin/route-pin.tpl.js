@@ -22,8 +22,8 @@ export const createRoutePinTemplate = (points, options) => {
   const {type, destination, date, price, isFavourite} = points;
   const {start, end} = date;
   const startDateDay = dayjs(start).format(`MMM DD`);
-  const startDateTime = dayjs(start).format(`HH:MM`);
-  const endDateTime = dayjs(end).format(`HH:MM`);
+  const startDateTime = dayjs(start).format(`HH:mm`);
+  const endDateTime = dayjs(end).format(`HH:mm`);
   const difference = getRouteDuration(start, end);
 
   let offers = null;

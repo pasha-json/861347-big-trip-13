@@ -4,6 +4,8 @@ import flatpickr from "flatpickr";
 
 import "../../../node_modules/flatpickr/dist/flatpickr.min.css";
 
+const priceKeyDownRegex = /^[0-9]|ArrowLeft|ArrowRight|Delete|Backspace|Tab$/;
+
 export default class FormEditView extends Smart {
   constructor(point, options, points) {
     super();
@@ -31,6 +33,7 @@ export default class FormEditView extends Smart {
     this._dateStartChangeHandler = this._dateStartChangeHandler.bind(this);
     this._dateEndChangeHandler = this._dateEndChangeHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+    this._priceChangeHandler = this._priceChangeHandler.bind(this);
 
     this._setInnerHandlers();
     this._setDatepicker();
@@ -78,7 +81,20 @@ export default class FormEditView extends Smart {
 
     this.getElement().querySelector(`.event__input--destination`)
       .addEventListener(`change`, this._destinationChangeHandler);
+
+    this.getElement().querySelector(`.event__input--price`)
+      .addEventListener(`keydown`, this._priceKeyDownHandler);
+
+    this.getElement().querySelector(`.event__input--price`)
+      .addEventListener(`input`, this._priceChangeHandler);
   }
+
+  _priceKeyDownHandler(evt) {
+    if (!priceKeyDownRegex.test(evt.key)) {
+      evt.preventDefault();
+    }
+  }
+
   _clickHandler(evt) {
     evt.preventDefault();
     this._callback.click();
@@ -135,9 +151,21 @@ export default class FormEditView extends Smart {
   }
 
   _dateEndChangeHandler(evt) {
+    console.log(this._data.date);
     const date = Object.assign({}, this._data.date);
+    console.log(date);
     date.end = new Date(evt).toISOString();
     this.updateData({date}, true);
+  }
+
+  _priceChangeHandler(evt) {
+    let price = Number.parseInt(evt.target.value, 10);
+
+    if (price !== price) {
+      price = 0;
+    }
+
+    this.updateData({price}, true);
   }
 
   _setDatepicker() {

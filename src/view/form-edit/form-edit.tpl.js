@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import {generateId} from "../../utils/common";
 
 const createTypeList = (types) => {
 
@@ -20,9 +21,10 @@ const createDestinationList = (cities) => {
 const createOptionsList = ({type, options}) => {
   if (options) {
     return Array.from(options).map(({name, price, isIncluded}) => {
+      const id = generateId();
       return `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-1" type="checkbox" name="event-offer-${type}" ${isIncluded ? `checked` : ``}>
-    <label class="event__offer-label" for="event-offer-${type}-1">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}-1" type="checkbox" name="event-offer-${type}" ${isIncluded ? `checked` : ``}>
+    <label class="event__offer-label" for="event-offer-${id}-1">
       <span class="event__offer-title">${name}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${price}</span>
@@ -54,6 +56,9 @@ export const createEditTemplate = (data = {}, types, destinations, options) => {
 
   const typeList = createTypeList(types);
   const destinationList = createDestinationList(destinations);
+
+  const startDate = dayjs(start).format(`DD/MM/YY HH:mm`);
+  const endDate = dayjs(end).format(`DD/MM/YY HH:mm`);
 
   let offers = null;
 
@@ -97,10 +102,10 @@ export const createEditTemplate = (data = {}, types, destinations, options) => {
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs(start).format(`DD/MM/YY HH:MM`)}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${startDate}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(end).format(`DD/MM/YY HH:MM`)}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${endDate}">
       </div>
 
       <div class="event__field-group  event__field-group--price">

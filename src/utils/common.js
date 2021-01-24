@@ -134,3 +134,5 @@ export const formatPointFormDate = (date) => {
 
   return dayjs(date).format(`DD/MM/YY HH:mm`);
 };
+
+export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);

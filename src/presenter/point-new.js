@@ -1,7 +1,6 @@
 import FormEditView from "../view/form-edit/form-edit";
-import {generateId} from "../mock/route-point";
 import {renderElement, RenderPosition, remove} from "../utils/render";
-import {isEscKeyPressed} from "../utils/common";
+import {isEscKeyPressed, generateId} from "../utils/common";
 import {UserAction, UpdateType} from "../consts/consts";
 import dayjs from 'dayjs';
 
