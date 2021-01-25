@@ -30,7 +30,7 @@ export default class Filter {
       renderElement(this._filterHeaderElement, this._filterComponent, RenderPosition.BEFOREEND);
       return;
     }
-    replace(this._filterHeaderElement, this._filterComponent, prevFilterComponent);
+    replace(this._filterComponent, prevFilterComponent);
     remove(prevFilterComponent);
   }
 

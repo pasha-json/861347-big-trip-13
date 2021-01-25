@@ -42,11 +42,7 @@ export const remove = (component) => {
   component.removeElement();
 };
 
-export const replace = (container, newChild, oldChild) => {
-
-  if (container instanceof Abstract) {
-    container = container.getElement();
-  }
+export const replace = (newChild, oldChild) => {
 
   if (oldChild instanceof Abstract) {
     oldChild = oldChild.getElement();
@@ -54,6 +50,12 @@ export const replace = (container, newChild, oldChild) => {
 
   if (newChild instanceof Abstract) {
     newChild = newChild.getElement();
+  }
+
+  const container = oldChild.parentElement;
+
+  if (container === null || newChild === null) {
+    throw new Error(`Can't replace unexisting elements`);
   }
 
   container.replaceChild(newChild, oldChild);

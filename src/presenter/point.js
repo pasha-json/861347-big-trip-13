@@ -56,10 +56,10 @@ export default class Point {
     }
 
     if (this._mode === Mode.DEFAULT) {
-      replace(this._siteListElement, this._routePoint, prevRoutePoint);
+      replace(this._routePoint, prevRoutePoint);
     }
     if (this._mode === Mode.EDITING) {
-      replace(this._siteListElement, this._editForm, prevEditForm);
+      replace(this._editForm, prevEditForm);
     }
 
     remove(prevRoutePoint);
@@ -77,14 +77,14 @@ export default class Point {
   }
 
   _replaceRoutePointToForm() {
-    replace(this._siteListElement, this._editForm, this._routePoint);
+    replace(this._editForm, this._routePoint);
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._changeMode();
     this._mode = Mode.EDITING;
   }
 
   _replaceFormToRoutePoint() {
-    replace(this._siteListElement, this._routePoint, this._editForm);
+    replace(this._routePoint, this._editForm);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._mode = Mode.DEFAULT;
   }
