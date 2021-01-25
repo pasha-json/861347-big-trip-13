@@ -11,7 +11,7 @@ export default class SortView extends Abstract {
     return createSortTemplate(this._sortType);
   }
   _sortTypeChangeHandler(evt) {
-    if (evt.target.className !== `trip-sort__btn` && !evt.target.dataSortType) {
+    if (!evt.target.getAttribute(`data-sort-type`)) {
       return;
     }
     this._callback.sortTypeChange(evt.target.dataset.sortType);
