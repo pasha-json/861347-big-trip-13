@@ -1,6 +1,7 @@
 import {createEditTemplate} from "./form-edit.tpl";
 import Smart from "../smart/smart";
 import flatpickr from "flatpickr";
+import {deepClone} from "../../utils/common";
 
 import "../../../node_modules/flatpickr/dist/flatpickr.min.css";
 
@@ -25,6 +26,8 @@ export default class FormEditView extends Smart {
 
     this._data = this._parsePointToData(point);
     this._datepicker = null;
+
+    this._updatedOptions = [];
 
     const input = this.getElement().querySelector(`.event__input--destination`);
     input.setAttribute(`required`, `true`);
@@ -202,19 +205,28 @@ export default class FormEditView extends Smart {
     if (!target) {
       return;
     }
-
+    // console.log(this._data);
     const name = target.querySelector(`span`).textContent;
 
-    const options = this._data.options.options.slice();
+    const data = deepClone(this._data);
+    const options = Object.values(data.options.options);
 
-    const updatedOptions = options.map((option) => {
+    let hooi = new Set();
+    options.map((option) => {
       if (option.name === name) {
-        option.isIncluded = !option.isIncluded;
+        hooi.add(Object.assign(
+            option,
+            {
+              isIncluded: !option.isIncluded
+            }
+        ));
       }
-      return option;
+      hooi.add(option);
     });
+    // this._updatedOptions = updatedOptions;
+    console.log([...hooi]);
 
-    this.updateData({options: {options: updatedOptions}}, true);
+    // this.updateData({options: {options: updatedOptions}}, true);
   }
 
   _setDatepicker() {

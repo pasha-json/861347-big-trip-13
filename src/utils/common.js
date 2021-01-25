@@ -1,3 +1,4 @@
+/* eslint-disable guard-for-in */
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
@@ -136,3 +137,15 @@ export const formatPointFormDate = (date) => {
 };
 
 export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
+export const deepClone = (obj) => {
+  const clonedObj = {};
+  for (const i in obj) {
+    if (obj[i] instanceof Object) {
+      clonedObj[i] = deepClone(obj[i]);
+      continue;
+    }
+    clonedObj[i] = obj[i];
+  }
+  return clonedObj;
+};
