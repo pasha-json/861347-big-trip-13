@@ -1,18 +1,36 @@
 import Trip from "./presenter/trip";
 import {generatePoint} from "./mock/route-point";
-import {generateTotalCost} from "./mock/cost";
-import {Filters, generateMenu, POINT_COUNT} from "./consts/consts";
-import {generateRouteInfo} from "./mock/route";
-import {generateSorting} from "./mock/sort";
+import {generateOptions} from "./mock/options";
+import {POINT_COUNT} from "./consts/consts";
+import PointsModel from "./model/points";
+import OptionsModel from "./model/options";
+import FilterModel from "./model/filter";
+import Filter from "./presenter/filter";
+
+const body = document.querySelector(`.page-body`);
+const tripInfo = body.querySelector(`.page-header .trip-main`);
+const filtersContainer = tripInfo.querySelector(`.trip-main__trip-controls`);
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
-const cost = generateTotalCost(points);
+const options = generateOptions();
 
-const menu = generateMenu();
+const pointsModel = new PointsModel();
+pointsModel.setPoints(points);
 
-const filters = Object.values(Filters);
-const route = generateRouteInfo(points);
-const sort = generateSorting();
+const optionsModel = new OptionsModel();
+optionsModel.setOptions(options);
 
-const newTrip = new Trip(points, cost, menu, filters, route, sort);
+const filterModel = new FilterModel();
+
+const newTrip = new Trip(pointsModel, optionsModel, filterModel);
 newTrip._init();
+
+const filterPresenter = new Filter(filtersContainer, filterModel, pointsModel);
+filterPresenter.init();
+
+document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
+  evt.preventDefault();
+  newTrip._createPoint();
+});
+
+

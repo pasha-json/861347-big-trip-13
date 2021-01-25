@@ -4,11 +4,14 @@ import flatpickr from "flatpickr";
 
 import "../../../node_modules/flatpickr/dist/flatpickr.min.css";
 
+const priceKeyDownRegex = /^[0-9]|ArrowLeft|ArrowRight|Delete|Backspace|Tab$/;
+
 export default class FormEditView extends Smart {
-  constructor(point, points) {
+  constructor(point, options, points) {
     super();
-    this._point = point;
-    this._points = points;
+    this._point = Object.assign({}, point);
+    this._options = options.slice();
+    this._points = points.slice();
 
     this._destinations = new Set();
     this._points.forEach((elem) => {
@@ -20,8 +23,11 @@ export default class FormEditView extends Smart {
       this._types.add(elem.type);
     });
 
-    this._data = FormEditView.parsePointToData(point);
+    this._data = this._parsePointToData(point);
     this._datepicker = null;
+
+    const input = this.getElement().querySelector(`.event__input--destination`);
+    input.setAttribute(`required`, `true`);
 
     this._clickHandler = this._clickHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);
@@ -29,10 +35,19 @@ export default class FormEditView extends Smart {
     this._destinationChangeHandler = this._destinationChangeHandler.bind(this);
     this._dateStartChangeHandler = this._dateStartChangeHandler.bind(this);
     this._dateEndChangeHandler = this._dateEndChangeHandler.bind(this);
-    this._formCloseHandler = this._formCloseHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+    this._priceChangeHandler = this._priceChangeHandler.bind(this);
+    this._offerChangeHandler = this._offerChangeHandler.bind(this);
 
     this._setInnerHandlers();
     this._setDatepicker();
+  }
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepicker) {
+      this._datepicker = null;
+    }
   }
   getTemplate() {
     return createEditTemplate(this._data, this._types, this._destinations);
@@ -40,29 +55,42 @@ export default class FormEditView extends Smart {
 
   reset(point) {
     this.updateData(
-        FormEditView.parsePointToData(point)
+        this._parsePointToData(point)
     );
   }
 
-  static parsePointToData(point) {
+  _parsePointToData(point) {
+    const type = point.type.toLowerCase();
+    const options = this._options.filter((elem) => elem.type === type);
+
+    let offers = null;
+    options.forEach((elem) => {
+      if (elem.type === `${type.toLowerCase()}`) {
+        offers = elem;
+      }
+    });
     return Object.assign(
         {},
         point,
-        {}
+        {
+          options: offers
+        }
     );
   }
 
-  static parseDataToPoint(data) {
+  _parseDataToPoint(data) {
     data = Object.assign({}, data);
+
+    delete data.options;
     return data;
   }
 
   restoreHandlers() {
-    this._setInnerHandlers();
-    this._clickHandler = this._clickHandler.bind(this);
-    this._submitHandler = this._submitHandler.bind(this);
     this._setDatepicker();
-    this.setFormCloseHandler(this._callback.formClose);
+    this._setInnerHandlers();
+    this.setClickHandler(this._callback.click);
+    this.setSubmitHandler(this._callback.submit);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-wrapper`)
@@ -70,7 +98,27 @@ export default class FormEditView extends Smart {
 
     this.getElement().querySelector(`.event__input--destination`)
       .addEventListener(`change`, this._destinationChangeHandler);
+
+    this.getElement().querySelector(`.event__input--price`)
+      .addEventListener(`keydown`, this._priceKeyDownHandler);
+
+    this.getElement().querySelector(`.event__input--price`)
+      .addEventListener(`input`, this._priceChangeHandler);
+
+    const optionsNode = this.getElement().querySelector(`.event__available-offers`);
+    if (optionsNode) {
+      optionsNode
+        .addEventListener(`click`, this._offerChangeHandler);
+
+    }
   }
+
+  _priceKeyDownHandler(evt) {
+    if (!priceKeyDownRegex.test(evt.key)) {
+      evt.preventDefault();
+    }
+  }
+
   _clickHandler(evt) {
     evt.preventDefault();
     this._callback.click();
@@ -81,33 +129,39 @@ export default class FormEditView extends Smart {
   }
   _submitHandler(evt) {
     evt.preventDefault();
-    this._callback.submit();
+    this._callback.submit(this._parseDataToPoint(this._data));
   }
   setSubmitHandler(callback) {
     this._callback.submit = callback;
     this.getElement().addEventListener(`submit`, this._submitHandler);
   }
   _pointTypeToggleHandler(evt) {
+
     const target = evt.target.closest(`label.event__type-label`);
     if (!target) {
       return;
     }
     const type = target.textContent;
 
-    let options = [];
+    const options = this._options.filter((elem) => elem.type === type.toLowerCase());
 
-    this._points.forEach((elem) => {
-      if (elem.type === `${type}`) {
-        options = elem.options;
+    let offers = null;
+    options.forEach((elem) => {
+      if (elem.type === `${type.toLowerCase()}`) {
+        offers = elem;
       }
     });
-
-    this.updateData({type, options});
+    this.updateData({type, options: offers});
 
   }
   _destinationChangeHandler(evt) {
 
     const city = evt.target.value;
+
+    if (!city || !this._destinations.has(city)) {
+      evt.target.value = this._data.destination;
+      return;
+    }
     let description = ``;
     let images = [];
 
@@ -131,6 +185,36 @@ export default class FormEditView extends Smart {
     const date = Object.assign({}, this._data.date);
     date.end = new Date(evt).toISOString();
     this.updateData({date}, true);
+  }
+
+  _priceChangeHandler(evt) {
+    let price = Number.parseInt(evt.target.value, 10);
+
+    if (price !== price) {
+      price = 0;
+    }
+
+    this.updateData({price}, true);
+  }
+
+  _offerChangeHandler(evt) {
+    const target = evt.target.closest(`label.event__offer-label`);
+    if (!target) {
+      return;
+    }
+
+    const name = target.querySelector(`span`).textContent;
+
+    const options = this._data.options.options.slice();
+
+    const updatedOptions = options.map((option) => {
+      if (option.name === name) {
+        option.isIncluded = !option.isIncluded;
+      }
+      return option;
+    });
+
+    this.updateData({options: {options: updatedOptions}}, true);
   }
 
   _setDatepicker() {
@@ -163,14 +247,13 @@ export default class FormEditView extends Smart {
     this._datepicker = null;
   }
 
-  setFormCloseHandler(callback) {
-    this._callback.formClose = callback;
-    this.getElement().querySelector(`.event__rollup-btn`)
-      .addEventListener(`click`, this._formCloseHandler);
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(this._parseDataToPoint(this._data));
   }
-
-  _formCloseHandler() {
-    this._callback.formClose();
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
   }
 
 }

@@ -3,8 +3,9 @@ import {getRouteDuration} from "../../utils/common";
 
 
 const renderOptions = ({options}) => {
-  return `<ul class="event__selected-offers">
-    ${options.options.map(({name, price}) => {
+  if (options) {
+    return `<ul class="event__selected-offers">
+    ${options.map(({name, price}) => {
     return `<li class="event__offer">
         <span class="event__offer-title">${name}</span>
         &plus;&euro;&nbsp;
@@ -12,17 +13,28 @@ const renderOptions = ({options}) => {
       </li>`;
   }).slice().join(``)}
   </ul>`;
+  }
+  return ``;
 };
 
 
-export const createRoutePinTemplate = (points) => {
-  const {type, destination, options, date, price, isFavourite} = points;
+export const createRoutePinTemplate = (points, options) => {
+  const {type, destination, date, price, isFavourite} = points;
   const {start, end} = date;
   const startDateDay = dayjs(start).format(`MMM DD`);
-  const startDateTime = dayjs(start).format(`HH:MM`);
-  const endDateTime = dayjs(end).format(`HH:MM`);
+  const startDateTime = dayjs(start).format(`HH:mm`);
+  const endDateTime = dayjs(end).format(`HH:mm`);
   const difference = getRouteDuration(start, end);
-  const optionNode = options === null ? `` : renderOptions(points);
+
+  let offers = null;
+
+  options.forEach((elem) => {
+    if (elem.type === `${type.toLowerCase()}`) {
+      offers = elem;
+    }
+  });
+
+  const optionNode = offers === null ? `` : renderOptions(offers);
   const iconName = type.toLowerCase();
 
 

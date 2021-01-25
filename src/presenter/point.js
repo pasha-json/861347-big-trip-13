@@ -1,8 +1,8 @@
 import FormEditView from "../view/form-edit/form-edit";
 import RoutePinView from "../view/route-pin/route-pin";
-import EmptyView from "../view/empty/empty";
 import {renderElement, RenderPosition, remove, replace} from "../utils/render";
 import {isEscKeyPressed} from "../utils/common";
+import {UserAction, UpdateType} from "../consts/consts";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -11,11 +11,12 @@ const Mode = {
 
 
 export default class Point {
-  constructor(siteListElement, changeData, changeMode, points) {
+  constructor(siteListElement, changeData, changeMode, points, options) {
     this._siteListElement = siteListElement;
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._points = points;
+    this._options = options;
 
     this._routePoint = null;
     this._editForm = null;
@@ -25,6 +26,8 @@ export default class Point {
     this._replaceFormToRoutePoint = this._replaceFormToRoutePoint.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
     this._handleFavouriteClick = this._handleFavouriteClick.bind(this);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
 
   }
 
@@ -38,13 +41,14 @@ export default class Point {
 
     this._point = point;
 
-    this._routePoint = new RoutePinView(this._point);
-    this._editForm = new FormEditView(this._point, this._points);
+    this._routePoint = new RoutePinView(this._point, this._options);
+    this._editForm = new FormEditView(this._point, this._options, this._points);
 
     this._routePoint.setClickHandler(this._replaceRoutePointToForm);
-    this._editForm.setSubmitHandler(this._replaceFormToRoutePoint);
+    this._editForm.setSubmitHandler(this._handleFormSubmit);
     this._editForm.setClickHandler(this._replaceFormToRoutePoint);
     this._routePoint.setFavouriteClickHandler(this._handleFavouriteClick);
+    this._editForm.setDeleteClickHandler(this._handleDeleteClick);
 
     if (prevRoutePoint === null || prevEditForm === null) {
       renderElement(this._siteListElement, this._routePoint, RenderPosition.BEFOREEND);
@@ -52,10 +56,10 @@ export default class Point {
     }
 
     if (this._mode === Mode.DEFAULT) {
-      replace(this._siteListElement, this._routePoint, prevRoutePoint);
+      replace(this._routePoint, prevRoutePoint);
     }
     if (this._mode === Mode.EDITING) {
-      replace(this._siteListElement, this._editForm, prevEditForm);
+      replace(this._editForm, prevEditForm);
     }
 
     remove(prevRoutePoint);
@@ -65,9 +69,7 @@ export default class Point {
   _renderPins(point) {
     this._renderRoutePin(point);
   }
-  _renderEmpty() {
-    this._render(this._siteListElement, new EmptyView().getElement(), RenderPosition.BEFOREEND);
-  }
+
   _resetView() {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceFormToRoutePoint();
@@ -75,14 +77,14 @@ export default class Point {
   }
 
   _replaceRoutePointToForm() {
-    replace(this._siteListElement, this._editForm, this._routePoint);
+    replace(this._editForm, this._routePoint);
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._changeMode();
     this._mode = Mode.EDITING;
   }
 
   _replaceFormToRoutePoint() {
-    replace(this._siteListElement, this._routePoint, this._editForm);
+    replace(this._routePoint, this._editForm);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._mode = Mode.DEFAULT;
   }
@@ -103,6 +105,8 @@ export default class Point {
 
   _handleFavouriteClick() {
     this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._point,
@@ -110,6 +114,23 @@ export default class Point {
               isFavourite: !this._point.isFavourite
             }
         )
+    );
+  }
+
+  _handleFormSubmit(point) {
+    this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
+        point
+    );
+    this._replaceFormToRoutePoint();
+  }
+
+  _handleDeleteClick(point) {
+    this._changeData(
+        UserAction.DELETE_POINT,
+        UpdateType.MINOR,
+        point
     );
   }
 }
