@@ -9,9 +9,9 @@ const priceKeyDownRegex = /^[0-9]|ArrowLeft|ArrowRight|Delete|Backspace|Tab$/;
 export default class FormEditView extends Smart {
   constructor(point, options, points) {
     super();
-    this._point = point;
-    this._options = options;
-    this._points = points;
+    this._point = Object.assign({}, point);
+    this._options = options.slice();
+    this._points = points.slice();
 
     this._destinations = new Set();
     this._points.forEach((elem) => {
@@ -23,7 +23,7 @@ export default class FormEditView extends Smart {
       this._types.add(elem.type);
     });
 
-    this._data = FormEditView.parsePointToData(point);
+    this._data = this._parsePointToData(point);
     this._datepicker = null;
 
     this._clickHandler = this._clickHandler.bind(this);
@@ -34,6 +34,7 @@ export default class FormEditView extends Smart {
     this._dateEndChangeHandler = this._dateEndChangeHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
+    this._offerChangeHandler = this._offerChangeHandler.bind(this);
 
     this._setInnerHandlers();
     this._setDatepicker();
@@ -46,25 +47,38 @@ export default class FormEditView extends Smart {
     }
   }
   getTemplate() {
-    return createEditTemplate(this._data, this._types, this._destinations, this._options);
+    return createEditTemplate(this._data, this._types, this._destinations);
   }
 
   reset(point) {
     this.updateData(
-        FormEditView.parsePointToData(point)
+        this._parsePointToData(point)
     );
   }
 
-  static parsePointToData(point) {
+  _parsePointToData(point) {
+    const type = point.type.toLowerCase();
+    const options = this._options.filter((elem) => elem.type === type);
+
+    let offers = null;
+    options.forEach((elem) => {
+      if (elem.type === `${type.toLowerCase()}`) {
+        offers = elem;
+      }
+    });
     return Object.assign(
         {},
         point,
-        {}
+        {
+          options: offers
+        }
     );
   }
 
-  static parseDataToPoint(data) {
+  _parseDataToPoint(data) {
     data = Object.assign({}, data);
+
+    delete data.options;
     return data;
   }
 
@@ -87,6 +101,13 @@ export default class FormEditView extends Smart {
 
     this.getElement().querySelector(`.event__input--price`)
       .addEventListener(`input`, this._priceChangeHandler);
+
+    const optionsNode = this.getElement().querySelector(`.event__available-offers`);
+    if (optionsNode) {
+      optionsNode
+        .addEventListener(`click`, this._offerChangeHandler);
+
+    }
   }
 
   _priceKeyDownHandler(evt) {
@@ -105,28 +126,30 @@ export default class FormEditView extends Smart {
   }
   _submitHandler(evt) {
     evt.preventDefault();
-    this._callback.submit(FormEditView.parseDataToPoint(this._data));
+    this._callback.submit(this._parseDataToPoint(this._data));
   }
   setSubmitHandler(callback) {
     this._callback.submit = callback;
     this.getElement().addEventListener(`submit`, this._submitHandler);
   }
   _pointTypeToggleHandler(evt) {
+
     const target = evt.target.closest(`label.event__type-label`);
     if (!target) {
       return;
     }
     const type = target.textContent;
 
-    let options = [];
+    const options = this._options.filter((elem) => elem.type === type.toLowerCase());
 
-    this._points.forEach((elem) => {
-      if (elem.type === `${type}`) {
-        options = elem.options;
+    let offers = null;
+    options.forEach((elem) => {
+      if (elem.type === `${type.toLowerCase()}`) {
+        offers = elem;
       }
     });
+    this.updateData({type, options: offers});
 
-    this.updateData({type, options});
   }
   _destinationChangeHandler(evt) {
 
@@ -151,9 +174,7 @@ export default class FormEditView extends Smart {
   }
 
   _dateEndChangeHandler(evt) {
-    console.log(this._data.date);
     const date = Object.assign({}, this._data.date);
-    console.log(date);
     date.end = new Date(evt).toISOString();
     this.updateData({date}, true);
   }
@@ -166,6 +187,26 @@ export default class FormEditView extends Smart {
     }
 
     this.updateData({price}, true);
+  }
+
+  _offerChangeHandler(evt) {
+    const target = evt.target.closest(`label.event__offer-label`);
+    if (!target) {
+      return;
+    }
+
+    const name = target.querySelector(`span`).textContent;
+
+    const options = this._data.options.options.slice();
+
+    const updatedOptions = options.map((option) => {
+      if (option.name === name) {
+        option.isIncluded = !option.isIncluded;
+      }
+      return option;
+    });
+
+    this.updateData({options: {options: updatedOptions}}, true);
   }
 
   _setDatepicker() {
@@ -200,7 +241,7 @@ export default class FormEditView extends Smart {
 
   _formDeleteClickHandler(evt) {
     evt.preventDefault();
-    this._callback.deleteClick(FormEditView.parseDataToPoint(this._data));
+    this._callback.deleteClick(this._parseDataToPoint(this._data));
   }
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;

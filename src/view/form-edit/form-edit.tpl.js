@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import {generateId} from "../../utils/common";
 
 const createTypeList = (types) => {
 
@@ -21,7 +20,7 @@ const createDestinationList = (cities) => {
 const createOptionsList = ({type, options}) => {
   if (options) {
     return Array.from(options).map(({name, price, isIncluded}) => {
-      const id = generateId();
+      const id = name.toLowerCase().split(` `).join(`-`);
       return `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}-1" type="checkbox" name="event-offer-${type}" ${isIncluded ? `checked` : ``}>
     <label class="event__offer-label" for="event-offer-${id}-1">
@@ -48,9 +47,9 @@ const createImagesBlock = (images) => {
   return null;
 };
 
-export const createEditTemplate = (data = {}, types, destinations, options) => {
+export const createEditTemplate = (data = {}, types, destinations) => {
 
-  const {type, destination, date, price, description, images} = data;
+  const {type, destination, date, price, description, images, options} = data;
   const typeName = type.toLowerCase();
   const {start, end} = date;
 
@@ -60,15 +59,7 @@ export const createEditTemplate = (data = {}, types, destinations, options) => {
   const startDate = dayjs(start).format(`DD/MM/YY HH:mm`);
   const endDate = dayjs(end).format(`DD/MM/YY HH:mm`);
 
-  let offers = null;
-
-  options.forEach((elem) => {
-    if (elem.type === `${type.toLowerCase()}`) {
-      offers = elem;
-    }
-  });
-
-  const optionsList = createOptionsList(offers);
+  const optionsList = createOptionsList(options);
   const imagesBlock = createImagesBlock(images);
 
   return `<li class="trip-events__item">
