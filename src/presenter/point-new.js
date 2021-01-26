@@ -58,6 +58,7 @@ export default class PointNew {
     this._pointEditComponent._deleteDatePicker();
     remove(this._pointEditComponent);
     this._pointEditComponent = null;
+    document.querySelector(`.trip-main__event-add-btn`).disabled = false;
   }
 
   _onEscKeyDown(evt) {

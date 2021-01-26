@@ -1,10 +1,10 @@
-export const createMenuTemplate = ({items}) => {
+import {MenuItem} from "../../consts/consts";
 
-  const menuItems = items.map(({title, isActive}) => {
-    return `<a class="trip-tabs__btn  ${isActive ? `trip-tabs__btn--active` : ``}" href="#">${title}</a>`;
-  }).join(``);
-
-  return `<nav class="trip-controls__trip-tabs  trip-tabs">
-  ${menuItems}
-  </nav>`;
+export const createMenuTemplate = () => {
+  return `
+    <nav class="trip-controls__trip-tabs  trip-tabs">
+      <a class="trip-tabs__btn  trip-tabs__btn--active" href="#">${MenuItem.TABLE}</a>
+      <a class="trip-tabs__btn" href="#">${MenuItem.STATS}</a>
+    </nav>
+    `;
 };
