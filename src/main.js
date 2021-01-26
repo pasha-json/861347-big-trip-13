@@ -12,6 +12,10 @@ import {generateTotalCost, generateRouteInfo} from "./utils/common";
 import RouteView from "./view/route/route";
 import CostView from "./view/cost/cost";
 import MenuView from "./view/menu/menu";
+import Api from "./api/api";
+
+const AUTHORIZATION = `Basic wefju4rvnrijnvehuHJGhgji6`;
+const END_POINT = `https://13.ecmascript.pages.academy/big-trip/`;
 
 const body = document.querySelector(`.page-body`);
 const tripInfo = body.querySelector(`.page-header .trip-main`);
@@ -20,6 +24,15 @@ const tripElement = body.querySelector(`.page-main section.trip-events`);
 const siteControlsElement = body.querySelector(`.trip-main__trip-controls h2:first-child`);
 
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
+console.log(points);
+
+const api = new Api(END_POINT, AUTHORIZATION);
+
+api.getPoints().then((points) => {
+  console.log(points);
+
+});
+
 const options = generateOptions();
 
 const pointsModel = new PointsModel();
@@ -68,7 +81,6 @@ const handleSiteMenuClick = (menuItem) => {
     case MenuItem.ADD_POINT:
       statisticsComponent.hide();
       newTrip.show();
-      // newTrip._createPoint(menuComponent.enableAddPointButton);
       newTrip._createPoint();
       tripInfo.querySelector(`.trip-main__event-add-btn`).disabled = true;
       break;
@@ -76,10 +88,5 @@ const handleSiteMenuClick = (menuItem) => {
 };
 
 menuComponent.setMenuClickHandler(handleSiteMenuClick);
-
-// document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
-//   evt.preventDefault();
-//   newTrip._createPoint();
-// });
 
 
