@@ -1,28 +1,9 @@
-import {getRandomInteger} from "../utils/common";
-
-export const POINT_COUNT = 20;
+export const POINT_COUNT = 5;
 
 export const Filters = {
   EVERYTHING: `Everything`,
   FUTURE: `Future`,
   PAST: `Past`
-};
-
-export const generateMenu = () => {
-  const flag = Boolean(getRandomInteger(0, 1));
-  const items = [
-    {
-      title: `Table`,
-      isActive: flag
-    },
-    {
-      title: `Stats`,
-      isActive: !flag
-    }
-  ];
-  return {
-    items
-  };
 };
 
 export const SortType = {
@@ -43,3 +24,8 @@ export const UpdateType = {
   MAJOR: `MAJOR`
 };
 
+export const MenuItem = {
+  TABLE: `Table`,
+  STATS: `Stats`,
+  ADD_POINT: `New event`
+};

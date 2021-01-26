@@ -26,6 +26,8 @@ export default class FormEditView extends Smart {
     this._data = this._parsePointToData(point);
     this._datepicker = null;
 
+    this._updatedOptions = [];
+
     const input = this.getElement().querySelector(`.event__input--destination`);
     input.setAttribute(`required`, `true`);
 
@@ -198,6 +200,7 @@ export default class FormEditView extends Smart {
   }
 
   _offerChangeHandler(evt) {
+
     const target = evt.target.closest(`label.event__offer-label`);
     if (!target) {
       return;
@@ -215,6 +218,7 @@ export default class FormEditView extends Smart {
     });
 
     this.updateData({options: {options: updatedOptions}}, true);
+
   }
 
   _setDatepicker() {
