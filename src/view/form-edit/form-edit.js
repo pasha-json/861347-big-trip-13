@@ -201,30 +201,47 @@ export default class FormEditView extends Smart {
   }
 
   _offerChangeHandler(evt) {
+
     const target = evt.target.closest(`label.event__offer-label`);
     if (!target) {
       return;
     }
-    // console.log(this._data);
+
     const name = target.querySelector(`span`).textContent;
 
-    const data = deepClone(this._data);
-    const options = Object.values(data.options.options);
+    const options = this._data.options.options.slice();
 
-    let hooi = new Set();
-    options.map((option) => {
+    const updatedOptions = options.map((option) => {
       if (option.name === name) {
-        hooi.add(Object.assign(
-            option,
-            {
-              isIncluded: !option.isIncluded
-            }
-        ));
+        option.isIncluded = !option.isIncluded;
       }
-      hooi.add(option);
+      return option;
     });
+
+    this.updateData({options: {options: updatedOptions}}, true);
+
+    // // const target = evt.target.closest(`label.event__offer-label`);
+    // const target = evt.target.closest(`.event__offer-selector`);
+    // if (!target) {
+    //   return;
+    // }
+    // console.log(target);
+    // const name = target.querySelector(`span`).textContent;
+    // const checkbox = target.querySelector(`input`);
+    // console.log(checkbox);
+
+    // const data = deepClone(this._data);
+    // const options = Object.values(data.options.options).slice();
+
+    // const updatedOptions = options.map((option) => {
+    //   if (option.name === name) {
+    //     console.log(option);
+    //     option.isIncluded = !option.isIncluded;
+    //   }
+    //   return option;
+    // });
     // this._updatedOptions = updatedOptions;
-    console.log([...hooi]);
+    // console.log(updatedOptions);
 
     // this.updateData({options: {options: updatedOptions}}, true);
   }
