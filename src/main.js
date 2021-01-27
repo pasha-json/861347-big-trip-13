@@ -34,6 +34,7 @@ api.getPoints().then((points) => {
 });
 
 const options = generateOptions();
+console.log(options);
 
 const pointsModel = new PointsModel();
 pointsModel.setPoints(points);

@@ -51,4 +51,75 @@ export default class PointsModel extends Observer {
 
     this._notify(updateType);
   }
+
+  static adaptToClient(point) {
+    const adaptedPoint = Object.assign(
+        {},
+        point,
+        {
+          price: point.base_price,
+          date: {
+            start: new Date(point.date_from),
+            end: new Date(point.date_to)
+          },
+          destination: point.destination.name,
+          description: point.destination.description,
+          images: point.pictures,
+          isFavourite: point.is_favourite,
+          options: {
+            type: point.type,
+            options: point.offers !== null ? point.offers.map((elem) => {
+              elem[`title`] = elem[`name`];
+              elem.isIncluded = false;
+              delete elem[`name`];
+              return elem;
+            }) : []
+          }
+        }
+    );
+
+    delete adaptedPoint.base_price;
+    delete adaptedPoint.date_from;
+    delete adaptedPoint.date_to;
+    delete adaptedPoint.destination;
+    delete adaptedPoint.pictures;
+    delete adaptedPoint.is_favourite;
+    delete adaptedPoint.type;
+    delete adaptedPoint.offers;
+
+    return adaptedPoint;
+  }
+
+  static adaptToServer(point) {
+    const adaptedPoint = Object.assign(
+        {},
+        point,
+        {
+          "base_price": point.price,
+          "date_from": point.date.start.toISOString(),
+          "date_to": point.date.end.toISOString(),
+          "destination": {
+            "name": point.destination,
+            "description": point.description
+          },
+          "pictures": point.images,
+          "is_favourite": point.isFavourite,
+          "offers": point.options.options !== null ? point.options.options.map((elem) => {
+            elem[`name`] = elem[`title`];
+            delete elem[`name`];
+            elem.price = Number(elem.price);
+          }) : []
+        }
+    );
+
+    delete adaptedPoint.price;
+    delete adaptedPoint.date;
+    delete adaptedPoint.destination;
+    delete adaptedPoint.description;
+    delete adaptedPoint.images;
+    delete adaptedPoint.isFavourite;
+    delete adaptedPoint.options;
+
+    return adaptedPoint;
+  }
 }
