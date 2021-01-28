@@ -1,7 +1,7 @@
 import Trip from "./presenter/trip";
 import {generatePoint} from "./mock/route-point";
 import {generateOptions} from "./mock/options";
-import {POINT_COUNT, MenuItem} from "./consts/consts";
+import {POINT_COUNT, MenuItem, UpdateType} from "./consts/consts";
 import PointsModel from "./model/points";
 import OptionsModel from "./model/options";
 import FilterModel from "./model/filter";
@@ -28,8 +28,9 @@ console.log(points);
 
 const api = new Api(END_POINT, AUTHORIZATION);
 
-api.getPoints().then((points) => {
-  console.log(points);
+api.getPoints().then((newPoints) => {
+  console.log(newPoints);
+  pointsModel.setPoints(UpdateType.MAJOR, newPoints);
 
 });
 
@@ -37,7 +38,7 @@ const options = generateOptions();
 console.log(options);
 
 const pointsModel = new PointsModel();
-pointsModel.setPoints(points);
+pointsModel.setPoints(UpdateType.MAJOR, points);
 
 const optionsModel = new OptionsModel();
 optionsModel.setOptions(options);

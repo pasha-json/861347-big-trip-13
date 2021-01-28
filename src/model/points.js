@@ -5,8 +5,10 @@ export default class PointsModel extends Observer {
     super();
     this._points = [];
   }
-  setPoints(points) {
+  setPoints(UpdateType, points) {
     this._points = points.slice();
+
+    this._notify(UpdateType);
   }
   getPoints() {
     return this._points;
@@ -62,16 +64,18 @@ export default class PointsModel extends Observer {
             start: new Date(point.date_from),
             end: new Date(point.date_to)
           },
-          destination: point.destination.name,
-          description: point.destination.description,
-          images: point.pictures,
-          isFavourite: point.is_favourite,
+          destination: point[`destination`][`name`],
+          description: point[`destination`][`description`],
+          images: point[`destination`][`pictures`].map((elem) => {
+            return elem[`src`];
+          }),
+          isFavourite: point.is_favorite,
           options: {
             type: point.type,
             options: point.offers !== null ? point.offers.map((elem) => {
-              elem[`title`] = elem[`name`];
+              elem[`name`] = elem[`title`];
               elem.isIncluded = false;
-              delete elem[`name`];
+              delete elem[`title`];
               return elem;
             }) : []
           }
@@ -81,10 +85,10 @@ export default class PointsModel extends Observer {
     delete adaptedPoint.base_price;
     delete adaptedPoint.date_from;
     delete adaptedPoint.date_to;
-    delete adaptedPoint.destination;
-    delete adaptedPoint.pictures;
-    delete adaptedPoint.is_favourite;
-    delete adaptedPoint.type;
+    // delete adaptedPoint.destination;
+    // delete adaptedPoint.pictures;
+    delete adaptedPoint.is_favorite;
+    // delete adaptedPoint.type;
     delete adaptedPoint.offers;
 
     return adaptedPoint;
