@@ -64,7 +64,7 @@ export default class FormEditView extends Smart {
 
   _parsePointToData(point) {
     const type = point.type.toLowerCase();
-    const options = this._options.filter((elem) => elem.type === type);
+    const options = this._options.filter((elem) => elem.type === type).slice();
 
     let offers = null;
     options.forEach((elem) => {
@@ -209,10 +209,11 @@ export default class FormEditView extends Smart {
 
     const name = target.querySelector(`span`).textContent;
 
-    const options = this._data.options.options.slice();
+    const options = this._data.options.offers.slice();
+
 
     const updatedOptions = options.map((option) => {
-      if (option.name === name) {
+      if (option.title === name) {
         option.isIncluded = !option.isIncluded;
       }
       return option;
