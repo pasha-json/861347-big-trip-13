@@ -7,9 +7,9 @@ import DestinationsModel from "./model/destinations";
 import Filter from "./presenter/filter";
 import StatisticsView from "./view/statistics/statistics";
 import {renderElement, RenderPosition} from "./utils/render";
-import {generateTotalCost, generateRouteInfo} from "./utils/common";
-import RouteView from "./view/route/route";
-import CostView from "./view/cost/cost";
+// import {generateTotalCost, generateRouteInfo} from "./utils/common";
+// import RouteView from "./view/route/route";
+// import CostView from "./view/cost/cost";
 import MenuView from "./view/menu/menu";
 import Api from "./api/api";
 
@@ -22,11 +22,6 @@ const filtersContainer = tripInfo.querySelector(`.trip-main__trip-controls`);
 const tripElement = body.querySelector(`.page-main section.trip-events`);
 const siteControlsElement = body.querySelector(`.trip-main__trip-controls h2:first-child`);
 
-// const points = new Array(POINT_COUNT).fill().map(generatePoint);
-// console.log(points);
-
-const points = [];
-
 const destinationsModel = new DestinationsModel();
 const pointsModel = new PointsModel();
 const optionsModel = new OptionsModel();
@@ -36,72 +31,45 @@ const statisticsComponent = new StatisticsView();
 
 const api = new Api(END_POINT, AUTHORIZATION);
 
-api.getPoints().then((newPoints) => {
-  // console.log(newPoints);
-  pointsModel.setPoints(UpdateType.INIT, newPoints);
+// const cost = pointsModel.getPoints().toString() ? generateTotalCost(pointsModel.getPoints()) : ``;
+// const route = pointsModel.getPoints().toString() ? generateRouteInfo(pointsModel.getPoints()) : {};
 
-  const cost = pointsModel.getPoints().toString() ? generateTotalCost(pointsModel.getPoints()) : ``;
-  const route = pointsModel.getPoints().toString() ? generateRouteInfo(pointsModel.getPoints()) : {};
+// const routeComponent = new RouteView(route);
+// const costComponent = new CostView(cost);
 
-  const routeComponent = new RouteView(route);
-  const costComponent = new CostView(cost);
+// renderElement(tripInfo, routeComponent.getElement(), RenderPosition.AFTERBEGIN);
+// const siteCostElement = tripInfo.querySelector(`.trip-main__trip-info`);
 
-  renderElement(tripInfo, routeComponent.getElement(), RenderPosition.AFTERBEGIN);
-  const siteCostElement = tripInfo.querySelector(`.trip-main__trip-info`);
+// if (siteCostElement) {
+//   renderElement(siteCostElement, costComponent.getElement(), RenderPosition.BEFOREEND);
+// }
 
-  if (siteCostElement) {
-    renderElement(siteCostElement, costComponent.getElement(), RenderPosition.BEFOREEND);
+const newTrip = new Trip(tripElement, pointsModel, optionsModel, filterModel, destinationsModel);
+newTrip._init();
+
+const handleSiteMenuClick = (menuItem) => {
+  switch (menuItem) {
+    case MenuItem.TABLE:
+      newTrip._resetSortType();
+      newTrip.show();
+      statisticsComponent.hide();
+      break;
+    case MenuItem.STATS:
+      newTrip.hide();
+      statisticsComponent.init(pointsModel.getPoints());
+      statisticsComponent.show();
+      break;
+    case MenuItem.ADD_POINT:
+      statisticsComponent.hide();
+      newTrip.show();
+      newTrip._createPoint();
+      tripInfo.querySelector(`.trip-main__event-add-btn`).disabled = true;
+      break;
   }
-
-});
-
-api.getOffers().then((offers) => {
-  optionsModel.setOptions(UpdateType.OFFERS_INIT, offers);
-
-  const newTrip = new Trip(tripElement, pointsModel, optionsModel, filterModel, destinationsModel);
-  newTrip._init();
-
-  const handleSiteMenuClick = (menuItem) => {
-    switch (menuItem) {
-      case MenuItem.TABLE:
-        newTrip._resetSortType();
-        newTrip.show();
-        statisticsComponent.hide();
-        break;
-      case MenuItem.STATS:
-        newTrip.hide();
-        statisticsComponent.init(pointsModel.getPoints());
-        statisticsComponent.show();
-        break;
-      case MenuItem.ADD_POINT:
-        statisticsComponent.hide();
-        newTrip.show();
-        newTrip._createPoint();
-        tripInfo.querySelector(`.trip-main__event-add-btn`).disabled = true;
-        break;
-    }
-  };
-
-  menuComponent.setMenuClickHandler(handleSiteMenuClick);
-
-});
-
-api.getDestinations().then((destinations) => {
-  destinationsModel.setDestinations(UpdateType.DESTINATIONS_INIT, destinations);
-
-});
-
-// const options = generateOptions();
-// console.log(options);
-
-
-// pointsModel.setPoints(UpdateType.MAJOR, points);
-
-
-// optionsModel.setOptions(UpdateType.MAJOR, options);
+};
 
 const menuComponent = new MenuView(tripInfo);
-
+menuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 renderElement(siteControlsElement, menuComponent.getElement(), RenderPosition.AFTEREND);
 
@@ -109,3 +77,19 @@ const filterPresenter = new Filter(filtersContainer, filterModel, pointsModel);
 filterPresenter.init();
 
 renderElement(tripElement, statisticsComponent, RenderPosition.AFTEREND);
+
+api.getPoints()
+  .then((points) => {
+    pointsModel.setPoints(UpdateType.INIT, points);
+  })
+  .catch(() => {
+    pointsModel.setPoints(UpdateType.INIT, []);
+  });
+
+api.getOffers().then((offers) => {
+  optionsModel.setOptions(UpdateType.OFFERS_INIT, offers);
+});
+
+api.getDestinations().then((destinations) => {
+  destinationsModel.setDestinations(UpdateType.DESTINATIONS_INIT, destinations);
+});

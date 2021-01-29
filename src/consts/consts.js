@@ -1,5 +1,3 @@
-export const POINT_COUNT = 5;
-
 export const Filters = {
   EVERYTHING: `Everything`,
   FUTURE: `Future`,

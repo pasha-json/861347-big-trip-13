@@ -5,10 +5,10 @@ export default class PointsModel extends Observer {
     super();
     this._points = [];
   }
-  setPoints(UpdateType, points) {
+  setPoints(updateType, points) {
     this._points = points.slice();
 
-    this._notify(UpdateType);
+    this._notify(updateType);
   }
   getPoints() {
     return this._points;

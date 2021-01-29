@@ -1,5 +1,6 @@
 import SortView from "../view/sort/sort";
 import FormListView from "../view/form-list/form-list";
+import LoadingView from "../view/loading/loading";
 import {remove, renderElement, RenderPosition} from "../utils/render";
 import {filter} from "../utils/filter";
 import {isEscKeyPressed, sortByDate, sortByPrice, sortByTime} from "../utils/common";
@@ -25,6 +26,7 @@ export default class Trip {
     this._pointPresenter = {};
 
     this._currentSortType = SortType.DAY;
+    this._isLoading = true;
 
     this._siteMainElement = document.querySelector(`.page-body`);
     this._siteRouteElement = this._siteMainElement.querySelector(`.trip-main`);
@@ -38,6 +40,8 @@ export default class Trip {
     this._emptyComponent = null;
     this._filterPresenter = null;
 
+    this._loadingComponent = new LoadingView();
+
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
@@ -49,12 +53,7 @@ export default class Trip {
   }
 
   _init() {
-    if (this._pointsModel.getPoints().length === 0) {
-      this._renderEmpty();
-    } else {
-      this._emptyComponent = null;
-      this._renderSort();
-    }
+    this._renderSort();
   }
 
   _getPoints() {
@@ -107,6 +106,10 @@ export default class Trip {
   }
 
   _renderSort() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
     if (this._sortComponent !== null) {
       this._sortComponent = null;
     }
@@ -115,6 +118,10 @@ export default class Trip {
     this._render(this._siteSortElement, this._sortComponent.getElement(), RenderPosition.BEFOREEND);
     this._renderFormList();
   }
+  _renderLoading() {
+    this._render(this._siteSortElement, this._loadingComponent, RenderPosition.BEFOREEND);
+  }
+
   _renderFormList() {
     this._render(this._siteSortElement, this._formList.getElement(), RenderPosition.BEFOREEND);
     this._renderPointsList();
@@ -152,6 +159,7 @@ export default class Trip {
     }
     this._emptyComponent = null;
     this._filterPresenter = null;
+    remove(this._loadingComponent);
   }
 
   _handleModeChange() {
@@ -192,17 +200,17 @@ export default class Trip {
         this._init();
         break;
       case UpdateType.INIT:
-        this._clearRoute();
-        this._currentSortType = SortType.DAY;
-        this._init();
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._renderSort();
         break;
       case UpdateType.OFFERS_INIT:
         this._clearRoute();
-        this._renderSort();
+        this._init();
         break;
       case UpdateType.DESTINATIONS_INIT:
         this._clearRoute();
-        this._renderSort();
+        this._init();
         break;
     }
   }
