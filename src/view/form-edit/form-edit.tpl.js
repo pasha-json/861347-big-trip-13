@@ -11,14 +11,15 @@ const createTypeList = (types) => {
   }).join(``);
 };
 
-const createDestinationList = (cities) => {
-  return Array.from(cities).map((city) => {
-    return `<option value="${city}"></option>`;
+const createDestinationList = (destinations) => {
+
+  return destinations.map((elem) => {
+    return `<option value="${elem.name}"></option>`;
   }).join(``);
 };
 
-const createOptionsList = ({type, options}) => {
-  if (options) {
+const createOptionsList = ({type, options} = {}) => {
+  if (type && options) {
     return Array.from(options).map(({name, price, isIncluded}) => {
       const id = name.toLowerCase().split(` `).join(`-`);
       return `<div class="event__offer-selector">
@@ -33,14 +34,20 @@ const createOptionsList = ({type, options}) => {
   }
   return ``;
 };
-const createImagesBlock = (images) => {
-  if (images) {
+const createImagesBlock = (cityInfo) => {
+  if (cityInfo) {
     return `<div class="event__photos-container">
   <div class="event__photos-tape">
-    ${
-  images.map((url) => {
-    return `<img class="event__photo" src="${url}" alt="Event photo"></img>`;
-  }).join(``)}
+
+  ${
+  cityInfo.map((elem) => {
+    const {pictures} = elem;
+
+    return pictures.map((item) => {
+      return `<img class="event__photo" src="${item.src}" alt="${item.description}"></img>`;
+    }).join(``);
+  })}
+
   </div>
 </div>`;
   }
@@ -59,8 +66,10 @@ export const createEditTemplate = (data = {}, types, destinations) => {
   const startDate = dayjs(start).format(`DD/MM/YY HH:mm`);
   const endDate = dayjs(end).format(`DD/MM/YY HH:mm`);
 
+  const currentCityInfo = destinations.filter((elem) => elem.name === destination);
+
   const optionsList = createOptionsList(options);
-  const imagesBlock = createImagesBlock(images);
+  const imagesBlock = createImagesBlock(currentCityInfo);
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">

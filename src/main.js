@@ -1,6 +1,6 @@
 import Trip from "./presenter/trip";
-import {generatePoint} from "./mock/route-point";
-import {generateOptions} from "./mock/options";
+// import {generatePoint} from "./mock/route-point";
+// import {generateOptions} from "./mock/options";
 import {POINT_COUNT, MenuItem, UpdateType} from "./consts/consts";
 import PointsModel from "./model/points";
 import OptionsModel from "./model/options";
@@ -40,48 +40,69 @@ const api = new Api(END_POINT, AUTHORIZATION);
 
 api.getPoints().then((newPoints) => {
   // console.log(newPoints);
-  // pointsModel.setPoints(UpdateType.MAJOR, newPoints);
+  pointsModel.setPoints(UpdateType.INIT, newPoints);
+
+  const cost = pointsModel.getPoints().toString() ? generateTotalCost(pointsModel.getPoints()) : ``;
+  const route = pointsModel.getPoints().toString() ? generateRouteInfo(pointsModel.getPoints()) : {};
+
+  const routeComponent = new RouteView(route);
+  const costComponent = new CostView(cost);
+
+  renderElement(tripInfo, routeComponent.getElement(), RenderPosition.AFTERBEGIN);
+  const siteCostElement = tripInfo.querySelector(`.trip-main__trip-info`);
+
+  if (siteCostElement) {
+    renderElement(siteCostElement, costComponent.getElement(), RenderPosition.BEFOREEND);
+  }
 
 });
 
 api.getOffers().then((offers) => {
-  console.log(offers);
-  // optionsModel.setOptions(UpdateType.MAJOR, offers);
+  optionsModel.setOptions(UpdateType.OFFERS_INIT, offers);
+
+  const newTrip = new Trip(tripElement, pointsModel, optionsModel, filterModel, destinationsModel);
+  newTrip._init();
+
+  const handleSiteMenuClick = (menuItem) => {
+    switch (menuItem) {
+      case MenuItem.TABLE:
+        newTrip.show();
+        statisticsComponent.hide();
+        break;
+      case MenuItem.STATS:
+        newTrip.hide();
+        statisticsComponent.init(pointsModel.getPoints());
+        statisticsComponent.show();
+        break;
+      case MenuItem.ADD_POINT:
+        statisticsComponent.hide();
+        newTrip.show();
+        newTrip._createPoint();
+        tripInfo.querySelector(`.trip-main__event-add-btn`).disabled = true;
+        break;
+    }
+  };
+
+  menuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 });
 
 api.getDestinations().then((destinations) => {
-  console.log(destinations);
-  // destinationsModel.setDestinations(UpdateType.MAJOR, destinations);
+  destinationsModel.setDestinations(UpdateType.DESTINATIONS_INIT, destinations);
 
 });
 
-const options = generateOptions();
+// const options = generateOptions();
 // console.log(options);
 
 
-pointsModel.setPoints(UpdateType.MAJOR, points);
+// pointsModel.setPoints(UpdateType.MAJOR, points);
 
 
-optionsModel.setOptions(UpdateType.MAJOR, options);
+// optionsModel.setOptions(UpdateType.MAJOR, options);
 
-console.log(Boolean(pointsModel.getPoints().toString()));
-
-const cost = pointsModel.getPoints().toString() ? generateTotalCost(pointsModel.getPoints()) : null;
-const route = pointsModel.getPoints().toString() ? generateRouteInfo(pointsModel.getPoints()) : {};
-
-const newTrip = new Trip(tripElement, pointsModel, optionsModel, filterModel, destinationsModel);
-newTrip._init();
-
-const routeComponent = new RouteView(route);
-const costComponent = new CostView(cost);
 const menuComponent = new MenuView(tripInfo);
 
-
-renderElement(tripInfo, routeComponent.getElement(), RenderPosition.AFTERBEGIN);
-const siteCostElement = tripInfo.querySelector(`.trip-main__trip-info`);
-
-renderElement(siteCostElement, costComponent.getElement(), RenderPosition.BEFOREEND);
 
 renderElement(siteControlsElement, menuComponent.getElement(), RenderPosition.AFTEREND);
 
@@ -89,27 +110,3 @@ const filterPresenter = new Filter(filtersContainer, filterModel, pointsModel);
 filterPresenter.init();
 
 renderElement(tripElement, statisticsComponent, RenderPosition.AFTEREND);
-
-const handleSiteMenuClick = (menuItem) => {
-  switch (menuItem) {
-    case MenuItem.TABLE:
-      newTrip.show();
-      statisticsComponent.hide();
-      break;
-    case MenuItem.STATS:
-      newTrip.hide();
-      statisticsComponent.init(pointsModel.getPoints());
-      statisticsComponent.show();
-      break;
-    case MenuItem.ADD_POINT:
-      statisticsComponent.hide();
-      newTrip.show();
-      newTrip._createPoint();
-      tripInfo.querySelector(`.trip-main__event-add-btn`).disabled = true;
-      break;
-  }
-};
-
-menuComponent.setMenuClickHandler(handleSiteMenuClick);
-
-

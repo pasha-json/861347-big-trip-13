@@ -19,8 +19,12 @@ export default class FormEditView extends Smart {
     // });
     // console.log(this._destinations2);
 
-    this._destinations = destinations;
-    console.log(this._destinations);
+    this._destinations = destinations.slice();
+
+    this._cities = new Set();
+    this._destinations.forEach((elem) => {
+      this._cities.add(elem.name);
+    });
 
     this._types = new Set();
     this._points.forEach((elem) => {
@@ -164,17 +168,17 @@ export default class FormEditView extends Smart {
 
     const city = evt.target.value;
 
-    if (!city || !this._destinations.has(city)) {
+    if (!city || !this._cities.has(city)) {
       evt.target.value = this._data.destination;
       return;
     }
     let description = ``;
     let images = [];
 
-    this._points.forEach((point) => {
-      if (point.destination === `${city}`) {
-        description = point.description;
-        images = point.images;
+    this._destinations.forEach((elem) => {
+      if (elem.name === `${city}`) {
+        description = elem.description;
+        images = elem.pictures;
       }
     });
 

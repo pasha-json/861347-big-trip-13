@@ -31,6 +31,7 @@ export default class Trip {
     this._siteControlsElement = this._siteMainElement.querySelector(`.trip-main__trip-controls h2:first-child`);
     this._siteFiltersElement = this._siteMainElement.querySelector(`.trip-main__trip-controls h2:nth-child(2)`);
     this._siteSortElement = this._siteMainElement.querySelector(`.trip-events`);
+    this._formListElement = this._siteMainElement.querySelector(`ul.trip-events__list`);
 
     this._formList = new FormListView();
     this._sortComponent = null;
@@ -51,6 +52,7 @@ export default class Trip {
     if (this._pointsModel.getPoints().length === 0) {
       this._renderEmpty();
     } else {
+      this._emptyComponent = null;
       this._renderSort();
     }
   }
@@ -119,7 +121,10 @@ export default class Trip {
   }
   _renderEmpty() {
     this._emptyComponent = new EmptyView();
-    this._render(this._formList, this._emptyComponent, RenderPosition.BEFOREEND);
+    if (!this._formListElement) {
+      this._render(this._siteSortElement, this._formList, RenderPosition.BEFOREEND);
+    }
+    this._render(this._formList, this._emptyComponent.getElement(), RenderPosition.BEFOREEND);
   }
   _renderPoint(point) {
     const pointPresenter = new Point(this._formList, this._handleViewAction, this._handleModeChange, this._getPoints(), this._getOptions(), this._getDestinations());
@@ -137,7 +142,9 @@ export default class Trip {
       .forEach((presenter) => presenter.destroy());
     this._pointPresenter = {};
 
-    remove(this._sortComponent);
+    if (this._sortComponent) {
+      remove(this._sortComponent);
+    }
     this._emptyComponent = null;
     this._filterPresenter = null;
   }
@@ -178,6 +185,19 @@ export default class Trip {
         this._clearRoute();
         this._currentSortType = SortType.DAY;
         this._init();
+        break;
+      case UpdateType.INIT:
+        this._clearRoute();
+        this._currentSortType = SortType.DAY;
+        this._init();
+        break;
+      case UpdateType.OFFERS_INIT:
+        this._clearRoute();
+        this._renderSort();
+        break;
+      case UpdateType.DESTINATIONS_INIT:
+        this._clearRoute();
+        this._renderSort();
         break;
     }
   }
