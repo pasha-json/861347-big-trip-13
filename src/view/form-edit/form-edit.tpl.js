@@ -18,22 +18,28 @@ const createDestinationList = (destinations) => {
   }).join(``);
 };
 
-const createOptionsList = ({type, options} = {}) => {
-  if (type && options) {
-    return Array.from(options).map(({name, price, isIncluded}) => {
-      const id = name.toLowerCase().split(` `).join(`-`);
-      return `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}-1" type="checkbox" name="event-offer-${type}" ${isIncluded ? `checked` : ``}>
-    <label class="event__offer-label" for="event-offer-${id}-1">
-      <span class="event__offer-title">${name}</span>
-      &plus;&euro;&nbsp;
-      <span class="event__offer-price">${price}</span>
-    </label>
-  </div>`;
-    }).join(``);
+const createOptionsList = (options) => {
+  if (options.toString()) {
+    return options.map(({type, offers}) => {
+
+      return offers.map(({title, price, isIncluded}) => {
+
+        const id = title.toLowerCase().split(` `).join(`-`);
+        return `<div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}-1" type="checkbox" name="event-offer-${type}" ${isIncluded ? `checked` : ``}>
+      <label class="event__offer-label" for="event-offer-${id}-1">
+        <span class="event__offer-title">${title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${price}</span>
+      </label>
+    </div>`;
+      }).join(``);
+
+    });
   }
   return ``;
 };
+
 const createImagesBlock = (cityInfo) => {
   if (cityInfo) {
     return `<div class="event__photos-container">
@@ -54,9 +60,9 @@ const createImagesBlock = (cityInfo) => {
   return null;
 };
 
-export const createEditTemplate = (data = {}, types, destinations) => {
+export const createEditTemplate = (data = {}, types, destinations, options) => {
 
-  const {type, destination, date, price, description, images, options} = data;
+  const {type, destination, date, price, description, images} = data;
   const typeName = type.toLowerCase();
   const {start, end} = date;
 
@@ -67,8 +73,9 @@ export const createEditTemplate = (data = {}, types, destinations) => {
   const endDate = dayjs(end).format(`DD/MM/YY HH:mm`);
 
   const currentCityInfo = destinations.filter((elem) => elem.name === destination);
+  const currentTypeOffers = options.filter((elem) => elem.type === typeName);
 
-  const optionsList = createOptionsList(options);
+  const optionsList = createOptionsList(currentTypeOffers);
   const imagesBlock = createImagesBlock(currentCityInfo);
 
   return `<li class="trip-events__item">

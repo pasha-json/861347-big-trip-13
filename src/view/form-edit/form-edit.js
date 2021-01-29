@@ -12,13 +12,6 @@ export default class FormEditView extends Smart {
     this._point = Object.assign({}, point);
     this._options = options.slice();
     this._points = points.slice();
-
-    // this._destinations2 = new Set();
-    // this._points.forEach((elem) => {
-    //   this._destinations2.add(elem.destination);
-    // });
-    // console.log(this._destinations2);
-
     this._destinations = destinations.slice();
 
     this._cities = new Set();
@@ -60,7 +53,7 @@ export default class FormEditView extends Smart {
     }
   }
   getTemplate() {
-    return createEditTemplate(this._data, this._types, this._destinations);
+    return createEditTemplate(this._data, this._types, this._destinations, this._options);
   }
 
   reset(point) {
