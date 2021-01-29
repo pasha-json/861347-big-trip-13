@@ -7,16 +7,20 @@ import "../../../node_modules/flatpickr/dist/flatpickr.min.css";
 const priceKeyDownRegex = /^[0-9]|ArrowLeft|ArrowRight|Delete|Backspace|Tab$/;
 
 export default class FormEditView extends Smart {
-  constructor(point, options, points) {
+  constructor(point, options, points, destinations) {
     super();
     this._point = Object.assign({}, point);
     this._options = options.slice();
     this._points = points.slice();
 
-    this._destinations = new Set();
-    this._points.forEach((elem) => {
-      this._destinations.add(elem.destination);
-    });
+    // this._destinations2 = new Set();
+    // this._points.forEach((elem) => {
+    //   this._destinations2.add(elem.destination);
+    // });
+    // console.log(this._destinations2);
+
+    this._destinations = destinations;
+    console.log(this._destinations);
 
     this._types = new Set();
     this._points.forEach((elem) => {

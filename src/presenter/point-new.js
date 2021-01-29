@@ -21,12 +21,13 @@ const EMPTY_POINT = {
 
 
 export default class PointNew {
-  constructor(siteListElement, changeData, options, points) {
+  constructor(siteListElement, changeData, options, points, destinations) {
     this._siteListElement = siteListElement;
     this._changeData = changeData;
 
     this._options = options;
     this._points = points;
+    this._destinations = destinations;
 
     this._pointEditComponent = null;
     this._handleFavouriteClick = this._handleFavouriteClick.bind(this);
@@ -41,7 +42,7 @@ export default class PointNew {
       return;
     }
 
-    this._pointEditComponent = new FormEditView(EMPTY_POINT, this._options, this._points);
+    this._pointEditComponent = new FormEditView(EMPTY_POINT, this._options, this._points, this._destinations);
     this._pointEditComponent.setSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
     this._pointEditComponent.setClickHandler(this._handleDeleteClick);

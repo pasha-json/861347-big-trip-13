@@ -6,6 +6,7 @@ export default class RoutePinView extends Abstract {
     super();
     this._data = data;
     this._options = options;
+    console.log(this._options);
     this._clickHandler = this._clickHandler.bind(this);
     this._favouriteClickHandler = this._favouriteClickHandler.bind(this);
   }

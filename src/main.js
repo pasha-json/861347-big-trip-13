@@ -5,6 +5,7 @@ import {POINT_COUNT, MenuItem, UpdateType} from "./consts/consts";
 import PointsModel from "./model/points";
 import OptionsModel from "./model/options";
 import FilterModel from "./model/filter";
+import DestinationsModel from "./model/destinations";
 import Filter from "./presenter/filter";
 import StatisticsView from "./view/statistics/statistics";
 import {renderElement, RenderPosition} from "./utils/render";
@@ -23,38 +24,58 @@ const filtersContainer = tripInfo.querySelector(`.trip-main__trip-controls`);
 const tripElement = body.querySelector(`.page-main section.trip-events`);
 const siteControlsElement = body.querySelector(`.trip-main__trip-controls h2:first-child`);
 
-const points = new Array(POINT_COUNT).fill().map(generatePoint);
-console.log(points);
+// const points = new Array(POINT_COUNT).fill().map(generatePoint);
+// console.log(points);
+
+const points = [];
+
+const destinationsModel = new DestinationsModel();
+const pointsModel = new PointsModel();
+const optionsModel = new OptionsModel();
+const filterModel = new FilterModel();
+
+const statisticsComponent = new StatisticsView();
 
 const api = new Api(END_POINT, AUTHORIZATION);
 
 api.getPoints().then((newPoints) => {
-  console.log(newPoints);
-  pointsModel.setPoints(UpdateType.MAJOR, newPoints);
+  // console.log(newPoints);
+  // pointsModel.setPoints(UpdateType.MAJOR, newPoints);
+
+});
+
+api.getOffers().then((offers) => {
+  console.log(offers);
+  // optionsModel.setOptions(UpdateType.MAJOR, offers);
+
+});
+
+api.getDestinations().then((destinations) => {
+  console.log(destinations);
+  // destinationsModel.setDestinations(UpdateType.MAJOR, destinations);
 
 });
 
 const options = generateOptions();
-console.log(options);
+// console.log(options);
 
-const pointsModel = new PointsModel();
+
 pointsModel.setPoints(UpdateType.MAJOR, points);
 
-const optionsModel = new OptionsModel();
-optionsModel.setOptions(options);
 
-const filterModel = new FilterModel();
+optionsModel.setOptions(UpdateType.MAJOR, options);
 
-const cost = generateTotalCost(pointsModel.getPoints());
-const route = generateRouteInfo(pointsModel.getPoints());
+console.log(Boolean(pointsModel.getPoints().toString()));
 
-const newTrip = new Trip(tripElement, pointsModel, optionsModel, filterModel);
+const cost = pointsModel.getPoints().toString() ? generateTotalCost(pointsModel.getPoints()) : null;
+const route = pointsModel.getPoints().toString() ? generateRouteInfo(pointsModel.getPoints()) : {};
+
+const newTrip = new Trip(tripElement, pointsModel, optionsModel, filterModel, destinationsModel);
 newTrip._init();
 
 const routeComponent = new RouteView(route);
 const costComponent = new CostView(cost);
 const menuComponent = new MenuView(tripInfo);
-const statisticsComponent = new StatisticsView();
 
 
 renderElement(tripInfo, routeComponent.getElement(), RenderPosition.AFTERBEGIN);

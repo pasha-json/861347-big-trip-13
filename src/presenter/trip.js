@@ -10,11 +10,12 @@ import EmptyView from "../view/empty/empty";
 
 
 export default class Trip {
-  constructor(tripContainer, pointsModel, optionsModel, filterModel) {
+  constructor(tripContainer, pointsModel, optionsModel, filterModel, destinationsModel) {
     this._tripContainer = tripContainer;
     this._pointsModel = pointsModel;
     this._optionsModel = optionsModel;
     this._filterModel = filterModel;
+    this._destinationsModel = destinationsModel;
 
     this._pointsModel = pointsModel;
     this._optionsModel = optionsModel;
@@ -43,7 +44,7 @@ export default class Trip {
 
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
-    this._pointNewPresenter = new PointNew(this._formList, this._handleViewAction, this._getOptions(), this._getPoints());
+    this._pointNewPresenter = new PointNew(this._formList, this._handleViewAction, this._getOptions(), this._getPoints(), this._getDestinations());
   }
 
   _init() {
@@ -75,6 +76,10 @@ export default class Trip {
 
   _getOptions() {
     return this._optionsModel.getOptions();
+  }
+
+  _getDestinations() {
+    return this._destinationsModel.getDestinations();
   }
 
   _render(where, what, position) {
@@ -117,7 +122,7 @@ export default class Trip {
     this._render(this._formList, this._emptyComponent, RenderPosition.BEFOREEND);
   }
   _renderPoint(point) {
-    const pointPresenter = new Point(this._formList, this._handleViewAction, this._handleModeChange, this._getPoints(), this._getOptions());
+    const pointPresenter = new Point(this._formList, this._handleViewAction, this._handleModeChange, this._getPoints(), this._getOptions(), this._getDestinations());
     pointPresenter._init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
