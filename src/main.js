@@ -1,7 +1,5 @@
 import Trip from "./presenter/trip";
-// import {generatePoint} from "./mock/route-point";
-// import {generateOptions} from "./mock/options";
-import {POINT_COUNT, MenuItem, UpdateType} from "./consts/consts";
+import {MenuItem, UpdateType} from "./consts/consts";
 import PointsModel from "./model/points";
 import OptionsModel from "./model/options";
 import FilterModel from "./model/filter";
@@ -66,6 +64,7 @@ api.getOffers().then((offers) => {
   const handleSiteMenuClick = (menuItem) => {
     switch (menuItem) {
       case MenuItem.TABLE:
+        newTrip._resetSortType();
         newTrip.show();
         statisticsComponent.hide();
         break;

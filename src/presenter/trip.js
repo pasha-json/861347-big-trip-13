@@ -76,6 +76,11 @@ export default class Trip {
     return pointsAfterFiltration;
   }
 
+  _resetSortType() {
+    this._currentSortType = SortType.DAY;
+    this._filterModel.setFilter(UpdateType.MAJOR, Filters.EVERYTHING);
+  }
+
   _getOptions() {
     return this._optionsModel.getOptions();
   }
