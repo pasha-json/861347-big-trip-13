@@ -69,9 +69,6 @@ const handleSiteMenuClick = (menuItem) => {
 };
 
 const menuComponent = new MenuView(tripInfo);
-menuComponent.setMenuClickHandler(handleSiteMenuClick);
-
-renderElement(siteControlsElement, menuComponent.getElement(), RenderPosition.AFTEREND);
 
 const filterPresenter = new Filter(filtersContainer, filterModel, pointsModel);
 filterPresenter.init();
@@ -81,9 +78,13 @@ renderElement(tripElement, statisticsComponent, RenderPosition.AFTEREND);
 api.getPoints()
   .then((points) => {
     pointsModel.setPoints(UpdateType.INIT, points);
+    renderElement(siteControlsElement, menuComponent.getElement(), RenderPosition.AFTEREND);
+    menuComponent.setMenuClickHandler(handleSiteMenuClick);
   })
   .catch(() => {
     pointsModel.setPoints(UpdateType.INIT, []);
+    renderElement(siteControlsElement, menuComponent.getElement(), RenderPosition.AFTEREND);
+    menuComponent.setMenuClickHandler(handleSiteMenuClick);
   });
 
 api.getOffers().then((offers) => {

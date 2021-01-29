@@ -30,6 +30,7 @@ export default class Trip {
 
     this._siteMainElement = document.querySelector(`.page-body`);
     this._siteRouteElement = this._siteMainElement.querySelector(`.trip-main`);
+    this._addNewEventButton = this._siteRouteElement.querySelector(`.trip-main__event-add-btn`);
     this._siteControlsElement = this._siteMainElement.querySelector(`.trip-main__trip-controls h2:first-child`);
     this._siteFiltersElement = this._siteMainElement.querySelector(`.trip-main__trip-controls h2:nth-child(2)`);
     this._siteSortElement = this._siteMainElement.querySelector(`.trip-events`);
@@ -107,6 +108,7 @@ export default class Trip {
 
   _renderSort() {
     if (this._isLoading) {
+      this._addNewEventButton.disabled = true;
       this._renderLoading();
       return;
     }
@@ -202,6 +204,7 @@ export default class Trip {
       case UpdateType.INIT:
         this._isLoading = false;
         remove(this._loadingComponent);
+        this._addNewEventButton.disabled = false;
         this._renderSort();
         break;
       case UpdateType.OFFERS_INIT:
