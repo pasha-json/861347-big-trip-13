@@ -168,8 +168,8 @@ export default class Point {
         });
         break;
       case State.ABORTING:
-        // this._routePoint.shake(resetFormState);
-        // this._editForm.shake(resetFormState);
+        this._routePoint.shake(resetFormState);
+        this._editForm.shake(resetFormState);
         break;
     }
   }
