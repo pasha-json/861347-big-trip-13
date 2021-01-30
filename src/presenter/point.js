@@ -9,6 +9,12 @@ const Mode = {
   EDITING: `EDITING`
 };
 
+export const State = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`,
+  ABORTING: `ABORTING`
+};
+
 
 export default class Point {
   constructor(siteListElement, changeData, changeMode, points, options, destinations) {
@@ -62,6 +68,7 @@ export default class Point {
     }
     if (this._mode === Mode.EDITING) {
       replace(this._editForm, prevEditForm);
+      this._mode = Mode.DEFAULT;
     }
 
     remove(prevRoutePoint);
@@ -128,7 +135,6 @@ export default class Point {
         UpdateType.MINOR,
         point
     );
-    this._replaceFormToRoutePoint();
   }
 
   _handleDeleteClick(point) {
@@ -137,5 +143,34 @@ export default class Point {
         UpdateType.MINOR,
         point
     );
+  }
+
+  setViewState(state) {
+    const resetFormState = () => {
+      this._editForm.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this._editForm.updateData({
+          isDisabled: true,
+          isSaving: true
+        });
+        break;
+      case State.DELETING:
+        this._editForm.updateData({
+          isDisabled: true,
+          isDeleting: true
+        });
+        break;
+      case State.ABORTING:
+        // this._routePoint.shake(resetFormState);
+        // this._editForm.shake(resetFormState);
+        break;
+    }
   }
 }

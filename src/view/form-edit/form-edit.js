@@ -76,7 +76,10 @@ export default class FormEditView extends Smart {
         {},
         point,
         {
-          options: offers
+          options: offers,
+          isDisabled: false,
+          isSaving: false,
+          isDeleting: false
         }
     );
   }
@@ -85,6 +88,9 @@ export default class FormEditView extends Smart {
     data = Object.assign({}, data);
 
     delete data.options;
+    delete data.isDisabled;
+    delete data.isSaving;
+    delete data.isDeleting;
     return data;
   }
 

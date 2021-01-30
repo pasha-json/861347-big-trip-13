@@ -1,6 +1,6 @@
 import FormEditView from "../view/form-edit/form-edit";
 import {renderElement, RenderPosition, remove} from "../utils/render";
-import {isEscKeyPressed, generateId} from "../utils/common";
+import {isEscKeyPressed} from "../utils/common";
 import {UserAction, UpdateType} from "../consts/consts";
 import dayjs from 'dayjs';
 
@@ -88,12 +88,31 @@ export default class PointNew {
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,
-        Object.assign({id: generateId()}, point)
+        point
     );
     this.destroy();
   }
 
   _handleDeleteClick() {
     this.destroy();
+  }
+
+  setSaving() {
+    this._pointEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._pointEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    this._pointEditComponent.shake(resetFormState);
   }
 }
