@@ -7,14 +7,11 @@ import DestinationsModel from "./model/destinations";
 import Filter from "./presenter/filter";
 import StatisticsView from "./view/statistics/statistics";
 import {renderElement, RenderPosition} from "./utils/render";
-// import {generateTotalCost, generateRouteInfo} from "./utils/common";
-// import RouteView from "./view/route/route";
-// import CostView from "./view/cost/cost";
 import MenuView from "./view/menu/menu";
 import Api from "./api/api";
 
 const AUTHORIZATION = `Basic wefju4rvnrijnvehuHJGhgji6`;
-const END_POINT = `https://13.ecmascript.pages.academy/big-trip/`;
+const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
 
 const body = document.querySelector(`.page-body`);
 const tripInfo = body.querySelector(`.page-header .trip-main`);
@@ -31,20 +28,7 @@ const statisticsComponent = new StatisticsView();
 
 const api = new Api(END_POINT, AUTHORIZATION);
 
-// const cost = pointsModel.getPoints().toString() ? generateTotalCost(pointsModel.getPoints()) : ``;
-// const route = pointsModel.getPoints().toString() ? generateRouteInfo(pointsModel.getPoints()) : {};
-
-// const routeComponent = new RouteView(route);
-// const costComponent = new CostView(cost);
-
-// renderElement(tripInfo, routeComponent.getElement(), RenderPosition.AFTERBEGIN);
-// const siteCostElement = tripInfo.querySelector(`.trip-main__trip-info`);
-
-// if (siteCostElement) {
-//   renderElement(siteCostElement, costComponent.getElement(), RenderPosition.BEFOREEND);
-// }
-
-const newTrip = new Trip(tripElement, pointsModel, optionsModel, filterModel, destinationsModel);
+const newTrip = new Trip(tripElement, pointsModel, optionsModel, filterModel, destinationsModel, api);
 newTrip._init();
 
 const handleSiteMenuClick = (menuItem) => {

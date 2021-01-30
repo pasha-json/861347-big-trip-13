@@ -36,10 +36,11 @@ export default class Api {
     return this._load({
       url: `points/${point.id}`,
       method: Method.PUT,
-      body: JSON.stringify(point),
+      body: JSON.stringify(PointModel.adaptToServer(point)),
       headers: new Headers({"Content-Type": `application/json`})
     })
-      .then(Api.tpJSON);
+      .then(Api.toJSON)
+      .then((updatedPoint) => PointModel.adaptToClient(updatedPoint));
   }
 
   _load({

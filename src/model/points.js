@@ -67,12 +67,15 @@ export default class PointsModel extends Observer {
           destination: point[`destination`][`name`],
           description: point[`destination`][`description`],
           images: point[`destination`][`pictures`].map((elem) => {
-            return elem[`src`];
+            return {
+              src: elem[`src`],
+              description: elem[`description`]
+            };
           }),
           isFavourite: point.is_favorite,
           options: {
             type: point.type,
-            options: point.offers !== null ? point.offers.map((elem) => {
+            offers: point.offers !== null ? point.offers.map((elem) => {
               elem[`name`] = elem[`title`];
               elem.isIncluded = false;
               delete elem[`title`];
@@ -85,10 +88,7 @@ export default class PointsModel extends Observer {
     delete adaptedPoint.base_price;
     delete adaptedPoint.date_from;
     delete adaptedPoint.date_to;
-    // delete adaptedPoint.destination;
-    // delete adaptedPoint.pictures;
     delete adaptedPoint.is_favorite;
-    // delete adaptedPoint.type;
     delete adaptedPoint.offers;
 
     return adaptedPoint;
@@ -104,21 +104,22 @@ export default class PointsModel extends Observer {
           "date_to": point.date.end.toISOString(),
           "destination": {
             "name": point.destination,
-            "description": point.description
+            "description": point.description,
+            "pictures": point.images
           },
-          "pictures": point.images,
-          "is_favourite": point.isFavourite,
-          "offers": point.options.options !== null ? point.options.options.map((elem) => {
-            elem[`name`] = elem[`title`];
-            delete elem[`name`];
-            elem.price = Number(elem.price);
+          "is_favorite": point.isFavourite,
+          "offers": point.options.offers.length !== 0 ? point.options.offers.map((elem) => {
+            return {
+              title: elem[`name`],
+              price: Number(elem.price),
+              isIncluded: elem.isIncluded
+            };
           }) : []
         }
     );
 
     delete adaptedPoint.price;
     delete adaptedPoint.date;
-    delete adaptedPoint.destination;
     delete adaptedPoint.description;
     delete adaptedPoint.images;
     delete adaptedPoint.isFavourite;

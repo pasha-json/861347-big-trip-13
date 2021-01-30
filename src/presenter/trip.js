@@ -11,15 +11,14 @@ import EmptyView from "../view/empty/empty";
 
 
 export default class Trip {
-  constructor(tripContainer, pointsModel, optionsModel, filterModel, destinationsModel) {
+  constructor(tripContainer, pointsModel, optionsModel, filterModel, destinationsModel, api) {
     this._tripContainer = tripContainer;
-    this._pointsModel = pointsModel;
-    this._optionsModel = optionsModel;
     this._filterModel = filterModel;
     this._destinationsModel = destinationsModel;
 
     this._pointsModel = pointsModel;
     this._optionsModel = optionsModel;
+    this._api = api;
 
     this._isEscKeyPressed = isEscKeyPressed;
 
@@ -175,7 +174,9 @@ export default class Trip {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._pointsModel.updatePoint(updateType, update);
+        this._api.updatePoint(update).then((response) => {
+          this._pointsModel.updatePoint(updateType, response);
+        });
         break;
       case UserAction.ADD_POINT:
         this._pointsModel.addPoint(updateType, update);
