@@ -132,7 +132,7 @@ export default class FormEditView extends Smart {
   }
   _submitHandler(evt) {
     evt.preventDefault();
-    this._callback.submit(this._parseDataToPoint(this._data));
+    this._callback.submit(this._data);
   }
   setSubmitHandler(callback) {
     this._callback.submit = callback;
