@@ -97,7 +97,7 @@ export default class Trip {
 
     if (resetSort) {
       this._clearRoute(true);
-      this._init();
+      this._renderSort();
     }
   }
 
@@ -130,6 +130,11 @@ export default class Trip {
   _createPoint() {
     this._currentSortType = SortType.DAY;
     this._filterModel.setFilter(UpdateType.MAJOR, Filters.EVERYTHING);
+
+    if (this._getPoints().length === 0) {
+      remove(this._emptyComponent);
+    }
+
     this._pointNewPresenter.init();
   }
   _renderEmpty() {
@@ -161,6 +166,9 @@ export default class Trip {
     this._emptyComponent = null;
     this._filterPresenter = null;
     remove(this._loadingComponent);
+    if (this._emptyComponent) {
+      remove(this._emptyComponent);
+    }
   }
 
   _handleModeChange() {
@@ -213,12 +221,12 @@ export default class Trip {
       case UpdateType.MINOR:
         this._clearRoute();
         this._currentSortType = SortType.DAY;
-        this._init();
+        this._renderSort();
         break;
       case UpdateType.MAJOR:
         this._clearRoute();
         this._currentSortType = SortType.DAY;
-        this._init();
+        this._renderSort();
         break;
       case UpdateType.INIT:
         this._isLoading = false;
@@ -228,11 +236,11 @@ export default class Trip {
         break;
       case UpdateType.OFFERS_INIT:
         this._clearRoute();
-        this._init();
+        this._renderSort();
         break;
       case UpdateType.DESTINATIONS_INIT:
         this._clearRoute();
-        this._init();
+        this._renderSort();
         break;
     }
   }
@@ -245,6 +253,6 @@ export default class Trip {
     this._getPoints();
 
     this._clearRoute();
-    this._init();
+    this._renderSort();
   }
 }
