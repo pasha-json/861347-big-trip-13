@@ -144,7 +144,7 @@ export default class Trip {
     if (this._getPoints().length === 0) {
       remove(this._emptyComponent);
     }
-
+    this._pointNewPresenter = new PointNew(this._formList, this._handleViewAction, this._getOptions(), this._getPoints(), this._getDestinations());
     this._pointNewPresenter.init();
   }
   _renderEmpty() {

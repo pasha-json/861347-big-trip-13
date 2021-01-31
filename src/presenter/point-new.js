@@ -10,13 +10,16 @@ const EMPTY_POINT = {
   type: DEFAULT_POINT_TYPE,
   destination: ``,
   description: ``,
-  offers: [],
+  options: {
+    type: ``,
+    offers: []
+  },
   price: 0,
   date: {
     start: dayjs().toDate(),
     end: dayjs().add(1, `day`).toDate()
   },
-  isFavorite: false
+  isFavourite: false
 };
 
 
@@ -90,7 +93,7 @@ export default class PointNew {
         UpdateType.MINOR,
         point
     );
-    this.destroy();
+    // this.destroy();
   }
 
   _handleDeleteClick() {

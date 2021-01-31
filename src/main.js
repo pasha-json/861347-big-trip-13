@@ -10,7 +10,7 @@ import {renderElement, RenderPosition} from "./utils/render";
 import MenuView from "./view/menu/menu";
 import Api from "./api/api";
 
-const AUTHORIZATION = `Basic wefju4rvnrijnvehuHJGhgji64`;
+const AUTHORIZATION = `Basic wefju4rvnrijnvehuHJGhgji6455`;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
 
 const body = document.querySelector(`.page-body`);

@@ -100,21 +100,22 @@ export default class PointsModel extends Observer {
         point,
         {
           "base_price": point.price,
-          "date_from": point.date.start.toISOString(),
-          "date_to": point.date.end.toISOString(),
+          "date_from": new Date(point.date[`start`]).toISOString(),
+          "date_to": new Date(point.date[`end`]).toISOString(),
           "destination": {
             "name": point.destination,
             "description": point.description,
             "pictures": point.images
           },
           "is_favorite": point.isFavourite,
-          "offers": point.options.offers.length !== 0 ? point.options.offers.map((elem) => {
+          "offers": point.options[`offers`].length !== 0 ? point.options[`offers`].map((elem) => {
             return {
-              title: elem[`name`],
-              price: Number(elem.price),
-              isIncluded: elem.isIncluded
+              title: elem[`title`],
+              price: Number(elem.price)
+              // isIncluded: elem.isIncluded
             };
-          }) : []
+          }) : [],
+          "type": point[`type`].toLowerCase()
         }
     );
 
@@ -124,6 +125,9 @@ export default class PointsModel extends Observer {
     delete adaptedPoint.images;
     delete adaptedPoint.isFavourite;
     delete adaptedPoint.options;
+    delete adaptedPoint.isDeleting;
+    delete adaptedPoint.isSaving;
+    delete adaptedPoint.isDisabled;
 
     return adaptedPoint;
   }

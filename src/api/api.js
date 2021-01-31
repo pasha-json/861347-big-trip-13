@@ -53,8 +53,8 @@ export default class Api {
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then(Api.toJSON)
-      // .then((newPoint) => PointModel.adaptToClient(newPoint));
-      .then(PointModel.adaptToClient);
+      .then((newPoint) => PointModel.adaptToClient(newPoint));
+    // .then(PointModel.adaptToClient);
   }
 
   deletePoint(point) {
