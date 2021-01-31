@@ -64,7 +64,7 @@ api.getOffers()
     optionsModel.setOptions(UpdateType.OFFERS_INIT, offers);
   })
   .catch(() => {
-    optionsModel.setOptions(UpdateType.OFFERS_INIT, []);
+    optionsModel.setOptions(UpdateType.OFFERS_FAILED, []);
   });
 
 api.getDestinations()
@@ -72,7 +72,7 @@ api.getDestinations()
     destinationsModel.setDestinations(UpdateType.DESTINATIONS_INIT, destinations);
   })
   .catch(() => {
-    destinationsModel.setDestinations(UpdateType.DESTINATIONS_INIT, []);
+    destinationsModel.setDestinations(UpdateType.DESTINATIONS_FAILED, []);
   });
 
 api.getPoints()

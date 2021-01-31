@@ -26,6 +26,8 @@ export default class Trip {
 
     this._currentSortType = SortType.DAY;
     this._isLoading = true;
+    this._isOffersLoad = false;
+    this._isDestinationLoad = false;
 
     this._siteMainElement = document.querySelector(`.page-body`);
     this._siteRouteElement = this._siteMainElement.querySelector(`.trip-main`);
@@ -49,6 +51,9 @@ export default class Trip {
 
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+    this._optionsModel.addObserver(this._handleModelEvent);
+    this._destinationsModel.addObserver(this._handleModelEvent);
+
     this._pointNewPresenter = new PointNew(this._formList, this._handleViewAction, this._getOptions(), this._getPoints(), this._getDestinations());
   }
 
@@ -156,7 +161,8 @@ export default class Trip {
   }
   _renderPoint(point) {
     const pointPresenter = new Point(this._formList, this._handleViewAction, this._handleModeChange, this._getPoints(), this._getOptions(), this._getDestinations());
-    pointPresenter._init(point);
+    const isDataLoaded = this._isOffersLoad && this._isDestinationLoad;
+    pointPresenter._init(point, isDataLoaded);
     this._pointPresenter[point.id] = pointPresenter;
   }
   _renderPointsList() {
@@ -245,13 +251,31 @@ export default class Trip {
         this._renderSort();
         break;
       case UpdateType.OFFERS_INIT:
-        this._clearRoute();
-        this._renderSort();
+        this._isOffersLoad = true;
+        if (this._isDestinationLoad) {
+          this._clearRoute();
+          this._renderSort();
+        }
         break;
       case UpdateType.DESTINATIONS_INIT:
-        this._clearRoute();
-        this._renderSort();
+        this._isDestinationLoad = true;
+        if (this._isOffersLoad) {
+          this._clearRoute();
+          this._renderSort();
+        }
         break;
+      case UpdateType.OFFERS_FAILED:
+        this._isOffersLoad = false;
+        break;
+      case UpdateType.DESTINATIONS_FAILED:
+        this._isDestinationLoad = false;
+        break;
+    }
+    if (this._isOffersLoad && this._isDestinationLoad) {
+      // this._callback.enableAddPointButton();
+      Object
+        .values(this._pointPresenter)
+        .forEach((presenter) => presenter.enableEdit());
     }
   }
 

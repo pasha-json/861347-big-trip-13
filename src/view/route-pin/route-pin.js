@@ -2,15 +2,25 @@ import {createRoutePinTemplate} from "./route-pin.tpl";
 import Abstract from "../abstract/abstract";
 
 export default class RoutePinView extends Abstract {
-  constructor(data, options) {
+  constructor(data, options, isDataLoaded) {
     super();
     this._data = data;
     this._options = options;
+
+    this._editControl = this.getElement().querySelector(`.event__rollup-btn`);
+    if (!isDataLoaded) {
+      this._editControl.disabled = true;
+    }
+
     this._clickHandler = this._clickHandler.bind(this);
     this._favouriteClickHandler = this._favouriteClickHandler.bind(this);
   }
   getTemplate() {
     return createRoutePinTemplate(this._data, this._options);
+  }
+
+  enableEditControl() {
+    this._editControl.disabled = false;
   }
   _clickHandler(evt) {
     evt.preventDefault();

@@ -28,6 +28,7 @@ export default class Point {
     this._routePoint = null;
     this._editForm = null;
     this._mode = Mode.DEFAULT;
+    this._isDataLoaded = false;
 
     this._replaceRoutePointToForm = this._replaceRoutePointToForm.bind(this);
     this._replaceFormToRoutePoint = this._replaceFormToRoutePoint.bind(this);
@@ -39,8 +40,9 @@ export default class Point {
 
   }
 
-  _init(point) {
+  _init(point, isDataLoaded) {
     this._renderPins(point);
+    this._isDataLoaded = isDataLoaded;
   }
   _renderRoutePin(point) {
 
@@ -49,7 +51,7 @@ export default class Point {
 
     this._point = point;
 
-    this._routePoint = new RoutePinView(this._point, this._options);
+    this._routePoint = new RoutePinView(this._point, this._options, this._isDataLoaded);
     this._editForm = new FormEditView(this._point, this._options, this._points, this._destinations);
 
     this._routePoint.setClickHandler(this._replaceRoutePointToForm);
@@ -83,6 +85,10 @@ export default class Point {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceFormToRoutePoint();
     }
+  }
+
+  enableEdit() {
+    this._routePoint.enableEditControl();
   }
 
   _replaceRoutePointToForm() {
