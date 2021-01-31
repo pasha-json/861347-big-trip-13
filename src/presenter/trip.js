@@ -173,7 +173,6 @@ export default class Trip {
     if (this._sortComponent) {
       remove(this._sortComponent);
     }
-    // this._emptyComponent = null;
     this._filterPresenter = null;
     remove(this._loadingComponent);
     if (this._emptyComponent) {
@@ -206,6 +205,7 @@ export default class Trip {
         this._api.addPoint(update)
           .then((response) => {
             this._pointsModel.addPoint(updateType, response);
+            this._pointNewPresenter.destroy();
           })
           .catch(() => {
             this._pointNewPresenter.setAborting();

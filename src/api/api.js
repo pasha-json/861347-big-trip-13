@@ -54,7 +54,6 @@ export default class Api {
     })
       .then(Api.toJSON)
       .then((newPoint) => PointModel.adaptToClient(newPoint));
-    // .then(PointModel.adaptToClient);
   }
 
   deletePoint(point) {
