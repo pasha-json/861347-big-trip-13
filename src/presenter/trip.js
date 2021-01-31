@@ -23,6 +23,7 @@ export default class Trip {
     this._isEscKeyPressed = isEscKeyPressed;
 
     this._pointPresenter = {};
+    this._callback = {};
 
     this._currentSortType = SortType.DAY;
     this._isLoading = true;
@@ -59,6 +60,10 @@ export default class Trip {
 
   _init() {
     this._renderSort();
+  }
+
+  setAddPointButtonEnableHandler(callback) {
+    this._callback.enableAddPointButton = callback;
   }
 
   _getPoints() {
@@ -247,7 +252,6 @@ export default class Trip {
       case UpdateType.INIT:
         this._isLoading = false;
         remove(this._loadingComponent);
-        this._addNewEventButton.disabled = false;
         this._renderSort();
         break;
       case UpdateType.OFFERS_INIT:
@@ -272,7 +276,7 @@ export default class Trip {
         break;
     }
     if (this._isOffersLoad && this._isDestinationLoad) {
-      // this._callback.enableAddPointButton();
+      this._callback.enableAddPointButton();
       Object
         .values(this._pointPresenter)
         .forEach((presenter) => presenter.enableEdit());

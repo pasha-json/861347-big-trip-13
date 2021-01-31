@@ -112,7 +112,6 @@ export default class PointsModel extends Observer {
             return {
               title: elem[`title`],
               price: Number(elem.price)
-              // isIncluded: elem.isIncluded
             };
           }) : [],
           "type": point[`type`].toLowerCase()

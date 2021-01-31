@@ -25,11 +25,13 @@ const optionsModel = new OptionsModel();
 const filterModel = new FilterModel();
 
 const statisticsComponent = new StatisticsView();
+const menuComponent = new MenuView(tripInfo);
 
 const api = new Api(END_POINT, AUTHORIZATION);
 
 const newTrip = new Trip(tripElement, pointsModel, optionsModel, filterModel, destinationsModel, api);
 newTrip._init();
+newTrip.setAddPointButtonEnableHandler(menuComponent.enableAddPointButton);
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
@@ -51,8 +53,6 @@ const handleSiteMenuClick = (menuItem) => {
       break;
   }
 };
-
-const menuComponent = new MenuView(tripInfo);
 
 const filterPresenter = new Filter(filtersContainer, filterModel, pointsModel);
 filterPresenter.init();

@@ -216,8 +216,6 @@ export default class FormEditView extends Smart {
     const name = target.querySelector(`span`).textContent;
 
     const options = this._data.options.offers.slice();
-    console.log(options);
-
 
     const updatedOptions = options.map((option) => {
       if (option.title === name) {
@@ -225,12 +223,7 @@ export default class FormEditView extends Smart {
       }
       return option;
     });
-    console.log(this._data);
-
     this.updateData({options: {offers: updatedOptions, type: this._data.type.toLowerCase()}}, true);
-
-    console.log(this._data);
-
   }
 
   _setDatepicker() {
