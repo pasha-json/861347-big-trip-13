@@ -59,6 +59,14 @@ filterPresenter.init();
 
 renderElement(tripElement, statisticsComponent, RenderPosition.AFTEREND);
 
+api.getOffers().then((offers) => {
+  optionsModel.setOptions(UpdateType.OFFERS_INIT, offers);
+});
+
+api.getDestinations().then((destinations) => {
+  destinationsModel.setDestinations(UpdateType.DESTINATIONS_INIT, destinations);
+});
+
 api.getPoints()
   .then((points) => {
     pointsModel.setPoints(UpdateType.INIT, points);
@@ -71,10 +79,3 @@ api.getPoints()
     menuComponent.setMenuClickHandler(handleSiteMenuClick);
   });
 
-api.getOffers().then((offers) => {
-  optionsModel.setOptions(UpdateType.OFFERS_INIT, offers);
-});
-
-api.getDestinations().then((destinations) => {
-  destinationsModel.setDestinations(UpdateType.DESTINATIONS_INIT, destinations);
-});
