@@ -106,6 +106,9 @@ export default class Trip {
   }
 
   _renderSort() {
+
+    const points = this._getPoints();
+
     if (this._isLoading) {
       this._addNewEventButton.disabled = true;
       this._renderLoading();
@@ -115,6 +118,13 @@ export default class Trip {
       this._sortComponent = null;
     }
     this._sortComponent = new SortView(this._currentSortType);
+
+    if (points.length === 0) {
+      this._renderEmpty();
+      this._sortComponent.hide();
+      return;
+    }
+
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
     this._render(this._siteSortElement, this._sortComponent.getElement(), RenderPosition.BEFOREEND);
     this._renderFormList();
@@ -163,7 +173,7 @@ export default class Trip {
     if (this._sortComponent) {
       remove(this._sortComponent);
     }
-    this._emptyComponent = null;
+    // this._emptyComponent = null;
     this._filterPresenter = null;
     remove(this._loadingComponent);
     if (this._emptyComponent) {

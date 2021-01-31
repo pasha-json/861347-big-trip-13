@@ -6,7 +6,6 @@ export default class MenuView extends Abstract {
     super();
 
     this._addPointButton = tripInfoElement.querySelector(`.trip-main__event-add-btn`);
-    // this._addPointButton.disabled = true;
     this._menuClickHandler = this._menuClickHandler.bind(this);
     this.enableAddPointButton = this.enableAddPointButton.bind(this);
   }
@@ -22,7 +21,7 @@ export default class MenuView extends Abstract {
   }
 
   enableAddPointButton() {
-    // this._addPointButton.disabled = false;
+    this._addPointButton.disabled = false;
   }
 
   _setMenuItemTable() {
@@ -44,7 +43,7 @@ export default class MenuView extends Abstract {
     let target = evt.target.closest(`button`);
     if (target) {
       evt.preventDefault();
-      // this._addPointButton.disabled = true;
+      this._addPointButton.disabled = true;
       this._setMenuItemTable();
       this._callback.menuClick(target.textContent);
       return;
