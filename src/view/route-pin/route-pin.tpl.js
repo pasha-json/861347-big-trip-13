@@ -1,22 +1,24 @@
 import dayjs from "dayjs";
 import {getRouteDuration} from "../../utils/common";
 
-
-const renderOptions = ({options}) => {
-  if (options) {
+const renderOptions = (offers) => {
+  if (offers.length > 0) {
     return `<ul class="event__selected-offers">
-    ${options.map(({name, price}) => {
-    return `<li class="event__offer">
-        <span class="event__offer-title">${name}</span>
+    ${
+
+  offers.map((elem) => {
+    return elem.offers.map((item) => {
+      return `<li class="event__offer">
+        <span class="event__offer-title">${item.title}</span>
         &plus;&euro;&nbsp;
-        <span class="event__offer-price">${price}</span>
+        <span class="event__offer-price">${item.price}</span>
       </li>`;
-  }).slice().join(``)}
+    }).slice().join(``);
+  })}
   </ul>`;
   }
   return ``;
 };
-
 
 export const createRoutePinTemplate = (points, options) => {
   const {type, destination, date, price, isFavourite} = points;
@@ -26,17 +28,10 @@ export const createRoutePinTemplate = (points, options) => {
   const endDateTime = dayjs(end).format(`HH:mm`);
   const difference = getRouteDuration(start, end);
 
-  let offers = null;
-
-  options.forEach((elem) => {
-    if (elem.type === `${type.toLowerCase()}`) {
-      offers = elem;
-    }
-  });
+  const offers = options.toString() ? options.filter((elem) => elem.type === `${type.toLowerCase()}`) : null;
 
   const optionNode = offers === null ? `` : renderOptions(offers);
   const iconName = type.toLowerCase();
-
 
   return `<li class="trip-events__item">
   <div class="event">

@@ -9,18 +9,26 @@ const Mode = {
   EDITING: `EDITING`
 };
 
+export const State = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`,
+  ABORTING: `ABORTING`
+};
+
 
 export default class Point {
-  constructor(siteListElement, changeData, changeMode, points, options) {
+  constructor(siteListElement, changeData, changeMode, points, options, destinations) {
     this._siteListElement = siteListElement;
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._points = points;
     this._options = options;
+    this._destinations = destinations;
 
     this._routePoint = null;
     this._editForm = null;
     this._mode = Mode.DEFAULT;
+    this._isDataLoaded = false;
 
     this._replaceRoutePointToForm = this._replaceRoutePointToForm.bind(this);
     this._replaceFormToRoutePoint = this._replaceFormToRoutePoint.bind(this);
@@ -32,8 +40,9 @@ export default class Point {
 
   }
 
-  _init(point) {
+  _init(point, isDataLoaded) {
     this._renderPins(point);
+    this._isDataLoaded = isDataLoaded;
   }
   _renderRoutePin(point) {
 
@@ -42,8 +51,8 @@ export default class Point {
 
     this._point = point;
 
-    this._routePoint = new RoutePinView(this._point, this._options);
-    this._editForm = new FormEditView(this._point, this._options, this._points);
+    this._routePoint = new RoutePinView(this._point, this._options, this._isDataLoaded);
+    this._editForm = new FormEditView(this._point, this._options, this._points, this._destinations);
 
     this._routePoint.setClickHandler(this._replaceRoutePointToForm);
     this._editForm.setSubmitHandler(this._handleFormSubmit);
@@ -61,6 +70,7 @@ export default class Point {
     }
     if (this._mode === Mode.EDITING) {
       replace(this._editForm, prevEditForm);
+      this._mode = Mode.DEFAULT;
     }
 
     remove(prevRoutePoint);
@@ -75,6 +85,10 @@ export default class Point {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceFormToRoutePoint();
     }
+  }
+
+  enableEdit() {
+    this._routePoint.enableEditControl();
   }
 
   _replaceRoutePointToForm() {
@@ -127,7 +141,6 @@ export default class Point {
         UpdateType.MINOR,
         point
     );
-    this._replaceFormToRoutePoint();
   }
 
   _handleDeleteClick(point) {
@@ -136,5 +149,34 @@ export default class Point {
         UpdateType.MINOR,
         point
     );
+  }
+
+  setViewState(state) {
+    const resetFormState = () => {
+      this._editForm.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this._editForm.updateData({
+          isDisabled: true,
+          isSaving: true
+        });
+        break;
+      case State.DELETING:
+        this._editForm.updateData({
+          isDisabled: true,
+          isDeleting: true
+        });
+        break;
+      case State.ABORTING:
+        this._routePoint.shake(resetFormState);
+        this._editForm.shake(resetFormState);
+        break;
+    }
   }
 }

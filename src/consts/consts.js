@@ -1,5 +1,3 @@
-export const POINT_COUNT = 5;
-
 export const Filters = {
   EVERYTHING: `Everything`,
   FUTURE: `Future`,
@@ -21,7 +19,12 @@ export const UserAction = {
 export const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
+  INIT: `INIT`,
+  OFFERS_INIT: `OFFERS_INIT`,
+  DESTINATIONS_INIT: `DESTINATIONS_INIT`,
+  DESTINATIONS_FAILED: `DESTINATIONS_FAILED`,
+  OFFERS_FAILED: `OFFERS_FAILED`
 };
 
 export const MenuItem = {

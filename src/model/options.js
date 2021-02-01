@@ -5,10 +5,13 @@ export default class OptionsModel extends Observer {
     super();
     this._options = [];
   }
-  setOptions(options) {
-    this._options = options.slice();
-  }
   getOptions() {
     return this._options;
   }
+
+  setOptions(UpdateType, offers) {
+    this._options = offers.slice();
+    this._notify(UpdateType);
+  }
+
 }

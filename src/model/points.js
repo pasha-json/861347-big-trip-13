@@ -5,8 +5,10 @@ export default class PointsModel extends Observer {
     super();
     this._points = [];
   }
-  setPoints(points) {
+  setPoints(updateType, points) {
     this._points = points.slice();
+
+    this._notify(updateType);
   }
   getPoints() {
     return this._points;
@@ -50,5 +52,82 @@ export default class PointsModel extends Observer {
     ];
 
     this._notify(updateType);
+  }
+
+  static adaptToClient(point) {
+    const adaptedPoint = Object.assign(
+        {},
+        point,
+        {
+          price: point.base_price,
+          date: {
+            start: new Date(point.date_from),
+            end: new Date(point.date_to)
+          },
+          destination: point[`destination`][`name`],
+          description: point[`destination`][`description`],
+          images: point[`destination`][`pictures`].map((elem) => {
+            return {
+              src: elem[`src`],
+              description: elem[`description`]
+            };
+          }),
+          isFavourite: point.is_favorite,
+          options: {
+            type: point.type,
+            offers: point.offers !== null ? point.offers.map((elem) => {
+              elem[`name`] = elem[`title`];
+              elem.isIncluded = false;
+              delete elem[`title`];
+              return elem;
+            }) : []
+          }
+        }
+    );
+
+    delete adaptedPoint.base_price;
+    delete adaptedPoint.date_from;
+    delete adaptedPoint.date_to;
+    delete adaptedPoint.is_favorite;
+    delete adaptedPoint.offers;
+
+    return adaptedPoint;
+  }
+
+  static adaptToServer(point) {
+    const adaptedPoint = Object.assign(
+        {},
+        point,
+        {
+          "base_price": point.price,
+          "date_from": new Date(point.date[`start`]).toISOString(),
+          "date_to": new Date(point.date[`end`]).toISOString(),
+          "destination": {
+            "name": point.destination,
+            "description": point.description,
+            "pictures": point.images
+          },
+          "is_favorite": point.isFavourite,
+          "offers": point.options[`offers`].length !== 0 ? point.options[`offers`].map((elem) => {
+            return {
+              title: elem[`title`],
+              price: Number(elem.price)
+            };
+          }) : [],
+          "type": point[`type`].toLowerCase()
+        }
+    );
+
+    delete adaptedPoint.price;
+    delete adaptedPoint.date;
+    delete adaptedPoint.description;
+    delete adaptedPoint.images;
+    delete adaptedPoint.isFavourite;
+    delete adaptedPoint.options;
+    delete adaptedPoint.isDeleting;
+    delete adaptedPoint.isSaving;
+    delete adaptedPoint.isDisabled;
+
+    return adaptedPoint;
   }
 }

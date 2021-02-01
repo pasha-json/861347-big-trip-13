@@ -1,6 +1,6 @@
 import FormEditView from "../view/form-edit/form-edit";
 import {renderElement, RenderPosition, remove} from "../utils/render";
-import {isEscKeyPressed, generateId} from "../utils/common";
+import {isEscKeyPressed} from "../utils/common";
 import {UserAction, UpdateType} from "../consts/consts";
 import dayjs from 'dayjs';
 
@@ -10,23 +10,27 @@ const EMPTY_POINT = {
   type: DEFAULT_POINT_TYPE,
   destination: ``,
   description: ``,
-  offers: [],
+  options: {
+    type: ``,
+    offers: []
+  },
   price: 0,
   date: {
     start: dayjs().toDate(),
     end: dayjs().add(1, `day`).toDate()
   },
-  isFavorite: false
+  isFavourite: false
 };
 
 
 export default class PointNew {
-  constructor(siteListElement, changeData, options, points) {
+  constructor(siteListElement, changeData, options, points, destinations) {
     this._siteListElement = siteListElement;
     this._changeData = changeData;
 
     this._options = options;
     this._points = points;
+    this._destinations = destinations;
 
     this._pointEditComponent = null;
     this._handleFavouriteClick = this._handleFavouriteClick.bind(this);
@@ -41,7 +45,7 @@ export default class PointNew {
       return;
     }
 
-    this._pointEditComponent = new FormEditView(EMPTY_POINT, this._options, this._points);
+    this._pointEditComponent = new FormEditView(EMPTY_POINT, this._options, this._points, this._destinations);
     this._pointEditComponent.setSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
     this._pointEditComponent.setClickHandler(this._handleDeleteClick);
@@ -87,12 +91,30 @@ export default class PointNew {
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,
-        Object.assign({id: generateId()}, point)
+        point
     );
-    this.destroy();
   }
 
   _handleDeleteClick() {
     this.destroy();
+  }
+
+  setSaving() {
+    this._pointEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._pointEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    this._pointEditComponent.shake(resetFormState);
   }
 }
