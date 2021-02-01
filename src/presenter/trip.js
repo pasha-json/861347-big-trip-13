@@ -275,6 +275,10 @@ export default class Trip {
         this._isDestinationLoad = false;
         break;
     }
+    this._restoreControls();
+  }
+
+  _restoreControls() {
     if (this._isOffersLoad && this._isDestinationLoad) {
       this._callback.enableAddPointButton();
       Object

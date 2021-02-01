@@ -38,6 +38,7 @@ const handleSiteMenuClick = (menuItem) => {
     case MenuItem.TABLE:
       newTrip._resetSortType();
       newTrip.show();
+      newTrip._restoreControls();
       statisticsComponent.hide();
       break;
     case MenuItem.STATS:
