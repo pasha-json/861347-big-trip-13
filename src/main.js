@@ -30,7 +30,7 @@ const menuComponent = new MenuView(tripInfo);
 const api = new Api(END_POINT, AUTHORIZATION);
 
 const newTrip = new Trip(tripElement, pointsModel, optionsModel, filterModel, destinationsModel, api);
-newTrip._init();
+newTrip.init();
 newTrip.setAddPointButtonEnableHandler(menuComponent.enableAddPointButton);
 
 const handleSiteMenuClick = (menuItem) => {

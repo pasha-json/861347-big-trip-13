@@ -58,7 +58,7 @@ export default class Trip {
     this._pointNewPresenter = new PointNew(this._formList, this._handleViewAction, this._getOptions(), this._getPoints(), this._getDestinations());
   }
 
-  _init() {
+  init() {
     this._renderSort();
   }
 
