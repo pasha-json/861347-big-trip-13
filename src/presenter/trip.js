@@ -296,5 +296,6 @@ export default class Trip {
 
     this._clearRoute();
     this._renderSort();
+    this.restoreControls();
   }
 }
