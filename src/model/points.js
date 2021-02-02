@@ -110,7 +110,7 @@ export default class PointsModel extends Observer {
           "is_favorite": point.isFavourite,
           "offers": point.options[`offers`].length !== 0 ? point.options[`offers`].map((elem) => {
             return {
-              title: elem[`title`],
+              title: elem[`title`] ? elem[`title`] : elem[`name`],
               price: Number(elem.price)
             };
           }) : [],
