@@ -45,7 +45,7 @@ export default class PointNew {
       return;
     }
 
-    this._pointEditComponent = new FormEditView(EMPTY_POINT, this._options, this._points, this._destinations);
+    this._pointEditComponent = new FormEditView(EMPTY_POINT, this._options, this._points, this._destinations, true);
     this._pointEditComponent.setSubmitHandler(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
     this._pointEditComponent.setClickHandler(this._handleDeleteClick);

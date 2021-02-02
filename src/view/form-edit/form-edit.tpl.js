@@ -60,7 +60,7 @@ const createImagesBlock = (cityInfo) => {
   return null;
 };
 
-export const createEditTemplate = (data = {}, types, destinations, options) => {
+export const createEditTemplate = (data = {}, types, destinations, options, isNewPoint) => {
 
   const {type, destination, date, price, description, images, isDisabled, isSaving, isDeleting} = data;
   const typeName = type.toLowerCase();
@@ -124,7 +124,7 @@ export const createEditTemplate = (data = {}, types, destinations, options) => {
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? `disabled` : ``}>${isSaving ? `Saving...` : `Save`}</button>
-      <button class="event__reset-btn" type="reset" ${isDisabled ? `disabled` : ``}>${isDeleting ? `Deleting...` : `Delete`}</button>
+      ${isNewPoint ? `<button class="event__reset-btn" type="reset" ${isDisabled ? `disabled` : ``}>Cancel</button>` : `<button class="event__reset-btn" type="reset" ${isDisabled ? `disabled` : ``}>${isDeleting ? `Deleting...` : `Delete`}</button>`}
       <button class="event__rollup-btn" type="button" ${isDisabled ? `disabled` : ``}>
         <span class="visually-hidden">Open event</span>
       </button>

@@ -7,12 +7,13 @@ import "../../../node_modules/flatpickr/dist/flatpickr.min.css";
 const priceKeyDownRegex = /^[0-9]|ArrowLeft|ArrowRight|Delete|Backspace|Tab$/;
 
 export default class FormEditView extends Smart {
-  constructor(point, options, points, destinations) {
+  constructor(point, options, points, destinations, isNewPoint = false) {
     super();
     this._point = Object.assign({}, point);
     this._options = options.slice();
     this._points = points.slice();
     this._destinations = destinations.slice();
+    this._isNewPoint = isNewPoint;
 
     this._cities = new Set();
     this._destinations.forEach((elem) => {
@@ -53,7 +54,7 @@ export default class FormEditView extends Smart {
     }
   }
   getTemplate() {
-    return createEditTemplate(this._data, this._types, this._destinations, this._options);
+    return createEditTemplate(this._data, this._types, this._destinations, this._options, this._isNewPoint);
   }
 
   reset(point) {
