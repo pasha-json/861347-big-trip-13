@@ -36,9 +36,9 @@ newTrip.setAddPointButtonEnableHandler(menuComponent.enableAddPointButton);
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
-      newTrip._resetSortType();
+      newTrip.resetSortType();
       newTrip.show();
-      newTrip._restoreControls();
+      newTrip.restoreControls();
       statisticsComponent.hide();
       break;
     case MenuItem.STATS:
@@ -49,7 +49,7 @@ const handleSiteMenuClick = (menuItem) => {
     case MenuItem.ADD_POINT:
       statisticsComponent.hide();
       newTrip.show();
-      newTrip._createPoint();
+      newTrip.createPoint();
       tripInfo.querySelector(`.trip-main__event-add-btn`).disabled = true;
       break;
   }

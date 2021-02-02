@@ -85,7 +85,7 @@ export default class Trip {
     return pointsAfterFiltration;
   }
 
-  _resetSortType() {
+  resetSortType() {
     this._currentSortType = SortType.DAY;
     this._filterModel.setFilter(UpdateType.MAJOR, Filters.EVERYTHING);
   }
@@ -147,7 +147,7 @@ export default class Trip {
     this._render(this._siteSortElement, this._formList.getElement(), RenderPosition.BEFOREEND);
     this._renderPointsList();
   }
-  _createPoint() {
+  createPoint() {
     this._currentSortType = SortType.DAY;
     this._filterModel.setFilter(UpdateType.MAJOR, Filters.EVERYTHING);
 
@@ -275,10 +275,10 @@ export default class Trip {
         this._isDestinationLoad = false;
         break;
     }
-    this._restoreControls();
+    this.restoreControls();
   }
 
-  _restoreControls() {
+  restoreControls() {
     if (this._isOffersLoad && this._isDestinationLoad) {
       this._callback.enableAddPointButton();
       Object

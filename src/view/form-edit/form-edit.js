@@ -228,7 +228,7 @@ export default class FormEditView extends Smart {
 
   _setDatepicker() {
     if (this._datepicker) {
-      this._deleteDatePicker();
+      this.deleteDatePicker();
     }
 
     const [startDate, endDate] = Array.from(
@@ -250,7 +250,7 @@ export default class FormEditView extends Smart {
       }),
     };
   }
-  _deleteDatePicker() {
+  deleteDatePicker() {
     this._datepicker.start.destroy();
     this._datepicker.end.destroy();
     this._datepicker = null;
