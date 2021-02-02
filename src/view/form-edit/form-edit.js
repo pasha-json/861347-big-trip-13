@@ -6,7 +6,7 @@ import "../../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const priceKeyDownRegex = /^[0-9]|ArrowLeft|ArrowRight|Delete|Backspace|Tab$/;
 
-export default class FormEditView extends Smart {
+export default class FormEdit extends Smart {
   constructor(point, options, points, destinations, isNewPoint = false) {
     super();
     this._point = Object.assign({}, point);

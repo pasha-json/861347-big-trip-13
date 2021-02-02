@@ -1,7 +1,7 @@
 import {createSortTemplate} from "./sort.tpl";
 import Abstract from "../abstract/abstract";
 
-export default class SortView extends Abstract {
+export default class Sort extends Abstract {
   constructor(sortType) {
     super();
     this._sortType = sortType;

@@ -1,7 +1,7 @@
 import {createFiltersTemplate} from "./filters.tpl";
 import Abstract from "../abstract/abstract";
 
-export default class FiltersView extends Abstract {
+export default class Filters extends Abstract {
   constructor(data, type) {
     super();
     this._data = data;

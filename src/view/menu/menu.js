@@ -1,7 +1,7 @@
 import {createMenuTemplate} from "./menu.tpl";
 import Abstract from "../abstract/abstract";
 
-export default class MenuView extends Abstract {
+export default class Menu extends Abstract {
   constructor(tripInfoElement) {
     super();
 

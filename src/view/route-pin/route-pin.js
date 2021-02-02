@@ -1,7 +1,7 @@
 import {createRoutePinTemplate} from "./route-pin.tpl";
 import Abstract from "../abstract/abstract";
 
-export default class RoutePinView extends Abstract {
+export default class RoutePin extends Abstract {
   constructor(data, options, isDataLoaded) {
     super();
     this._data = data;
